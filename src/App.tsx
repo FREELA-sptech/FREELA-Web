@@ -1,8 +1,11 @@
 import React from 'react';
+import { Box } from '@material-ui/core'
 
 function App() {
   return (
-    <h1>Teste</h1>
+    <Box>
+      Teste
+    </Box>
   );
 }
 
