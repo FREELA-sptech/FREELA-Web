@@ -1,20 +1,8 @@
-import React from 'react';
-import { Box, createTheme,ThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@mui/material';
+
 import HeaderLandingPage from './components/header';
+import { theme } from './assets/mainTheme';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#6096BA",
-      light: "#A3CEF1",
-      dark: "#274C77",
-      contrastText: "#f6f6f6",
-
-      
-    }
-
-  }
-});
 
 function App() {
   return (
