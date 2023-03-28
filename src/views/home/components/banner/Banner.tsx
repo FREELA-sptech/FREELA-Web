@@ -1,7 +1,7 @@
 function Banner() {
     return (
-        <h1>teste</h1>
-    );    
+        <h1>Banner Component</h1>
+    );
 }
 
 export default Banner

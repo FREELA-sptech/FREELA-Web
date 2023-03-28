@@ -1,15 +1,8 @@
-import { ThemeProvider } from '@mui/material';
-
-import HeaderLandingPage from './components/header';
-import { theme } from './assets/mainTheme';
-
+import Home from "./views/Home";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <HeaderLandingPage />
-    </ThemeProvider>
-
+    <Home />
   );
 }
 
