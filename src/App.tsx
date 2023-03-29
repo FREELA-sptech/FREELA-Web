@@ -2,7 +2,7 @@ import './style.scss'
 
 import Header from './components/Header/Header';
 
-import Home from "./views/Home"
+import Home from "./views/home"
 
 function App() {
   return (
