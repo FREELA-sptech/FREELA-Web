@@ -1,8 +1,14 @@
 import "./style.scss"
 
+import AboutUs from "./components/AboutUs";
+import Banner from "./components/Banner";
+
 function Home() {
     return (
-        <h1 className="test">Home Component</h1>
+        <div className="container">
+            <Banner />
+            <AboutUs />
+        </div>
     );
 }
 
