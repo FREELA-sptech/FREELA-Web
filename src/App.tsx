@@ -1,8 +1,8 @@
 import './style.scss'
 
-import Header from './components/Header/Header';
+import Header from './components/Header';
 
-import Home from "./views/home"
+import Home from "./views/Home"
 
 function App() {
   return (

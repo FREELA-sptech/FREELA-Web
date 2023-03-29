@@ -1,9 +1,12 @@
 import "./style.scss"
+
 import Button from "../../../../components/Button";
+
 function Banner() {
     const handleButton = () => {
         alert("PAULIN");
     }
+
     return (
         <section className="container-banner">
             <div className="container">
