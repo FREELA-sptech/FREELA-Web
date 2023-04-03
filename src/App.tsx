@@ -1,16 +1,5 @@
-import { useState } from 'react'
-import './App.css'
-import Home from './pages/home/Home'
+import AppRoutes from "./AppRoutes"
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className='background-class'>
-      <Header/>
-      <Home/>
-    </div>
-  )
-}
+const App = () => <AppRoutes />
 
 export default App
