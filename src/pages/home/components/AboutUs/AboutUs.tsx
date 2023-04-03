@@ -1,6 +1,11 @@
+import Button from "../../../../components/Button";
 import "./style.scss"
 
 function AboutUs() {
+    const handleButton = () => {
+
+    }
+
     return (
         <section className="container">
             <div className="about-us-header">
@@ -15,9 +20,7 @@ function AboutUs() {
 
                             <h3>A FREELA oferece uma ampla seleção de profissionais qualificados e talentosos em diferentes áreas.</h3>
 
-                            <button>
-                                SOU CLIENTE
-                            </button>
+                            <Button title={"SOU CLIENTE"} path={""} type={""} onClickButton={handleButton} />
                         </div>
                         <div className="card image">
                             <img src="/assets/images/about-us-client.svg" alt="" />

@@ -1,12 +1,9 @@
-import { ButtonConfig } from "../../models/button/button.model";
-
-
-function Button(buttonConfig: ButtonConfig ){    
+function ButtonBase(){    
     return (
         <button onClick={buttonConfig.onClickButton} className={buttonConfig.type}>
             {buttonConfig.title}
         </button>
     );
 }
-export default Button;
+export default ButtonBase;
 
