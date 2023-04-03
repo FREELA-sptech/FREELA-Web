@@ -1,9 +1,4 @@
-.container {
-      width: 95vw;
-      margin: auto;
-}
-  
-.background-class {
-      //background-color: var(--background-color);
-      min-height: 100vh;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+@import url('./shared/styles/style.scss');

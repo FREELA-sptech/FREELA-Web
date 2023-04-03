@@ -1,0 +1,30 @@
+.container {
+  width: 90vw;
+  margin: auto;
+}
+
+.flex-row {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.background-class {
+  //background-color: var(--background-color);
+  min-height: 100vh;
+}
