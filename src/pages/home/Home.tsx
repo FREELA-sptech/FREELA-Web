@@ -1,12 +1,11 @@
 import "./style.scss"
 
 import AboutUs from "./components/AboutUs";
-import Banner from "./components/Banner";
 
 function Home() {
     return (
         <div className="container">
-            <Banner />
+            {/* <Banner /> */}
             <AboutUs />
         </div>
     );
