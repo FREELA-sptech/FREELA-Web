@@ -1,43 +1,15 @@
 .about-us {
-  &-header {
-    text-align: center;
+  &-background {
+    background-color: var(--background-color);
 
-    &-subtitle {
-      padding: 20px 15% 0;
+    .title {
+      .logo {
+        color: var(--dark-contrast-color);
+      }
     }
-  }
 
-  &-body {
-    .section {
-      &-client {
-        .body {
-          display: flex;
-          flex-wrap: wrap;
-          padding: 10vh 0;
-
-          .card {
-            min-width: 50%;
-            max-width: 50%;
-            display: flex;
-            flex-direction: column;
-
-            &.image {
-              align-items: center;
-              justify-content: center;
-            }
-
-            &.text {
-              padding: 8vh 0;
-              align-items: flex-start;
-              justify-content: space-between;
-            }
-          }
-        }
-      }
-
-      &-freelance {
-        background-color: green;
-      }
+    .summary {
+      padding: 30px 100px;
     }
   }
 }

@@ -5,7 +5,7 @@ function Home() {
   return (
     <>
       <Banner />
-      {/* <AboutUs /> */}
+      <AboutUs />
     </>
   );
 }

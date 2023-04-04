@@ -12,7 +12,7 @@ function Header() {
   return (
     <header className="header-background">
       <div className="container flex-row justify-space-between">
-        <h1 className="logo">FREELA</h1>
+        <h1 className="logo" onClick={() => handleTransition("/")}>FREELA</h1>
         <ul className='menu flex-row align-center'>
           <li>
             <ButtonBase onClick={() => handleTransition("/login")} buttonType='tertiary-text' label='login' />
