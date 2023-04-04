@@ -1,11 +1,12 @@
 import AboutUs from "./components/AboutUs/AboutUs";
+import Banner from "./components/Banner/Banner";
 
 function Home() {
   return (
-    <div className="container">
-      {/* <Banner /> */}
-      <AboutUs />
-    </div>
+    <>
+      <Banner />
+      {/* <AboutUs /> */}
+    </>
   );
 }
 

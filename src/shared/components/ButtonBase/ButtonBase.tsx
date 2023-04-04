@@ -1,3 +1,5 @@
+import './style.scss'
+
 type Props = {
   onClick: () => void
   buttonType: string
@@ -6,7 +8,7 @@ type Props = {
 
 function ButtonBase({onClick, buttonType, label}: Props) {
   return (
-    <button onClick={onClick} className={buttonType}>
+    <button onClick={onClick} className={`button-base ${buttonType}`}>
       {label}
     </button>
   );
