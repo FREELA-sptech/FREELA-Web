@@ -14,10 +14,8 @@ function Header() {
       <div className="container flex-row justify-space-between">
         <h1 className="logo" onClick={() => handleTransition("/")}>FREELA</h1>
         <ul className='menu flex-row align-center'>
-          <li>
-            <ButtonBase onClick={() => handleTransition("/login")} buttonType='tertiary-text' label='login' />
-          </li>
-          <li>
+          <li className='forms flex-row'>
+            <ButtonBase onClick={() => handleTransition("/login")} buttonType='tertiary-outline' label='login' />
             <ButtonBase onClick={() => handleTransition("/cadastro")} buttonType='secundary-standart' label='cadastre-se' />
           </li>
         </ul>
