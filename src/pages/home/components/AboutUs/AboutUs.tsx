@@ -2,6 +2,7 @@ import "./style.scss"
 
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase"
 import ClientBanner from "../ClientBanner/ClientBanner";
+import FreelanceBanner from "../FreelanceBanner/FreelanceBanner";
 
 function AboutUs() {
   const handleButton = () => {
@@ -15,6 +16,7 @@ function AboutUs() {
         <p className="summary">Nossa plataforma oferece uma ampla variedade de oportunidades de trabalho, desde tarefas simples a projetos mais complexos, em diversas áreas, como design gráfico, redação, programação, marketing digital, tradução, entre outras.</p>
       </div>
       <ClientBanner />
+      <FreelanceBanner />
     </section>
   );
 }
