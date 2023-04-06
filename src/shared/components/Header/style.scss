@@ -11,6 +11,10 @@
         height: 45px;
         background-image: url(/public/assets/icons/menu.svg);
       }
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 }
@@ -19,8 +23,9 @@
   background-color: var(--background-color);
 
   .btn-close {
+    box-shadow: none;
     width: 45px;
     height: 45px;
-    background: transparent url(/public/assets/icons/close.svg) center/2em auto no-repeat;
+    background: url(/public/assets/icons/close.svg) center/2em auto no-repeat;
   }
 }
