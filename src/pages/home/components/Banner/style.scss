@@ -2,35 +2,15 @@
   &-background {
     background-color: var(--background-color);
     min-height: 90vh;
+  }
 
-    .container {
-      flex-grow: 1;
-      gap: 100px;
-    }
-
-    .text {
-      width: 50%;
-
-      span {
-        color: var(--dark-contrast-color);
-      }
-
-      .summary {
-        padding: 15px 0 45px;
-        width: 90%;
-      }
-    }
-
-    .show-more {
-      position: absolute;
-      bottom: 50px;
-      gap: 10px;
+  &-title {
+    span {
+      color: var(--dark-contrast-color);
     }
   }
 
-  .show-more {
-    position: absolute;
-    bottom: 0;
-    background-color: red;
+  &-summary {
+    padding: 10px 0 40px;
   }
 }

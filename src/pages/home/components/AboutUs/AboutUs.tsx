@@ -1,6 +1,9 @@
 import "./style.scss"
 
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase"
+import ClientBanner from "../ClientBanner/ClientBanner";
+import FreelanceBanner from "../FreelanceBanner/FreelanceBanner";
+import { Col, Container, Row } from "react-bootstrap";
 
 function AboutUs() {
   const handleButton = () => {
@@ -8,34 +11,23 @@ function AboutUs() {
   }
 
   return (
-    <section className="container">
-      <div className="about-us-header">
-        <h1>O que é a Freela ?</h1>
-        <p className="about-us-header-subtitle">Nossa plataforma oferece uma ampla variedade de oportunidades de trabalho, desde tarefas simples a projetos mais complexos, em diversas áreas, como design gráfico, redação, programação, marketing digital, tradução, entre outras.</p>
-      </div>
-      <div className="about-us-body">
-        <div className="section-client">
-          <div className="body">
-            <div className="card text">
-              <h2>SOU CLIENTE</h2>
-
-              <h3>A FREELA oferece uma ampla seleção de profissionais qualificados e talentosos em diferentes áreas.</h3>
-
-              <ButtonBase />
-            </div>
-            <div className="card image">
-              <img src="/assets/images/about-us-client.svg" alt="" />
-            </div>
-          </div>
-          <div className="footer">
-
-          </div>
-        </div>
-
-        <div className="section-freelance">
-
-        </div>
-      </div>
+    <section className="about-us-background">
+      <Container>
+        <Row>
+          <Col sm={12} className="text-center">
+            <h1 className="title about-us-title">O que é a <span className="logo">FREELA</span>?</h1>
+          </Col>
+          <Col sm={12} className="text-center">
+            <p className="summary">
+              Nossa plataforma oferece uma ampla variedade de oportunidades de trabalho,
+              desde tarefas simples a projetos mais complexos, em diversas áreas, como design gráfico,
+              redação, programação, marketing digital, tradução, entre outras.
+            </p>
+          </Col>
+        </Row>
+      </Container>
+      <ClientBanner />
+      <FreelanceBanner />
     </section>
   );
 }

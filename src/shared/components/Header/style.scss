@@ -5,9 +5,42 @@
     display: flex;
     align-items: center;
 
+    .logo {
+      cursor: pointer;
+    }
+
     .menu {
       list-style: none;
       text-transform: uppercase;
+
+      .forms {
+        gap: 20px;
+      }
+    }
+  }
+}
+
+
+@media (max-width: 800px) {
+  .header-background {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    display: none;
+
+    .container {
+      flex-direction: column;
+      height: 100%;
+      align-items: center;
+    }
+
+    .forms {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .menu {
+      width: 100%;
     }
   }
 }

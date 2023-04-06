@@ -9,6 +9,22 @@
   text-transform: uppercase;
 }
 
+.big-title {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 54px;
+  line-height: 62px;
+}
+
+.title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+}
+
 .subtitle {
   font-family: 'Roboto';
   font-style: normal;
@@ -18,12 +34,13 @@
   color: #1D1D1D;
 }
 
-.big-title {
-  font-family: 'Poppins';
+.category {
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
-  font-size: 54px;
-  line-height: 62px;
+  font-size: 22px;
+  line-height: 28px;
+  color: #274C77;
 }
 
 .summary {
@@ -32,4 +49,8 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+}
+
+.text-center {
+  text-align: center;
 }
