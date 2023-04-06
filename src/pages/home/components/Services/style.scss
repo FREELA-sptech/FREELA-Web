@@ -1,14 +1,30 @@
-.services{
-    &-background{
+.services {
+    &-background {
         background: radial-gradient(95.56% 95.56% at 50% 4.44%, rgba(29, 29, 29, 0.711) 0%, rgba(29, 29, 29, 0.9) 23.82%);
         backdrop-filter: blur(25px);
-        min-height: 80vh;
-        .left-side{
-            width: 50%;
+        .container{
+            min-height: 80vh;
         }
-        .right-side{
+
+        .left-side {
             width: 50%;
+            height: 100%;
+        }
+
+        .right-side {
+            width: 50%;
+            height: 100%;
+        }
+
+        .card-service {
+            padding: 24px;
+            gap: 16px;
+            width: 50%;
+            height: 96px;
+            background: rgba(247, 247, 247, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
         }
     }
-    
+
 }
