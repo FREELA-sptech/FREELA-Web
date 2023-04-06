@@ -3,6 +3,7 @@ import "./style.scss"
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase"
 import ClientBanner from "../ClientBanner/ClientBanner";
 import FreelanceBanner from "../FreelanceBanner/FreelanceBanner";
+import { Col, Container, Row } from "react-bootstrap";
 
 function AboutUs() {
   const handleButton = () => {
@@ -11,10 +12,20 @@ function AboutUs() {
 
   return (
     <section className="about-us-background">
-      <div className="container text-center">
-        <h1 className="title">O que é a <span className="logo">FREELA</span>?</h1>
-        <p className="summary">Nossa plataforma oferece uma ampla variedade de oportunidades de trabalho, desde tarefas simples a projetos mais complexos, em diversas áreas, como design gráfico, redação, programação, marketing digital, tradução, entre outras.</p>
-      </div>
+      <Container>
+        <Row>
+          <Col sm={12} className="text-center">
+            <h1 className="title about-us-title">O que é a <span className="logo">FREELA</span>?</h1>
+          </Col>
+          <Col sm={12} className="text-center">
+            <p className="summary">
+              Nossa plataforma oferece uma ampla variedade de oportunidades de trabalho,
+              desde tarefas simples a projetos mais complexos, em diversas áreas, como design gráfico,
+              redação, programação, marketing digital, tradução, entre outras.
+            </p>
+          </Col>
+        </Row>
+      </Container>
       <ClientBanner />
       <FreelanceBanner />
     </section>

@@ -1,15 +1,11 @@
 .about-us {
   &-background {
     background-color: var(--background-color);
+  }
 
-    .title {
-      .logo {
-        color: var(--dark-contrast-color);
-      }
-    }
-
-    .summary {
-      padding: 30px 100px;
+  &-title {
+    .logo {
+      color: var(--dark-contrast-color);
     }
   }
 }
