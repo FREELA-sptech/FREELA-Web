@@ -5,8 +5,17 @@
   font-size: 32px !important;
   line-height: 39px !important;
   letter-spacing: 0.1em !important;
-  color: #1D1D1D !important;
+  color: #1D1D1D;
   text-transform: uppercase !important;
+  text-decoration: none;
+
+  &:hover {
+    color: #1D1D1D !important;
+  }
+}
+
+.destak-color {
+  color: var(--dark-contrast-color) !important;
 }
 
 .big-title {

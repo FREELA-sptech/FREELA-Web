@@ -1,3 +1,4 @@
+import { Row } from 'react-bootstrap';
 import './style.scss'
 
 type Props = {
@@ -5,12 +6,12 @@ type Props = {
   label: string
 }
 
-function BenefitsCard({iconPath, label}: Props) {
+function BenefitsCard({ iconPath, label }: Props) {
   return (
-    <div className="benefits-card flex-row align-center">
-      <img src={iconPath} alt="icone" />
-      <p className='summary'>{label}</p>
-    </div>
+    <Row className='align-items-center d-flex w-auto benefits-card'>
+      <img className='icon-image' src={iconPath} alt="icone de benefícios" />
+      <p className='summary mb-0'>{label}</p>
+    </Row>
   );
 }
 

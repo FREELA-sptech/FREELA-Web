@@ -1,6 +1,7 @@
 .header {
   &-background {
     background-color: var(--background-color);
+    height: 10vh;
 
     .navbar-toggler {
       border: none;
@@ -15,6 +16,10 @@
       &:hover {
         opacity: 0.8;
       }
+    }
+
+    .logo:hover {
+      color: unset !important;
     }
   }
 }
