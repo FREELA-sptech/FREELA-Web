@@ -1,4 +1,4 @@
-.button-base {
+@mixin button-base {
   cursor: pointer !important;
   border-radius: 16px !important;
   padding: 16px 24px !important;
@@ -9,62 +9,108 @@
   line-height: 16px !important;
   text-transform: uppercase !important;
   transition: 0.3s !important;
-}
+  text-decoration: none;
 
-.button-base:hover {
-  opacity: 0.8;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .primary-standart {
+  @include button-base;
   background: var(--dark-contrast-color);
   color: var(--background-color);
   border: none;
+
+  &:hover {
+    color: var(--background-color);
+  }
 }
 
 .primary-outline {
+  @include button-base;
   background: transparent;
   color: var(--dark-contrast-color);
   border: 2px solid var(--dark-contrast-color);
+
+  &:hover {
+    color: var(--dark-contrast-color);
+  }
 }
 
 .primary-text {
+  @include button-base;
   background: transparent;
   color: var(--dark-contrast-color);
   border: none;
+
+  &:hover {
+    color: var(--dark-contrast-color);
+  }
 }
 
 .secundary-standart {
+  @include button-base;
   background: var(--contrast-color);
   color: var(--background-color);
   border: none;
+
+  &:hover {
+    color: var(--background-color);
+  }
 }
 
 .secundary-outline {
+  @include button-base;
   background: transparent;
   color: var(--contrast-color);
   border: 2px solid var(--contrast-color);
+
+  &:hover {
+    color: var(--contrast-color);
+  }
 }
 
 .secundary-text {
+  @include button-base;
   background: transparent;
   color: var(--contrast-color);
   border: none;
+
+  &:hover {
+    color: var(--contrast-color);
+  }
 }
 
 .tertiary-standart {
+  @include button-base;
   background: var(--background-color);
   color: var(--text-color);
   border: none;
+
+  &:hover {
+    color: var(--text-color);
+  }
 }
 
 .tertiary-outline {
-  background: transparent !important;
-  color: var(--text-color) !important;
-  border: 2px solid var(--text-color) !important;
+  @include button-base;
+  background: transparent;
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
+
+  &:hover {
+    color: var(--text-color);
+  }
 }
 
 .tertiary-text {
+  @include button-base;
   background: transparent;
   color: var(--text-color);
   border: none;
+
+  &:hover {
+    color: var(--text-color);
+  }
 }
