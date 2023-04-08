@@ -1,0 +1,22 @@
+.footer{
+    &-background{
+        background-color: var(--text-color);
+        padding: 2rem 0rem;
+        .logo{
+            color: var(--background-color);
+            margin-bottom: 2rem;
+        }
+        .subtitle{
+            color: var(--background-color);
+        }
+        .link-social-media{
+            padding: 0.8rem;
+            background-color: #333333;
+            border-radius: 50%;
+        }
+        .container-social-media{
+            padding: 2rem;
+            gap: 1rem;
+        }
+    }
+}
