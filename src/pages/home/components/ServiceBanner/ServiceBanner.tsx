@@ -1,11 +1,11 @@
 import { Col, Container, Row } from "react-bootstrap";
 import "./style.scss"
 
-function Services() {
+function ServiceBanner() {
     return (
         <Container fluid className="d-flex services-background align-items-center flex-column justify-content-center">
             <Container className="d-flex justify-content-between flex-wrap align-items-center">
-                <Col md={5} xs={12} className="flex-column left-side ">
+                <Col lg={5} xs={12} className="flex-column left-side ">
                     <div className="services-header">
                         <h2 className="services-topic text-uppercase">Descubra</h2>
                         <h1 className="services-title text-uppercase">Principais Serviços.</h1>
@@ -15,7 +15,7 @@ function Services() {
                     </div>
                     <hr />
                 </Col>
-                <Col md={7} xs={12} className="d-flex left-side flex-wrap">
+                <Col md={12} lg={7} xs={12} className="d-flex left-side flex-wrap">
                     <Row className="d-flex justify-content-center flex-wrap container-cards">
                         <Col lg={5} md={12} className="card-service d-flex flex-wrap align-items-center">
                             <img src="/assets/icons/code-2.svg" alt="" />
@@ -48,4 +48,4 @@ function Services() {
     )
 }
 
-export default Services;
+export default ServiceBanner;

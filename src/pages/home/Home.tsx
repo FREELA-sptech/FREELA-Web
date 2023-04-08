@@ -1,7 +1,10 @@
 import AboutUs from "./components/AboutUs/AboutUs";
 import Banner from "./components/Banner/Banner";
 import ClientBanner from "./components/ClientBanner/ClientBanner";
+import Footer from "./components/Footer/Footer";
 import FreelanceBanner from "./components/FreelanceBanner/FreelanceBanner";
+import MobileBanner from "./components/MobileBanner/MobileBanner";
+import ServiceBanner from "./components/ServiceBanner/ServiceBanner";
 
 function Home() {
   return (
@@ -10,6 +13,9 @@ function Home() {
       <AboutUs />
       <ClientBanner />
       <FreelanceBanner />
+      <ServiceBanner />
+      <MobileBanner />
+      <Footer />
     </>
   );
 }
