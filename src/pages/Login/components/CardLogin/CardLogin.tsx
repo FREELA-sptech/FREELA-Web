@@ -13,11 +13,11 @@ function CardLogin() {
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Email:</Form.Label>
-            <Form.Control type="email" placeholder="name@example.com" />
+            <Form.Control className="primary-input" type="email" placeholder="name@example.com" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <Form.Label>Senha:</Form.Label>
-            <Form.Control type="password" placeholder="name@example.com" />
+            <Form.Control className="primary-input" type="password" placeholder="********" />
           </Form.Group>
           <ButtonBase onClick={() => { }} className="w-100 mt-2" buttonType={"primary-standart"} label={"entrar"} />
           <Form.Text className="summary mt-3 text-center w-100 d-block">
