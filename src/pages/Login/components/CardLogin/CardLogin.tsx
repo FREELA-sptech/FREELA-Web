@@ -1,41 +1,31 @@
+import { Card, Form } from "react-bootstrap";
 import "./style.scss"
-import React from 'react';
-
-
+import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
+import { Link } from "react-router-dom";
 
 function CardLogin() {
 
   return (
-
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className=" mt-5">
-            <div className="card-header bg-gradient">
-            <div className="card-border">  
-              <h2 className=" title text-center ">Entrar</h2>
-              <h4 className="subtitle text-center">Digite suas credenciais e faça login</h4>
-              <div className="card-body">
-                <form>
-                  <div className="form-group">
-                    <div className="category ">E-mail:</div>
-                    <input type="text" className="form-control"/>
-                  </div>
-                  <div className="form-group">
-                    <div className="category  ">Senha:</div>
-                    <input type="password" className="form-control"/>
-                  </div>
-                  <button type="submit" className="btn btn-primary category ">Entrar</button>
-                  <div className="text-center"><h6>Ainda não tem uma conta?  Cadastre-se</h6></div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-
+    <Card className="card-login-background w-100">
+      <Card.Body>
+        <Card.Title className="title text-center">Entrar</Card.Title>
+        <Card.Subtitle className="mb-3 text-muted subtitle text-center">Digite suas credenciais e faça login</Card.Subtitle>
+        <Form>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Email:</Form.Label>
+            <Form.Control type="email" placeholder="name@example.com" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Label>Senha:</Form.Label>
+            <Form.Control type="password" placeholder="name@example.com" />
+          </Form.Group>
+          <ButtonBase onClick={() => { }} className="w-100 mt-2" buttonType={"primary-standart"} label={"entrar"} />
+          <Form.Text className="summary mt-3 text-center w-100 d-block">
+            Ainda não tem uma conta? <Link to='/cadastro' className="destak-color">Cadastre-se</Link>
+          </Form.Text>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 }
 
