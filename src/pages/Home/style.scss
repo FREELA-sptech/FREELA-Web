@@ -1,6 +1,11 @@
 .home {
+  &-background {
+    background-color: var(--background-color);
+    flex-grow: 1;
+  }
+
   &-icon-background {
-    background-color: #E7ECEF;
+    background-color: var(--contrast-background-color);
     border-radius: 50%;
     width: 45px;
     height: 45px;
