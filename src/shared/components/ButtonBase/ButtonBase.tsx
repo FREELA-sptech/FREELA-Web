@@ -4,11 +4,12 @@ type Props = {
   onClick: () => void
   buttonType: string
   label: string
+  className?: string
 }
 
-function ButtonBase({onClick, buttonType, label}: Props) {
+function ButtonBase({onClick, buttonType, label, className}: Props) {
   return (
-    <button onClick={onClick} className={`button-base ${buttonType}`}>
+    <button onClick={onClick} className={`button-base ${buttonType} ${className}`}>
       {label}
     </button>
   );
