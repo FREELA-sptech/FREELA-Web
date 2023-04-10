@@ -1,0 +1,39 @@
+.cadastro{
+    &-background{
+        background-color: var(--background-color);
+
+        .content{
+            min-height: calc(100vh - 80px);
+        }
+        .container-form{
+            padding: 2rem 0rem;
+            gap: 1rem;
+            background-color: #fff;
+        }
+        .form{
+            gap: 1.5rem;
+            .form-control:focus{
+                background-color: var(--background-color);
+                outline: none;
+            }
+        }
+        .image-section{
+            background-color: var(--background-color);
+            .tab-content > .active {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .painel{
+                background-color: var(--background-color);
+                color: var(--text-color);
+                
+            }
+            .painel.active{
+                background-color: var(--dark-contrast-color);
+                color: var(--background-color);
+                
+            }
+        }
+    }
+}
