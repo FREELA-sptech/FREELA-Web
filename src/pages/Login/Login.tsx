@@ -5,9 +5,9 @@ import React from "react";
 
 function Login() {
     return (
-      <section className="login-background d-flex justify-content-center align-items-center">
+      <div className="login-background d-flex justify-content-center align-items-center">
           <CardLogin />
-      </section>
+      </div>
     );
   }
 

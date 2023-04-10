@@ -6,7 +6,7 @@ import FreelanceBanner from "./components/FreelanceBanner/FreelanceBanner";
 import MobileBanner from "./components/MobileBanner/MobileBanner";
 import ServiceBanner from "./components/ServiceBanner/ServiceBanner";
 
-function Home() {
+function Index() {
   return (
     <>
       <Banner />
@@ -20,4 +20,4 @@ function Home() {
   );
 }
 
-export default Home
+export default Index
