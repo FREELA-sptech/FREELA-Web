@@ -22,7 +22,7 @@ function ServicesAvailableCard() {
           className="position-absolute ms-2 mt-2"
         />
       </OverlayTrigger>
-      <Card.Img style={{ borderRadius: '16px 16px 0 0' }} width='100%' height='250px' variant="top" src="https://focalizando.com.br/sites/default/files/2023-03/ideias-de-tatuagens-no-antebraco-masculina-e-feminina.jpg" />
+      <Card.Img style={{ borderRadius: '16px 16px 0 0' }} width='100%' height='45%' variant="top" src="https://focalizando.com.br/sites/default/files/2023-03/ideias-de-tatuagens-no-antebraco-masculina-e-feminina.jpg" />
       <Card.Body className="mb-4">
         <Card.Title className="title">Criação de Landing Page</Card.Title>
         <Figure className="d-flex align-items-center gap-2 my-3">
@@ -38,7 +38,7 @@ function ServicesAvailableCard() {
           </Figure.Caption>
         </Figure>
         <Row className="d-flex justify-content-between my-3">
-          <Figure className="d-flex align-items-center gap-2 w-auto m-0">
+          <Figure className="d-flex align-items-center gap-2 w-50 m-0">
             <Figure.Image
               width='30px'
               height='30px'
@@ -50,7 +50,7 @@ function ServicesAvailableCard() {
               Criada: <span className="text-color fw-bold">01/04/2023</span>
             </Figure.Caption>
           </Figure>
-          <Figure className="d-flex align-items-center gap-2 w-auto m-0">
+          <Figure className="d-flex align-items-center gap-2 w-50 m-0">
             <Figure.Image
               width='30px'
               height='30px'
@@ -64,24 +64,8 @@ function ServicesAvailableCard() {
           </Figure>
         </Row>
       </Card.Body>
-      <ButtonBase onClick={() => { }} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"fazer proposta"} ></ButtonBase>
+      <ButtonBase onClick={() => { }} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
     </Card>
-    // <Card className="services-available-background">
-    //   <Card.Body>
-    //     <Card.Title className="d-flex justify-content-between align-items-center">
-    //       <h1 className="category w-auto">Criação de Landing Page</h1>
-    //       <h2 className="subtitle w-auto">R$ 500,00 - 1.300</h2>
-    //     </Card.Title>
-    //     <Card.Subtitle className="mb-2 subtitle">
-    //       Criada: 04/04/2023
-    //     </Card.Subtitle>
-    //     <Card.Text>
-    //       Some quick example text to build on the card title and make up the
-    //       bulk of the card's content.
-    //     </Card.Text>
-    //     <ButtonBase onClick={() => {}} buttonType={"primary-standart"} label={"fazer proposta"} ></ButtonBase>
-    //   </Card.Body>
-    // </Card>
   );
 }
 
