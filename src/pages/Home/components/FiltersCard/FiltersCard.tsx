@@ -17,19 +17,19 @@ function FiltersCard() {
         </Accordion.Header>
         <Accordion.Body>
           <ListGroup>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
@@ -49,19 +49,19 @@ function FiltersCard() {
         </Accordion.Header>
         <Accordion.Body>
           <ListGroup>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0">
+            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
               Mais Recente
               <Form.Check className="checkbox" aria-label="option 1" />
             </ListGroup.Item>
