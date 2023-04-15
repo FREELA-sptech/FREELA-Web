@@ -3,35 +3,16 @@ import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstra
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ButtonBase from "../../shared/components/ButtonBase/ButtonBase";
-import BenefitsCard from "../home/components/BenefitsCard/BenefitsCard";
 import { createUser } from "../../services/userService";
+import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
+import { FirstStep } from "./components/FirstStep";
 
 function Cadastro() {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-
-    })
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
-    }
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        try {
-           const response = await createUser(formData);
-            alert("CADASTRADO");
-        } catch (error) {
-            alert(error)
-        }
-
-    };
+    
     return (
         <Container fluid className="cadastro-background">
             <Container>
-                <Row className="content d-flex align-items-stretch">
+                <Row className="content d-flex align-items-stretch justify-content-center">
                     <Col className="image-section d-none d-lg-flex flex-column align-items-center justify-content-center gap-3" md={12} lg={6}>
                         <h1 className="big-title text-center">Seja bem vindo a <h1 className="logo">freela</h1></h1>
                         <Tabs
@@ -53,53 +34,7 @@ function Cadastro() {
                             </Tab>
                         </Tabs>
                     </Col>
-                    <Col md={12} lg={6} className="container-form d-flex flex-column justify-content-center align-items-center">
-                        <h1 className="title text-center">Cadastre-se ainda hoje</h1>
-                        <Form onSubmit={handleSubmit} className="form d-flex flex-column col-xs-12 col-md-10 col-lg-8">
-                            <Form.Group>
-                                <Form.Label>
-                                    Nome
-                                </Form.Label>
-                                <Form.Control onChange={handleInputChange} name="name" size="lg" type="name" required />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>
-                                    Email
-                                </Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                                    <Form.Control
-                                    onChange={handleInputChange}
-                                        name="email"
-                                        size="lg"
-                                        type="text"
-                                        placeholder=""
-                                        aria-describedby="inputGroupPrepend"
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Email inválido
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>
-                                    Senha
-                                </Form.Label>
-                                <Form.Control
-                                onChange={handleInputChange}
-                                    size="lg"
-                                    type="password"
-                                    name="password"
-                                    required
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Check type="checkbox" label="Concordo com os termos" />
-                            </Form.Group>
-                            <button className="button-base primary-standart" type="submit">Criar conta</button>
-                        </Form>
-                    </Col>
+                    <FirstStep/>
                 </Row>
             </Container>
 
