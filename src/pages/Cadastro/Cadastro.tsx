@@ -1,11 +1,93 @@
 import "./style.scss";
 import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstrap";
 import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
-import { FirstStep } from "./components/FirstStep";
+import { UserForm } from "./components/UserForm/UserForm";
+import { InterestForm } from "./components/InterestForm/InterestForm";
+
+//Hooks
+import { useForm } from "../../hooks/useForm";
+import { useState } from "react";
+import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
+import { createUser } from "../../services/userService";
+
 
 function Cadastro() {
-    const handleObject = (obj : any) => {
-      };
+    const [formData, setFormData] = useState({
+        name: '',
+        userName: '',
+        email: '',
+        cpf: '',
+        password: ''
+    });
+    const [errors, setErrors] = useState({
+        name: '',
+        userName: '',
+        email: '',
+        cpf: '',
+        password: ''
+    });
+    const formComponents = [<UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm />]
+    const { currentStep, currentComponent, changeStep } = useForm(formComponents)
+    const validateForm = () => {
+        const { name, userName, email, cpf, password } = formData;
+        const newErros = {
+            name: '',
+            userName: '',
+            email: '',
+            cpf: '',
+            password: ''
+        }
+
+        if (notBlank(name)) {
+            newErros.name = "O campo nome não pode estar vazio";
+        }
+
+        if (notBlank(userName)) {
+            newErros.userName = "O campo usuário não pode estar vazio";
+        }
+
+        if (notBlank(email)) {
+            newErros.email = "O campo email não pode estar vazio";
+        } else if (!emailValidation(email)) {
+            newErros.email = "Email inválido";
+        }
+
+        if (notBlank(cpf)) {
+            newErros.cpf = "O campo CPF não pode estar vazio";
+        } else if (!isValidCPF(cpf)) {
+            newErros.cpf = "CPF inválido";
+        }
+
+        if (notBlank(password)) {
+            newErros.password = "O campo senha não pode estar vazio";
+        } else if (passwordValidation(password)) {
+            newErros.password = "Senha muito curta";
+        }
+
+        return newErros;
+    }
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const errors = validateForm();
+            const valores = Object.values(errors);
+            const errorsValues = valores.every(valor => valor === "");
+            if (!errorsValues) {
+                setErrors(errors);
+            } else {
+                console.log(formData);
+                const response = await createUser(formData);
+                if (response.status == 201) {
+                    changeStep(currentStep+1)
+                    // navigator("/login")
+                }
+            }
+        } catch (error) {
+            alert(error)
+        }
+
+    };
     return (
         <Container fluid className="cadastro-background">
             <Container>
@@ -31,7 +113,16 @@ function Cadastro() {
                             </Tab>
                         </Tabs>
                     </Col>
-                    <FirstStep firstStepData={handleObject}/>
+                    <Col xs={12} md={12} lg={6} className="container-form d-flex flex-column justify-content-center align-items-center">
+                        <Col xs={10} md={11} lg={12} className="d-flex flex-column align-items-center justify-content-center">
+                            <Form onSubmit={handleSubmit} className="form d-flex flex-column col-md-10 col-lg-8">
+                                {currentComponent}
+                                <Col className="d-flex">
+                                    <button className="button-base primary-standart" type="submit">Avançar</button>
+                                </Col>
+                            </Form>
+                        </Col>
+                    </Col>
                 </Row>
             </Container>
 
