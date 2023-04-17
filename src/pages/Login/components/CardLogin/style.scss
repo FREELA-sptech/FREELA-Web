@@ -1,9 +1,12 @@
-.card-login {
+.form-login {
   &-background {
-    -webkit-box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
-    -moz-box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
-    box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
-    max-width: 350px;
-    border: none;
+    background-color: #fff;
+    padding: 2rem 0rem;
+.card-login{
+  gap:0.8rem;
+}
+    .content{
+      min-height: calc(100vh - 80px);
+    }
   }
 }

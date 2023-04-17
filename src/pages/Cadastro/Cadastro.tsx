@@ -1,14 +1,11 @@
 import "./style.scss";
 import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import ButtonBase from "../../shared/components/ButtonBase/ButtonBase";
-import { createUser } from "../../services/userService";
 import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
 import { FirstStep } from "./components/FirstStep";
 
 function Cadastro() {
-    
+    const handleObject = (obj : any) => {
+      };
     return (
         <Container fluid className="cadastro-background">
             <Container>
@@ -34,7 +31,7 @@ function Cadastro() {
                             </Tab>
                         </Tabs>
                     </Col>
-                    <FirstStep/>
+                    <FirstStep firstStepData={handleObject}/>
                 </Row>
             </Container>
 

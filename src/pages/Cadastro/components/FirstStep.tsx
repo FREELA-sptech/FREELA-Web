@@ -3,8 +3,9 @@ import { Col, Form, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { createUser } from "../../../services/userService";
 import { object } from "prop-types";
+import { notBlank,isValidCPF, emailValidation, passwordValidation } from "../../../shared/scripts/validators";
 
-export function FirstStep() {
+export function FirstStep(props : any) {
     const [formData, setFormData] = useState({
         name: '',
         userName: '',
@@ -13,31 +14,7 @@ export function FirstStep() {
         password: ''
       });
     const [errors, setErrors] = useState({});
-
-    const isValidCPF = (cpf: string): boolean=> {
-        cpf = cpf.replace(/[^\d]/g, ''); // Remove tudo que não é número
-        if (cpf.length !== 11) return false; // CPF deve ter 11 dígitos
-      
-        // Calcula o primeiro dígito verificador
-        let sum = 0;
-        for (let i = 0; i < 9; i++) {
-          sum += parseInt(cpf.charAt(i)) * (10 - i);
-        }
-        let remainder = sum % 11;
-        let digit = remainder < 2 ? 0 : 11 - remainder;
-      
-        if (parseInt(cpf.charAt(9)) !== digit) return false;
-      
-        // Calcula o segundo dígito verificador
-        sum = 0;
-        for (let i = 0; i < 10; i++) {
-          sum += parseInt(cpf.charAt(i)) * (11 - i);
-        }
-        remainder = sum % 11;
-        digit = remainder < 2 ? 0 : 11 - remainder;
-      
-        return parseInt(cpf.charAt(10)) === digit;
-      }
+    const navigate = useNavigate();
 
     const setField = (field: any, value: any) => {
         setFormData({
@@ -61,30 +38,29 @@ export function FirstStep() {
             password: ''
           }
 
-        if(!name || name === ""){
+        if(notBlank(name)){
             newErros.name = "O campo nome não pode estar vazio";         
         }
 
-        if(!userName || userName === ""){
+        if(notBlank(userName)){
             newErros.userName = "O campo usuário não pode estar vazio";         
         }
 
-        const regex = /\S+@\S+\.\S+/;
-        if(!email || email === ""){
+        if(notBlank(email)){
             newErros.email = "O campo email não pode estar vazio";
-        }else if(!regex.test(email)){
+        }else if(!emailValidation(email)){
             newErros.email = "Email inválido";
         }
 
-        if(!cpf || cpf === ""){
+        if(notBlank(cpf)){
             newErros.cpf = "O campo CPF não pode estar vazio";
         }else if(!isValidCPF(cpf)){
             newErros.cpf = "CPF inválido";
         }
 
-        if(!password || password === ""){
+        if(notBlank(password)){
             newErros.password = "O campo senha não pode estar vazio";
-        }else if(password.length < 8){
+        }else if(passwordValidation(password)){
             newErros.password = "Senha muito curta";
         }
 
@@ -100,8 +76,11 @@ export function FirstStep() {
             if(!errorsValues){
                 setErrors(errors);
             }else{
-                console.log(formData)
+                props.firstStepData(formData);
                 const response = await createUser(formData);
+                if(response.status == 201){
+                    navigate("/login")
+                }
             }
         } catch (error) {
             alert(error)
@@ -110,6 +89,7 @@ export function FirstStep() {
     };
     return (
         <Col xs={12} md={12} lg={6} className="container-form d-flex flex-column justify-content-center align-items-center">
+            <Col xs={10} md={11} lg={12} className="d-flex flex-column align-items-center justify-content-center">
             <h1 className="title text-center">Cadastre-se ainda hoje</h1>
             <Form onSubmit={handleSubmit} className="form d-flex flex-column col-md-10 col-lg-8">
                 <Form.Group>
@@ -139,7 +119,7 @@ export function FirstStep() {
                         isInvalid={!!errors.name}
                     />
                     <Form.Control.Feedback type="invalid">
-                        {errors.nome}
+                        {errors.name}
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
@@ -190,10 +170,10 @@ export function FirstStep() {
                         size="lg"
                         type="password"
                         name="password"
-                        isInvalid={!!errors.senha}
+                        isInvalid={!!errors.password}
                     />
                     <Form.Control.Feedback type="invalid">
-                        {errors.senha}
+                        {errors.password}
                         </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
@@ -201,6 +181,7 @@ export function FirstStep() {
                 </Form.Group>
                 <button className="button-base primary-standart" type="submit">Criar conta</button>
             </Form>
+            </Col>
         </Col>
     )
 }
