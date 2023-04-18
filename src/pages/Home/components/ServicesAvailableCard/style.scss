@@ -18,6 +18,12 @@
     .button-hidden {
       bottom: -50px;
     }
+
+    @media (max-width: 991px) {
+      .button-hidden {
+        bottom: 0 !important;
+      }
+    }
   }
 }
 

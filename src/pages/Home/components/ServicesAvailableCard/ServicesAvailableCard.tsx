@@ -7,7 +7,7 @@ function ServicesAvailableCard() {
   return (
     <Card className="services-available-background b-radius position-relative overflow-hidden">
       <OverlayTrigger
-        trigger="hover"
+        trigger={["hover", "focus"]}
         key='teste'
         placement='left'
         overlay={
@@ -25,20 +25,8 @@ function ServicesAvailableCard() {
       <Card.Img style={{ borderRadius: '16px 16px 0 0' }} width='100%' height='45%' variant="top" src="https://focalizando.com.br/sites/default/files/2023-03/ideias-de-tatuagens-no-antebraco-masculina-e-feminina.jpg" />
       <Card.Body className="mb-4">
         <Card.Title className="title">Criação de Landing Page</Card.Title>
-        <Figure className="d-flex align-items-center gap-2 my-3">
-          <Figure.Image
-            width='30px'
-            height='30px'
-            alt="dollar"
-            src="/assets/icons/dolar-background.svg"
-            className="m-0"
-          />
-          <Figure.Caption>
-            Valor: <span className="text-color fw-bold">R$ 20,00</span>
-          </Figure.Caption>
-        </Figure>
-        <Row className="d-flex justify-content-between my-3">
-          <Figure className="d-flex align-items-center gap-2 w-50 m-0">
+        <Row className="d-flex justify-content-start my-3 gap-2">
+          <Figure className="d-flex align-items-center gap-2 w-auto m-0">
             <Figure.Image
               width='30px'
               height='30px'
@@ -46,11 +34,11 @@ function ServicesAvailableCard() {
               src="/assets/icons/calendar.svg"
               className="m-0"
             />
-            <Figure.Caption>
-              Criada: <span className="text-color fw-bold">01/04/2023</span>
+            <Figure.Caption className="d-flex flex-column">
+              Orçamento: <span className="fs-6 text-color fw-bold">R$: 200,00</span>
             </Figure.Caption>
           </Figure>
-          <Figure className="d-flex align-items-center gap-2 w-50 m-0">
+          <Figure className="d-flex align-items-center gap-2 w-auto m-0">
             <Figure.Image
               width='30px'
               height='30px'
@@ -58,8 +46,8 @@ function ServicesAvailableCard() {
               src="/assets/icons/calendar.svg"
               className="m-0"
             />
-            <Figure.Caption>
-              Prazo: <span className="text-color fw-bold">17/04/2023</span>
+            <Figure.Caption className="d-flex flex-column">
+              Prazo: <span className="fs-6 text-color fw-bold">7 DIAS</span>
             </Figure.Caption>
           </Figure>
         </Row>

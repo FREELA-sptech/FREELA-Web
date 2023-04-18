@@ -3,6 +3,7 @@ import ServicesAvailableCard from "./components/ServicesAvailableCard/ServicesAv
 import './style.scss'
 import { useState } from "react";
 import FiltersCard from "./components/FiltersCard/FiltersCard";
+import FreelancerProfileCard from "./components/FreelancerProfileCard/FreelancerProfileCard";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
@@ -54,6 +55,21 @@ function Home() {
               </Col>
               <Col xs={12} md={6} lg={4} className="p-3">
                 <ServicesAvailableCard />
+              </Col>
+              <Col xs={12} md={6} lg={4} className="p-3">
+                <FreelancerProfileCard />
+              </Col>
+              <Col xs={12} md={6} lg={4} className="p-3">
+                <FreelancerProfileCard />
+              </Col>
+              <Col xs={12} md={6} lg={4} className="p-3">
+                <FreelancerProfileCard />
+              </Col>
+              <Col xs={12} md={6} lg={4} className="p-3">
+                <FreelancerProfileCard />
+              </Col>
+              <Col xs={12} md={6} lg={4} className="p-3">
+                <FreelancerProfileCard />
               </Col>
             </Row>
           </Col>
