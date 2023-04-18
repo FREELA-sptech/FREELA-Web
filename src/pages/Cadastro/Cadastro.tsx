@@ -126,8 +126,8 @@ function Cadastro() {
                 </Row>
             </Container>
 
-        </Container>
-    )
+    </Container>
+  )
 }
 
 export default Cadastro;
