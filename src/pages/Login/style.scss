@@ -2,5 +2,24 @@
   &-background {
     background-color: var(--background-color);
     flex-grow: 1;
+    .content {
+      min-height: calc(100vh - 80px);
+      .category {
+        color: var(--text-color);
+      }
+
+      .form {
+        gap: 2rem;
+      }
+
+    }
+    .image-section {
+      background: var(--background-color) url("/assets/images/banner-icon.svg") center 100% no-repeat;
+      padding: 0;
+
+      .text-container {
+        padding: 2rem;
+      }
+    }
   }
 }

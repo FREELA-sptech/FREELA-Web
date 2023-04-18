@@ -1,0 +1,52 @@
+.filters-card {
+  &-background {
+    border-radius: 16px !important;
+
+    .checkbox {
+      box-shadow: none !important;
+      margin-right: 0;
+
+      input {
+        box-shadow: none !important;
+        border: 2px solid var(--dark-contrast-color);
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+
+        &:checked {
+          background-color: var(--dark-contrast-color);
+        }
+      }
+    }
+  }
+
+  &-header {
+    box-shadow: none !important;
+
+    button {
+      background-color: var(--contrast-background-color) !important;
+      height: 50px !important;
+      box-shadow: none;
+      border-radius: 16px !important;
+
+      &:focus {
+        box-shadow: none;
+      }
+
+      &::after {
+        background-image: url("/public/assets/icons/arrow-accordion.svg") !important;
+        background-position: center;
+        transform: rotate(180deg);
+      }
+
+      &:not(.collapsed) {
+        color: unset;
+        border-radius: 16px 16px 0 0 !important;
+
+        &::after {
+          transform: rotate(0deg);
+        }
+      }
+    }
+  }
+}

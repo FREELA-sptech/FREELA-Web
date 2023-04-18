@@ -18,6 +18,10 @@
   color: var(--dark-contrast-color) !important;
 }
 
+.text-color {
+  color: var(--text-color) !important;
+}
+
 .big-title {
   font-family: 'Poppins';
   font-style: normal;
@@ -58,6 +62,11 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+}
+
+.mini-summary {
+  font-size: 0.875em;
+  color: #6c757d;
 }
 
 .text-center {
