@@ -5,6 +5,7 @@ import Login from './pages/Login/Login'
 import Index from './pages/Index/Index'
 import Cadastro from './pages/Cadastro/Cadastro'
 import Home from './pages/Home/Home'
+import Proposta from './pages/Proposta/Proposta'
 
 const AppRoutes = () => (
   <BrowserRouter>
@@ -14,6 +15,7 @@ const AppRoutes = () => (
       <Route path="/login" element={<Login />} />
       <Route path='/home' element={<Home />} />
       <Route path="/cadastro" element={<Cadastro />} />
+      <Route path="/proposta" element={<Proposta />} />
     </Routes>
   </BrowserRouter>
 )
