@@ -9,6 +9,11 @@
             padding: 2rem 0rem;
             gap: 1rem;
             background-color: #fff;
+
+            .link{
+                cursor: pointer;
+                color: var(--text-color);
+            }
         }
         .form{
             gap: 1.5rem;
