@@ -3,12 +3,14 @@ import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstra
 import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
 import { UserForm } from "./components/UserForm/UserForm";
 import { InterestForm } from "./components/InterestForm/InterestForm";
+import { MdArrowBack } from "react-icons/md";
 
 //Hooks
 import { useForm } from "../../hooks/useForm";
 import { useState } from "react";
 import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
 import { createUser } from "../../services/userService";
+import UserType from "./components/UserType/UserType";
 
 
 function Cadastro() {
@@ -17,7 +19,9 @@ function Cadastro() {
         userName: '',
         email: '',
         cpf: '',
-        password: ''
+        password: '',
+        type: ""
+
     });
     const [errors, setErrors] = useState({
         name: '',
@@ -26,8 +30,8 @@ function Cadastro() {
         cpf: '',
         password: ''
     });
-    const formComponents = [<UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm />]
-    const { currentStep, currentComponent, changeStep } = useForm(formComponents)
+    const formComponents = [<UserType formData={formData} setFormData={setFormData} />, <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm />]
+    const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
     const validateForm = () => {
         const { name, userName, email, cpf, password } = formData;
         const newErros = {
@@ -67,24 +71,35 @@ function Cadastro() {
         return newErros;
     }
 
+    const handleHeaderText = (currentStep : number) =>{
+        if (currentStep == 0) {return (<h1 className="title text-center w-100">Você é um:</h1>)}
+        if (currentStep == 1) {return (<h1 className="title text-center">Complete seus dados</h1>)}
+        return <h1 className="title text-center">Selecione seus Interesses</h1>;
+    }
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        try {
-            const errors = validateForm();
-            const valores = Object.values(errors);
-            const errorsValues = valores.every(valor => valor === "");
-            if (!errorsValues) {
-                setErrors(errors);
-            } else {
-                console.log(formData);
-                const response = await createUser(formData);
-                if (response.status == 201) {
-                    changeStep(currentStep+1)
-                    // navigator("/login")
+        if (currentStep == 0) changeStep(currentStep + 1)
+        else {
+            try {
+                const errors = validateForm();
+                const valores = Object.values(errors);
+                const errorsValues = valores.every(valor => valor === "");
+                if (!errorsValues) {
+                    setErrors(errors);
+                } else {
+                    console.log(formData);
+                    setFormData(formData);
+                    changeStep(currentStep + 1)
+                    // const response = await createUser(formData);
+                    // if (response.status == 201) {
+                    // } else {
+
+                    // }
                 }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            alert(error)
         }
 
     };
@@ -115,10 +130,20 @@ function Cadastro() {
                     </Col>
                     <Col xs={12} md={12} lg={6} className="container-form d-flex flex-column justify-content-center align-items-center">
                         <Col xs={10} md={11} lg={12} className="d-flex flex-column align-items-center justify-content-center">
+                            <Col lg={10} xs={12} className="d-flex align-items-center gap-3">
+                            {!isFirstStep && (
+                                <a className="link" onClick={() => changeStep(currentStep - 1)}><MdArrowBack size={"2rem"} /></a>
+                            )}
+                            {handleHeaderText(currentStep)}
+                            </Col>
                             <Form onSubmit={handleSubmit} className="form d-flex flex-column col-md-10 col-lg-8">
                                 {currentComponent}
-                                <Col className="d-flex">
-                                    <button className="button-base primary-standart" type="submit">Avançar</button>
+                                <Col className="d-flex justify-content-center align-items-center gap-3">
+                                    {!isLastStep ? (
+                                        <button className="button-base primary-standart w-100" type="submit">Avançar</button>
+                                    ) : (
+                                        <button className="button-base primary-standart w-100" type="submit">Concluir</button>
+                                    )}
                                 </Col>
                             </Form>
                         </Col>
@@ -126,8 +151,8 @@ function Cadastro() {
                 </Row>
             </Container>
 
-    </Container>
-  )
+        </Container>
+    )
 }
 
 export default Cadastro;

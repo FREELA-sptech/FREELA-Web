@@ -1,0 +1,20 @@
+.options-persona:checked{
+    background-color: red;
+}
+
+.checkbox {
+    box-shadow: none !important;
+    margin-right: 0;
+
+    input {
+      box-shadow: none !important;
+      border: 2px solid var(--dark-contrast-color);
+      height: 20px;
+      width: 20px;
+      cursor: pointer;
+
+      &:checked {
+        background-color: var(--dark-contrast-color);
+      }
+    }
+  }

@@ -1,12 +1,7 @@
-import { useState } from "react";
 import { Col, Form, InputGroup } from "react-bootstrap";
-import { useNavigate } from "react-router";
-import { createUser } from "../../../../services/userService";
-import { object } from "prop-types";
-import { notBlank, isValidCPF, emailValidation, passwordValidation } from "../../../../shared/scripts/validators";
 
 export function UserForm(props: any) {
-    console.log(props.formData);
+    console.log(props.formData)
     const setField = (field: any, value: any) => {
         props.setFormData({
             ...props.formData, [field]: value
@@ -19,7 +14,7 @@ export function UserForm(props: any) {
 
     }
     return (
-        <Col>
+        <Col className="container-form d-flex flex-column justify-content-center align-items-stretch">
             <Form.Group>
                 <Form.Label>
                     Usuario
@@ -28,6 +23,7 @@ export function UserForm(props: any) {
                     onChange={(e) => setField("userName", e.target.value)}
                     name="userName"
                     size="lg"
+                    value={props.formData.userName}
                     type="name"
                     isInvalid={!!props.errors.userName}
                 />
@@ -42,6 +38,7 @@ export function UserForm(props: any) {
                 <Form.Control
                     onChange={(e) => setField("name", e.target.value)}
                     name="name"
+                    value={props.formData.name}
                     size="lg"
                     type="name"
                     isInvalid={!!props.errors.name}
@@ -61,6 +58,7 @@ export function UserForm(props: any) {
                         name="email"
                         size="lg"
                         type="text"
+                        value={props.formData.email}
                         placeholder=""
                         aria-describedby="inputGroupPrepend"
                         isInvalid={!!props.errors.email}
@@ -81,6 +79,7 @@ export function UserForm(props: any) {
                         size="lg"
                         type="text"
                         placeholder=""
+                        value={props.formData.cpf}
                         aria-describedby="inputGroupPrepend"
                         isInvalid={!!props.errors.cpf}
                     />
@@ -98,14 +97,12 @@ export function UserForm(props: any) {
                     size="lg"
                     type="password"
                     name="password"
+                    value={props.formData.password}
                     isInvalid={!!props.errors.password}
                 />
                 <Form.Control.Feedback type="invalid">
                     {props.errors.password}
                 </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group>
-                <Form.Check type="checkbox" label="Concordo com os termos" required />
             </Form.Group>
         </Col>
 
