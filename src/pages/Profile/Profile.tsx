@@ -1,8 +1,8 @@
 import { Accordion, Card, Col, Container, Figure, Form, Modal, Row, useAccordionButton } from "react-bootstrap";
 import './style.scss'
 import { useState } from "react";
-import ServicesAvailableCard from "../Home/components/ServicesAvailableCard/ServicesAvailableCard";
-import FreelancerProfileCard from "../Home/components/FreelancerProfileCard/FreelancerProfileCard";
+import ServicesAvailableCard from "../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
+import FreelancerProfileCard from "../../shared/components/FreelancerProfileCard/FreelancerProfileCard";
 import CardProfile from "./components/CardProfile/CardProfile";
 
 function Profile() {
