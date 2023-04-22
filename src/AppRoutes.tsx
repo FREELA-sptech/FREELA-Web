@@ -8,7 +8,7 @@ import Home from './pages/Home/Home'
 
 const AppRoutes = () => (
   <BrowserRouter>
-    <Header></Header>
+    <Header authenticated={false}></Header>
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/login" element={<Login />} />
