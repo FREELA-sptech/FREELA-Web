@@ -114,3 +114,25 @@
     color: var(--text-color);
   }
 }
+
+.success-standart {
+  @include button-base;
+  background: var(--success-color);
+  color: var(--background-color);
+  border: none;
+
+  &:hover {
+    color: var(--background-color);
+  }
+}
+
+.error-standart {
+  @include button-base;
+  background: var(--error-color);
+  color: var(--background-color);
+  border: none;
+
+  &:hover {
+    color: var(--background-color);
+  }
+}

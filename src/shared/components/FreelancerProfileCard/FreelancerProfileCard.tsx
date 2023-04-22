@@ -1,6 +1,6 @@
 import { Button, Card, Figure, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import "./style.scss"
-import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
+import ButtonBase from "../ButtonBase/ButtonBase";
 
 
 function FreelancerProfileCard() {
@@ -45,7 +45,10 @@ function FreelancerProfileCard() {
               />
             </Row>
             <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
-              <span className="text-color fw-bold">Cassio Ramos</span>
+              <div className="d-flex flex-column">
+                <span className="text-color fw-bold f-16 f-inter">Cassio Ramos</span>
+                <span className="f-12 f-roboto fw-semibold">Design</span>
+              </div>
               <Figure className="d-flex align-items-center m-0">
                 <Figure.Image
                   width='15px'
@@ -54,7 +57,7 @@ function FreelancerProfileCard() {
                   src="/assets/icons/star.svg"
                   className="m-0"
                 />
-                <Figure.Caption>
+                <Figure.Caption className="f-14 f-inter">
                   4.9
                 </Figure.Caption>
               </Figure>
@@ -62,7 +65,7 @@ function FreelancerProfileCard() {
           </Figure>
         </Card.Title>
         <Row className="d-flex justify-content-between my-3 text-center">
-          <span className="mini-summary">"Sou um jogador que está sempre buscando evoluir e aprimorar minhas habilidades, seja através de treinos específicos ou análise de jogos."</span>
+          <span className="f-14 aditional-color">"Sou um jogador que está sempre buscando evoluir e aprimorar minhas habilidades, seja através de treinos específicos ou análise de jogos."</span>
         </Row>
       </Card.Body>
       <ButtonBase onClick={() => { }} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
