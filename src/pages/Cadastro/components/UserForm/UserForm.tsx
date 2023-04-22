@@ -1,7 +1,7 @@
 import { Col, Form, InputGroup } from "react-bootstrap";
 
 export function UserForm(props: any) {
-    console.log(props.formData)
+    // console.log(props.formData)
     const setField = (field: any, value: any) => {
         props.setFormData({
             ...props.formData, [field]: value

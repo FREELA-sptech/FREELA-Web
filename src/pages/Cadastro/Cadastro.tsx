@@ -11,9 +11,11 @@ import { useState } from "react";
 import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
 import { createUser } from "../../services/userService";
 import UserType from "./components/UserType/UserType";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 function Cadastro() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         userName: '',
@@ -21,7 +23,6 @@ function Cadastro() {
         cpf: '',
         password: '',
         type: ""
-
     });
     const [errors, setErrors] = useState({
         name: '',
@@ -30,7 +31,8 @@ function Cadastro() {
         cpf: '',
         password: ''
     });
-    const formComponents = [<UserType formData={formData} setFormData={setFormData} />, <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm />]
+    const [dataCategory, setDataCategory] = useState([]);
+    const formComponents = [<UserType formData={formData} setFormData={setFormData} />, <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm dataCategory={dataCategory} setDataCategory={setDataCategory}/>]
     const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
     const validateForm = () => {
         const { name, userName, email, cpf, password } = formData;
@@ -79,8 +81,8 @@ function Cadastro() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (currentStep == 0) changeStep(currentStep + 1)
-        else {
+        if (currentStep == 0) return changeStep(currentStep + 1)
+        if(currentStep == 1) {
             try {
                 const errors = validateForm();
                 const valores = Object.values(errors);
@@ -100,6 +102,9 @@ function Cadastro() {
             } catch (error) {
                 console.log(error);
             }
+        }
+        if (dataCategory.length > 0){
+            navigate("/home")
         }
 
     };
