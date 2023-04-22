@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import './style.scss'
-import { Container, Nav, Navbar, Offcanvas } from 'react-bootstrap';
+import { Container, Figure, Nav, Navbar, Offcanvas, Row } from 'react-bootstrap';
 import { useState } from 'react';
 
 function Header() {
@@ -19,10 +19,33 @@ function Header() {
         <Link to='/' className='logo' onClick={handleClose}>
           FREELA
         </Link>
-        <Navbar.Toggle
-          aria-controls='control-show-right-side-menu'
-          className='p-0'
-          onClick={handleOpen} />
+        <Link to='/perfil' className='tertiary-text d-none d-xl-block' onClick={handleClose}>
+          Encontre projetos
+        </Link>
+        <Row className='d-flex flex-grow-1 flex-nowrap m-0 justify-content-end align-items-center'>
+          <Link to='/perfil' className='w-auto px-2 d-xl-none' onClick={handleClose}>
+            <Figure.Image
+              width='35px'
+              height='35px'
+              alt="dollar"
+              src="/assets/icons/profile.svg"
+              className="m-0"
+            />
+          </Link>
+          <Link to='/perfil' className='w-auto px-2 d-xl-none' onClick={handleClose}>
+            <Figure.Image
+              width='35px'
+              height='35px'
+              alt="dollar"
+              src="/assets/icons/profile.svg"
+              className="m-0"
+            />
+          </Link>
+          <Navbar.Toggle
+            aria-controls='control-show-right-side-menu'
+            className='p-0 w-auto'
+            onClick={handleOpen} />
+        </Row>
         <Navbar.Offcanvas
           id='control-show-right-side-menu'
           aria-labelledby='control-show-label-menu'
@@ -35,12 +58,40 @@ function Header() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="text-center justify-content-xl-end flex-grow-1">
-              <Link to='/login' className='tertiary-text' onClick={handleClose}>
-                login
-              </Link>
-              <Link to='/cadastro' className='primary-standart' onClick={handleClose}>
-                cadastro
-              </Link>
+              {false ? (
+                <>
+                  <Link to='/login' className='tertiary-text' onClick={handleClose}>
+                    login
+                  </Link>
+                  <Link to='/cadastro' className='primary-standart' onClick={handleClose}>
+                    cadastro
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to='/perfil' className='tertiary-text d-xl-none' onClick={handleClose}>
+                    Encontre projetos
+                  </Link>
+                  <Link to='/perfil' className='w-auto px-2 d-xl-block d-none' onClick={handleClose}>
+                    <Figure.Image
+                      width='35px'
+                      height='35px'
+                      alt="dollar"
+                      src="/assets/icons/profile.svg"
+                      className="m-0"
+                    />
+                  </Link>
+                  <Link to='/perfil' className='w-auto px-2 d-xl-block d-none' onClick={handleClose}>
+                    <Figure.Image
+                      width='35px'
+                      height='35px'
+                      alt="dollar"
+                      src="/assets/icons/profile.svg"
+                      className="m-0"
+                    />
+                  </Link>
+                </>
+              )}
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

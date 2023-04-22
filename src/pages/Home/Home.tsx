@@ -16,7 +16,7 @@ function Home() {
     <section className="home-background">
       <Container>
         <Row className="pt-3 pb-3 d-flex justify-content-end">
-          <h1 className="title-underline d-flex flex-column justify-content-end w-auto text-uppercase f-roboto dark-contrast-color fw-bold f-42 dark-contrast-color">
+          <h1 className="title-underline d-flex flex-column justify-content-end w-auto text-uppercase f-roboto dark-contrast-color fw-bold f-30 dark-contrast-color">
             projetos disponíveis
           </h1>
         </Row>
@@ -52,6 +52,7 @@ function Home() {
                   className="m-0 ms-3"
                 />
                 <Form.Control
+                  style={{boxShadow: 'none'}}
                   className="primary-input"
                   placeholder="Busque aqui"
                   aria-label="Busque aqui"

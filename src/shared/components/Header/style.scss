@@ -2,6 +2,10 @@
   &-background {
     background-color: var(--background-color);
 
+    .navbar-hamburguer {
+      flex-shrink: initial;
+    }
+
     .navbar-toggler {
       border: none;
       box-shadow: none;
