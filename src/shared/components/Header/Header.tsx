@@ -19,7 +19,7 @@ function Header() {
         <Link to='/' className='logo' onClick={handleClose}>
           FREELA
         </Link>
-        <Link to='/perfil' className='tertiary-text d-none d-xl-block' onClick={handleClose}>
+        <Link to='/home' className='tertiary-text d-none d-xl-block' onClick={handleClose}>
           Encontre projetos
         </Link>
         <Row className='d-flex flex-grow-1 flex-nowrap m-0 justify-content-end align-items-center'>
@@ -28,7 +28,7 @@ function Header() {
               width='35px'
               height='35px'
               alt="dollar"
-              src="/assets/icons/profile.svg"
+              src="/assets/icons/notification.svg"
               className="m-0"
             />
           </Link>
@@ -69,7 +69,7 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <Link to='/perfil' className='tertiary-text d-xl-none' onClick={handleClose}>
+                  <Link to='/home' className='tertiary-text d-xl-none' onClick={handleClose}>
                     Encontre projetos
                   </Link>
                   <Link to='/perfil' className='w-auto px-2 d-xl-block d-none' onClick={handleClose}>
@@ -77,7 +77,7 @@ function Header() {
                       width='35px'
                       height='35px'
                       alt="dollar"
-                      src="/assets/icons/profile.svg"
+                      src="/assets/icons/notification.svg"
                       className="m-0"
                     />
                   </Link>
