@@ -1,7 +1,7 @@
 export function isValidCPF(cpf: string): boolean{
     cpf = cpf.replace(/[^\d]/g, ''); // Remove tudo que não é número
     if (cpf.length !== 11) return false; // CPF deve ter 11 dígitos
-  
+    else if (cpf == "00000000000") return false;
     // Calcula o primeiro dígito verificador
     let sum = 0;
     for (let i = 0; i < 9; i++) {
@@ -24,8 +24,6 @@ export function isValidCPF(cpf: string): boolean{
   }
 
   export function notBlank(field: string){
-    console.log(field);
-    console.log(field || field === "")
     return !field || field === "";
   }
 

@@ -5,15 +5,17 @@ import Login from './pages/Login/Login'
 import Index from './pages/Index/Index'
 import Cadastro from './pages/Cadastro/Cadastro'
 import Home from './pages/Home/Home'
+import Profile from './pages/Profile/Profile'
 
 const AppRoutes = () => (
   <BrowserRouter>
-    <Header></Header>
+    <Header authenticated={false}></Header>
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/login" element={<Login />} />
       <Route path='/home' element={<Home />} />
       <Route path="/cadastro" element={<Cadastro />} />
+      <Route path="/perfil" element={<Profile />} />
     </Routes>
   </BrowserRouter>
 )
