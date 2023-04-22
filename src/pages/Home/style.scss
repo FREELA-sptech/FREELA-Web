@@ -2,6 +2,18 @@
   &-background {
     background-color: var(--background-color);
     flex-grow: 1;
+
+    .title-underline {
+      &::after {
+        content: '';
+        width: 40%;
+        margin-left: 60%;
+        border-radius: 30px;
+        height: 7px;
+        display: block;
+        background-color: var(--aditional-color);
+      }
+    }
   }
 
   &-icon-background {
