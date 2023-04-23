@@ -1,13 +1,18 @@
 import { useState } from "react";
-import { Breadcrumb, Card, Col, Container, ListGroup, Row, Tab, Tabs, Image } from "react-bootstrap";
+import { Breadcrumb, Card, Col, Container, ListGroup, Row, Tab, Tabs, Image, Modal, Button } from "react-bootstrap";
 import { MdAttachMoney, MdCalendarToday, MdCategory, MdDelete, MdOutlineDelete, MdOutlineEdit, MdOutlineHome } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import "./style.scss";
 import ButtonBase from "../../../shared/components/ButtonBase/ButtonBase";
 import ProposalCard from "../../../shared/components/ProposalCard/ProposalCard";
+import { OrderUpdate } from "../OrderUpdate/OrderUpdate";
 
 export function OrderDetails() {
     const [order, setOrder] = useState({})
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     return (
         <Container fluid className="order-details">
             <Container className="container d-flex flex-column justify-content-start">
@@ -52,9 +57,9 @@ export function OrderDetails() {
                         </div>
                     </Col>
                     <Col className="d-flex justify-content-end align-items-start gap-3">
-                        {/* <button className="btn-update"><MdOutlineEdit fill="#274c77" size={"32px"} /></button>
-                        <button className="btn-delete"><MdOutlineDelete fill="#BA1A1A" size={"32px"} /></button> */}
-                        <button className="buttonBase primary-standart">Fazer Proposta</button>
+                        <button className="btn-update" onClick={handleShow}><MdOutlineEdit fill="#274c77" size={"32px"} /></button>
+                        <button className="btn-delete"><MdOutlineDelete fill="#BA1A1A" size={"32px"} /></button>
+                        {/* <button className="buttonBase primary-standart">Fazer Proposta</button> */}
                     </Col>
                 </Row>
                 <Row>
@@ -80,10 +85,10 @@ export function OrderDetails() {
                                     </ListGroup>
                                 </Card>
                             </Tab>
-                            <Tab eventKey="propostas" title="Propostas" tabClassName="painel">
+                            <Tab eventKey="propostas" title="Propostas :  1" tabClassName="painel">
                                 <Card>
                                     <Card.Body className="d-flex gap-3">
-                                        <ProposalCard/>
+                                        <ProposalCard />
                                     </Card.Body>
                                 </Card>
                             </Tab>
@@ -92,6 +97,20 @@ export function OrderDetails() {
                     </Col>
                 </Row>
             </Container>
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                size="lg"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Atualizar - Criação de Site para Petshop</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <OrderUpdate/>
+                </Modal.Body>
+            </Modal>
         </Container>
     )
 }

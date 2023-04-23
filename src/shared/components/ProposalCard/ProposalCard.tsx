@@ -1,10 +1,26 @@
-import { Button, Card, Figure, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
+import { Button, Card, Figure, Modal, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import "./style.scss"
 import ButtonBase from "../ButtonBase/ButtonBase";
+import { ProposalDetails } from "./ProposalDetails/ProposalDetails";
+import { useState } from "react";
+import { MdOutlineEdit } from "react-icons/md";
+import { ProposalUpdate } from "./ProposalUpdate/ProposalUpdate";
 
 
 function ProposalCard() {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [currentComponent,setCurrentComponent] = useState(0);
+
+  const proposalComponents = [<ProposalDetails />,<ProposalUpdate/>]
+  const handleSelectComponent = () =>{
+    if(currentComponent == 1) return setCurrentComponent(currentComponent-1);
+    setCurrentComponent(currentComponent+1);
+  }
+
   return (
+    <>
     <Card className="services-available-background b-radius position-relative overflow-hidden">
       <Card.Body className="mb-4">
         <Card.Title className="title">
@@ -73,32 +89,24 @@ function ProposalCard() {
             </Figure.Caption>
           </Figure>
         </Row>
-
-        {/* <Row className="d-flex justify-content-between my-3 gap-2">
-          <button className="error-standart w-auto d-flex align-items-center">
-            recusar
-            <Figure.Image
-              width='20px'
-              height='15px'
-              alt="calendario"
-              src="/assets/icons/close-white.svg"
-              className="m-0 ms-1"
-            />
-          </button>
-          <button className="success-standart w-auto d-flex align-items-center">
-            aceitar
-            <Figure.Image
-              width='20px'
-              height='15px'
-              alt="calendario"
-              src="/assets/icons/check.svg"
-              className="m-0 ms-1"
-            />
-          </button>
-        </Row> */}
       </Card.Body>
-      <ButtonBase onClick={() => { }} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
+      <ButtonBase onClick={() => handleShow()} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
     </Card>
+    <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        size="lg"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title><button onClick={handleSelectComponent}className="btn-update"><MdOutlineEdit fill="#274c77" size={"32px"}/></button>Detalhes da proposta</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {proposalComponents[currentComponent]}
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
 
