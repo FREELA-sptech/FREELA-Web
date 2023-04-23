@@ -73,7 +73,7 @@ export function OrderDetails() {
                                             <div className="image-container">
                                                 <img src="https://focalizando.com.br/sites/default/files/2023-03/ideias-de-tatuagens-no-antebraco-masculina-e-feminina.jpg" alt="" />
                                             </div>
-                                            <h4>Descrição</h4>
+                                            <h4 className="title-info">Descrição</h4>
                                             <p>Somos uma loja de animais de estimação que oferece produtos e serviços para cães, gatos, pássaros e outros animais. Nós gostaríamos de ter um site que represente a nossa marca e ajude a aumentar nossa presença online.</p>
                                             <p>O site deve incluir informações sobre os produtos e serviços que oferecemos, bem como informações úteis sobre cuidados com animais, dicas e notícias relevantes para nossos clientes. Queremos ter uma seção para exibir nossos produtos, uma seção para os serviços que oferecemos, uma seção para a nossa equipe e uma seção de contato para os clientes nos encontrarem.</p>
                                         </ListGroup.Item>
