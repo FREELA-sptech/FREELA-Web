@@ -136,3 +136,22 @@
     color: var(--background-color);
   }
 }
+
+.btn {
+
+  &-delete {
+      background-color: #FFDAD6;
+      outline: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+  }
+
+  &-update {
+      background-color: #E7ECEF;
+      outline: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+  }
+}
