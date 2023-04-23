@@ -6,6 +6,7 @@ import Index from './pages/Index/Index'
 import Cadastro from './pages/Cadastro/Cadastro'
 import Home from './pages/Home/Home'
 import Profile from './pages/Profile/Profile'
+import { OrderDetails } from './pages/Order/OrderDetails/OrderDetails'
 
 const AppRoutes = () => (
   <BrowserRouter>
@@ -16,6 +17,7 @@ const AppRoutes = () => (
       <Route path='/home' element={<Home />} />
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/perfil" element={<Profile />} />
+      <Route path="/order-details/:id" element={<OrderDetails/>} />
     </Routes>
   </BrowserRouter>
 )
