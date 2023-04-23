@@ -8,6 +8,7 @@ import Home from './pages/Home/Home'
 import Profile from './pages/Profile/Profile'
 import { OrderDetails } from './pages/Order/OrderDetails/OrderDetails'
 import { CreateOrder } from './pages/Order/CreateOrder/CreateOrder'
+import Proposta from './pages/Proposta/Proposta'
 
 const AppRoutes = () => (
   <BrowserRouter>
@@ -20,6 +21,7 @@ const AppRoutes = () => (
       <Route path="/perfil" element={<Profile />} />
       <Route path="/order-details/:id" element={<OrderDetails/>} />
       <Route path="/create-order" element={<CreateOrder/>} />
+      <Route path="/proposta" element={<Proposta />} />
     </Routes>
   </BrowserRouter>
 )
