@@ -2,7 +2,7 @@ import "./style.scss";
 import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstrap";
 import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
 import { UserForm } from "./components/UserForm/UserForm";
-import { InterestForm } from "./components/InterestForm/InterestForm";
+import { InterestForm } from "../../shared/components/InterestForm/InterestForm";
 import { MdArrowBack } from "react-icons/md";
 
 //Hooks
