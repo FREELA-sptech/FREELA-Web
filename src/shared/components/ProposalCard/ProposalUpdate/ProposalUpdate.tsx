@@ -1,4 +1,5 @@
-import { Container, Figure, Form, Row } from "react-bootstrap";
+import { Container, Figure, Form, InputGroup, Row } from "react-bootstrap";
+import { MdAttachMoney } from "react-icons/md";
 
 export function ProposalUpdate() {
     return (
@@ -44,16 +45,19 @@ export function ProposalUpdate() {
                 </Figure>
             </Row>
             <Row>
-                <Form className="d-flex flex-column gap-3"> 
+                <Form className="d-flex flex-column gap-3">
                     <Form.Group>
                         <Form.Label>
                             Valor que você espera receber
                         </Form.Label>
-                        <Form.Control
-                            name="maxValue"
-                            size="lg"
-                            type="name"
-                        />
+                        <InputGroup hasValidation>
+                            <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
+                            <Form.Control
+                                name="maxValue"
+                                size="lg"
+                                type="number"
+                            />
+                        </InputGroup>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>

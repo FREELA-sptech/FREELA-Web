@@ -1,6 +1,7 @@
-import { Col, Form } from "react-bootstrap"
+import { Col, Form, InputGroup } from "react-bootstrap"
+import { MdAttachMoney } from "react-icons/md"
 
-export function PrevisionOrder(props : any){
+export function PrevisionOrder(props: any) {
     const setField = (field: any, value: any) => {
         props.setFormData({
             ...props.formData, [field]: value
@@ -18,17 +19,20 @@ export function PrevisionOrder(props : any){
                 <Form.Label>
                     Valor maximo que você deseja pagar
                 </Form.Label>
-                <Form.Control
-                    onChange={(e) => setField("maxValue", e.target.value)}
-                    name="maxValue"
-                    size="lg"
-                    value={props.formData.maxValue}
-                    type="name"
-                    isInvalid={!!props.errors.maxValue}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {props.errors.maxValue}
-                </Form.Control.Feedback>
+                <InputGroup hasValidation>
+                    <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
+                    <Form.Control
+                        onChange={(e) => setField("maxValue", e.target.value)}
+                        name="maxValue"
+                        size="lg"
+                        value={props.formData.maxValue}
+                        type="number"
+                        isInvalid={!!props.errors.maxValue}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {props.errors.maxValue}
+                    </Form.Control.Feedback>
+                </InputGroup>
             </Form.Group>
             <Form.Group>
                 <Form.Label>
