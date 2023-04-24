@@ -1,74 +1,156 @@
 
+import { Form, InputGroup } from "react-bootstrap";
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import "./style.scss"
+import { useEffect, useState } from "react";
+import { notBlank } from "../../../../shared/scripts/validators";
+import { MdAttachMoney, MdDescription } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
-function CardProposta() {
-    const handleSubmit = (event: { preventDefault: () => void; target: {
-        [x: string]: any; valorPorHora: { value: any; }; prazoEntrega: { value: any; }; orcamento: { value: any; }; 
-        }; }) => {
+function CardProposta(props: any) {
 
-      event.preventDefault();
-      const valorPorHora = event.target.valorPorHora.value;
-      const prazoEntrega = event.target.prazoEntrega.value;
-      const orcamento = event.target.orcamento.value;
-      const descricao = event.target.descricao.value;
+  const { setShow } = props;
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    description: '',
+    maxValue: '',
+    deadline: ''
+  });
+  const [errors, setErrors] = useState({
+    description: '',
+    maxValue: '',
+    deadline: ''
+  });
+  const setField = (field: any, value: any) => {
+    setFormData({
+      ...formData, [field]: value
+    })
+    if (!!errors[field]) {
+      setErrors({
+        ...errors, [field]: null
+      })
+    }
+  }
 
-      if (valorPorHora === '' || prazoEntrega === '' || orcamento === '' || descricao == '') {
-        
-    
-      } else if (valorPorHora <= 0 || prazoEntrega <= 0 || orcamento <= 0 || descricao <= 0) {
-        
-        
-     }  else {
-        alert("proposta enviada")
-        // enviar formulário
+  const validateForm = () => {
+    const { maxValue, deadline, description, } = formData;
+    const newErros = {
+      description: '',
+      maxValue: '',
+      deadline: ''
+    }
+
+    if (notBlank(description)) {
+      newErros.description = "O campo descrição não pode estar vazio";
+    } else if (description.length < 30) {
+      newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
+    }
+    if (notBlank(maxValue)) {
+      newErros.maxValue = "O campo Valor máximo não pode estar vazio";
+    }
+    if (notBlank(deadline)) {
+      newErros.deadline = "O campo prazo não pode estar vazio";
+    }
+
+    return newErros;
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const errors = validateForm();
+      const valores = Object.values(errors);
+      const errorsValues = valores.every(valor => valor === "");
+      if (!errorsValues) {
+        setErrors(errors);
+      } else {
+        setFormData(formData);
+        setShow(true);
+        const timeoutId = setTimeout(() => {
+          setShow(false);
+          navigate('/home');
+        }, 1500);
+        return () => clearTimeout(timeoutId);
       }
-    };
-  
-    return (
-      <form onSubmit={handleSubmit}>
-        <div className="card-proposta align-self-start p-3">
-          <div className="topo">
-            <h4>
-              <b>Inicio</b> / Fazer proposta
-            </h4>
-          </div>
-          <div className="p-4">
-            <h2>Orçamento</h2>
-          </div>
-          <div className="d-flex justify-content-evenly box">
-            <div className="col-sm-3 teste p-4">
-              <h4>Valor por hora:</h4>
-              <input type="text" name="valorPorHora" placeholder="$RS:XXXX,XX" required min="0"  />
-            </div>
-            <div className="col-sm-3 teste p-4">
-              <h4>Prazo de entrega:</h4>
-              <input type="text" name="prazoEntrega" placeholder="0" required pattern="[1-9][0-9]*"  />
-            </div>
-            <div className="col-sm-3 teste p-4">
-              <h4>Orçamento:</h4>
-              <input type="text" name="orcamento" placeholder="$RS:XXXX,XX" required min="0"  />
-            </div>
-          </div>
-          <div className="cardDetalhes p-4">
-            <h2>Detalhes</h2>
-            <div className="mb-3">
-              <label className="form-label" >Descrição</label>
-              <textarea className="form-control" name='descricao' required min="10" ></textarea>
-            </div>
-            <div className="p-2">
-              <button type="submit" className="primary-standart">
-                Confirma
-              </button>
-              <button type="button" className="primary-text">
-                Cancelar
-              </button>
-            </div>
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="d-flex flex-column align-self-start">
+        <div>
+          <h4>Orçamento</h4>
+        </div>
+        <div className="d-flex justify-content-start gap-lg-3 flex-wrap">
+          <Form.Group>
+            <Form.Label>
+              Valor que você deseja receber
+            </Form.Label>
+            <InputGroup hasValidation>
+              <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
+              <Form.Control
+                onChange={(e) => setField("maxValue", e.target.value)}
+                name="maxValue"
+                size="lg"
+                value={formData.maxValue}
+                type="number"
+                isInvalid={!!errors.maxValue}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.maxValue}
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>
+              Prazo
+            </Form.Label>
+            <Form.Control
+              onChange={(e) => setField("deadline", e.target.value)}
+              name="deadline"
+              value={formData.deadline}
+              size="lg"
+              type="date"
+              isInvalid={!!errors.deadline}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.deadline}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </div>
+        <div className="info-line">
+          <h4>Detalhes</h4>
+          <Form.Group>
+            <Form.Label>
+              Descrição
+            </Form.Label>
+            <Form.Control
+              onChange={(e) => setField("description", e.target.value)}
+              as="textarea"
+              name="description"
+              value={formData.description}
+              size="lg"
+              type="description"
+              isInvalid={!!errors.description}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.description}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <div className="p-2">
+            <button type="submit" className="primary-standart">
+              Confirmar
+            </button>
+            <button onClick={() => navigate('/home')} type="button" className="primary-text">
+              Cancelar
+            </button>
           </div>
         </div>
-      </form>
-    );
-  }
-  
+      </div>
+    </form>
+  );
+}
+
 
 export default CardProposta

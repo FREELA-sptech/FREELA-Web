@@ -1,9 +1,10 @@
-import { Form } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import { InterestForm } from "../../../shared/components/InterestForm/InterestForm";
 import { useState } from "react";
 import "./style.scss";
+import { MdAttachMoney } from "react-icons/md";
 
-export function OrderUpdate(){
+export function OrderUpdate() {
     const [dataCategory, setDataCategory] = useState([]);
     return (
         <Form className="container-form-update d-flex flex-column ">
@@ -32,11 +33,14 @@ export function OrderUpdate(){
                 <Form.Label>
                     Valor maximo que você deseja pagar
                 </Form.Label>
-                <Form.Control
-                    name="maxValue"
-                    size="lg"
-                    type="name"
-                />
+                <InputGroup hasValidation>
+                    <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
+                    <Form.Control
+                        name="maxValue"
+                        size="lg"
+                        type="number"
+                    />
+                </InputGroup>
             </Form.Group>
             <Form.Group>
                 <Form.Label>
@@ -49,7 +53,7 @@ export function OrderUpdate(){
                 />
             </Form.Group>
             <h4>Categorias</h4>
-            <InterestForm dataCategory={dataCategory} setDataCategory={setDataCategory}/>
+            <InterestForm dataCategory={dataCategory} setDataCategory={setDataCategory} />
             <button type="submit" className="buttonBase primary-standart">Atualizar</button>
         </Form>
     )
