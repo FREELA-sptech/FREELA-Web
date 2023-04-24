@@ -2,9 +2,6 @@
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import "./style.scss"
 
-
-
-
 function CardProposta() {
     const handleSubmit = (event: { preventDefault: () => void; target: {
         [x: string]: any; valorPorHora: { value: any; }; prazoEntrega: { value: any; }; orcamento: { value: any; }; 
@@ -30,7 +27,7 @@ function CardProposta() {
   
     return (
       <form onSubmit={handleSubmit}>
-        <div className="card align-self-start p-3">
+        <div className="card-proposta align-self-start p-3">
           <div className="topo">
             <h4>
               <b>Inicio</b> / Fazer proposta

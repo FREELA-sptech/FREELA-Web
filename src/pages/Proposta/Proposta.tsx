@@ -1,14 +1,15 @@
-import { Col, Container, Row, Toast, ToastContainer } from "react-bootstrap";
-import "./style.scss"
-import React from "react";
-import CardProposta from "./components/CardProposta";
 
+
+import React from "react";
+import Alerta from "./components/Alert/Alerta"
+import CardProposta from "./components/CardProposta/CardProposta";
 
 function proposta() {
 
   return (
    <>
    <CardProposta />
+   <Alerta />
    </>
   );
 }
