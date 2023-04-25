@@ -114,3 +114,44 @@
     color: var(--text-color);
   }
 }
+
+.success-standart {
+  @include button-base;
+  background: var(--success-color);
+  color: var(--background-color);
+  border: none;
+
+  &:hover {
+    color: var(--background-color);
+  }
+}
+
+.error-standart {
+  @include button-base;
+  background: var(--error-color);
+  color: var(--background-color);
+  border: none;
+
+  &:hover {
+    color: var(--background-color);
+  }
+}
+
+.btn {
+
+  &-delete {
+      background-color: #FFDAD6;
+      outline: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+  }
+
+  &-update {
+      background-color: #E7ECEF;
+      outline: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+  }
+}

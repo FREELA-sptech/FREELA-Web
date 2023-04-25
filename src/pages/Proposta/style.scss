@@ -1,0 +1,23 @@
+
+.card-proposta {
+    border: solid #D3E4FF;
+    width: 80%;
+
+    .topo {
+
+        border-bottom: solid #D3E4FF;
+        width: 100%;
+    }
+
+    input {
+        background-color: var(dark-contrast-color);
+        border: solid #D3E4FF;
+        height: 50px;
+        width: 120%;
+    }
+
+    textarea {
+        height: 100px;
+        border: solid #D3E4FF;
+    }
+}

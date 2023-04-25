@@ -1,0 +1,24 @@
+.container-type {
+    padding: 2rem 0rem ;
+    .radio-group {
+        padding: 0 !important;
+
+        input {
+            visibility: hidden;
+            display: none;
+        }
+
+        .form-check-input:checked+.form-check-label {
+            .container-type {
+                background-color: #ced4da;
+            }
+        }
+
+        .container-type {
+            cursor: pointer;
+            padding: 2rem;
+            border: 1px solid var(--ligth-contrast-color);
+            border-radius: 20px;
+        }
+    }
+}

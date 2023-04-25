@@ -2,6 +2,17 @@
   &-background {
     background-color: var(--background-color);
 
+    .navbar-hamburguer {
+      flex-shrink: initial;
+    }
+
+    .fill-icon{
+      padding: 0.5rem;
+      background-color: #E7ECEF;
+      border-radius: 50%;
+      width: fit-content;
+    }
+
     .navbar-toggler {
       border: none;
       box-shadow: none;
