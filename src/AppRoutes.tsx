@@ -24,9 +24,9 @@ const AppRoutes = () => {
         <Route path='/home' element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/perfil" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-        <Route path="/order-details/:id" element={isAuthenticated ? <OrderDetails /> : <Navigate to="/login" />} />
-        <Route path="/create-order" element={isAuthenticated ? <CreateOrder /> : <Navigate to="/login" />} />
-        <Route path="/proposta" element={isAuthenticated ? <Proposta /> : <Navigate to="/login" />} />
+        <Route path="/order-details/:id" element={isAuthenticated ? <OrderDetails /> : <OrderDetails />} />
+        <Route path="/create-order" element={isAuthenticated ? <CreateOrder /> : <CreateOrder />} />
+        <Route path="/proposta" element={isAuthenticated ? <Proposta /> : <Proposta />} />
       </Routes>
     </BrowserRouter>
   )

@@ -64,6 +64,12 @@ function Home() {
               <Col xs={12} md={6} lg={4} className="p-3">
                 <ProposalCard />
               </Col>
+              <Col xs={12} md={6} lg={4} className="p-3">
+                <FreelancerProfileCard />
+              </Col>
+              <Col xs={12} md={6} lg={4} className="p-3">
+                <ServicesAvailableCard />
+              </Col>
             </Row>
           </Col>
         </Row>
