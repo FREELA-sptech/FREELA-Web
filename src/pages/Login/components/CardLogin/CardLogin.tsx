@@ -2,35 +2,40 @@ import { Alert, Card, Col, Form, InputGroup, Toast } from "react-bootstrap";
 import "./style.scss"
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from "../../../../services/userService";
 import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
+import { AuthContext } from "../../../../context/AuthContext";
+import { AiFillEye } from "react-icons/ai";
+import { MdAlternateEmail } from "react-icons/md";
 
 function CardLogin() {
-  const [messageError,setMessageError] = useState("");
-  const [messageSuccess,setMessageSuccess] = useState("");
+  const [messageError, setMessageError] = useState("");
+  const [messageSuccess, setMessageSuccess] = useState("");
+  const [errors, setErrors] = useState<any>({});
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
 
   const setField = (field: any, value: any) => {
     setFormData({
       ...formData, [field]: value
     })
+
     if (!!errors[field]) {
       setErrors({
         ...errors, [field]: null
       })
     }
-
   }
 
   const validateForm = () => {
     const { email, password } = formData;
-     
+
     const newErros = {
       email: '',
       password: ''
@@ -62,11 +67,12 @@ function CardLogin() {
       } else {
         const response = await login(formData);
         if (response.status == 200) {
-          if(response.data == ""){
+          if (response.data == "") {
             setMessageError("Email ou senha inválida, por favor tente novamente")
             return messageError;
           }
-          setMessageError("");
+          setMessageError("")
+          login()
           navigate("/home")
         }
       }
@@ -78,19 +84,28 @@ function CardLogin() {
   return (
     <Col xs={12} md={6} className="form-login-background d-flex justify-content-center">
       <Col xs={10} lg={8} className="card-login d-flex flex-column align-items-center justify-content-center">
-        <h1 className="title text-center">Entrar</h1>
-        <h1 className="text-muted subtitle text-center">Digite suas credenciais e faça login</h1>
+        <h1 className="f-32 dark-contrast-color text-center">Entrar</h1>
+        <h1 className="text-muted f-roboto aditional-color f-16 text-center">Digite suas credenciais e faça login</h1>
         <Form onSubmit={handleSubmit} className="form d-flex w-100 flex-column justify-content-center">
-        <Alert variant={"danger"} show={!!messageError}>
-          {messageError}
-        </Alert>
+          <Alert variant={"danger"} show={!!messageError}>
+            {messageError}
+          </Alert>
           <Form.Group>
-            <Form.Label>
-              Email
+            <Form.Label className="f-roboto fw-bold">
+              Email:
             </Form.Label>
             <InputGroup hasValidation>
-              <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+              <MdAlternateEmail
+                className="position-absolute ms-2 h-100"
+                style={{ zIndex: 99 }}
+                fill="#274C77"
+                size={"20px"}
+              />
               <Form.Control
+                className="rounded"
+                style={{
+                  paddingLeft: "35px"
+                }}
                 onChange={(e) => setField("email", e.target.value)}
                 name="email"
                 size="lg"
@@ -105,23 +120,35 @@ function CardLogin() {
             </InputGroup>
           </Form.Group>
           <Form.Group>
-            <Form.Label>
-              Senha
+            <Form.Label className="f-roboto fw-bold">
+              Senha:
             </Form.Label>
-            <Form.Control
-              onChange={(e) => setField("password", e.target.value)}
-              size="lg"
-              type="password"
-              name="password"
-              isInvalid={!!errors.password}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.password}
-            </Form.Control.Feedback>
+            <InputGroup hasValidation>
+              <AiFillEye
+                className="position-absolute ms-2 h-100"
+                style={{ zIndex: 99 }}
+                fill="#274C77"
+                size={"20px"}
+              />
+              <Form.Control
+                className="rounded"
+                style={{
+                  paddingLeft: "35px"
+                }}
+                onChange={(e) => setField("password", e.target.value)}
+                size="lg"
+                type="password"
+                name="password"
+                isInvalid={!!errors.password}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.password}
+              </Form.Control.Feedback>
+            </InputGroup>
           </Form.Group>
           <button className="button-base primary-standart" type="submit">Entrar</button>
           <Form.Text className="summary mt-3 text-center w-100 d-block">
-            <p className="d-flex justify-content-start gap-2">Ainda não tem uma conta? <Link to='/cadastro' className="destak-color">Cadastre-se</Link></p>
+            <p className="f-roboto f-16 aditional-color">Ainda não tem uma conta? &nbsp;<Link to='/cadastro' className="f-roboto f-16 contrast-color">Cadastre-se</Link></p>
           </Form.Text>
         </Form>
       </Col>

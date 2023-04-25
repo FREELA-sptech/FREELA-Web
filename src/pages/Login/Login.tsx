@@ -14,13 +14,13 @@ function Login() {
           <Col className="text-container d-none d-md-flex flex-column align-items-start justify-content-center" md={6} lg={6}>
             <Figure>
               <Figure.Image
-              width={"100px"}
+                width={"100px"}
                 src="/assets/images/banner-icon.svg"
               />
             </Figure>
             <div className="w-100">
-            <h1 className="big-title">Bem vindo de volta</h1>
-            <h1 className="category">Inicie sessão para voltar a buscar por serviços com seus interesses</h1>
+              <h1 className="f-inter f-52 dark-contrast-color">Bem vindo de volta</h1>
+              <h1 className="f-roboto f-22 aditional-color fw-normal">Inicie sessão para voltar a buscar por serviços com seus interesses</h1>
             </div>
           </Col>
         </Row>
