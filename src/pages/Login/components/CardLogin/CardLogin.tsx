@@ -3,7 +3,7 @@ import "./style.scss"
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { login } from "../../../../services/userService";
+import { loginAuth } from "../../../../services/userService";
 import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
 import { AuthContext } from "../../../../context/AuthContext";
 import { AiFillEye } from "react-icons/ai";
@@ -65,7 +65,7 @@ function CardLogin() {
       if (!errorsValues) {
         setErrors(errors);
       } else {
-        const response = await login(formData);
+        const response = await loginAuth(formData);
         if (response.status == 200) {
           if (response.data == "") {
             setMessageError("Email ou senha inválida, por favor tente novamente")
@@ -96,7 +96,7 @@ function CardLogin() {
             </Form.Label>
             <InputGroup hasValidation>
               <MdAlternateEmail
-                className="position-absolute ms-2 h-100"
+                className="position-absolute ms-2 icon-input"
                 style={{ zIndex: 99 }}
                 fill="#274C77"
                 size={"20px"}
@@ -125,7 +125,7 @@ function CardLogin() {
             </Form.Label>
             <InputGroup hasValidation>
               <AiFillEye
-                className="position-absolute ms-2 h-100"
+                className="position-absolute ms-2 icon-input"
                 style={{ zIndex: 99 }}
                 fill="#274C77"
                 size={"20px"}

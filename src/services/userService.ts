@@ -5,7 +5,7 @@ export async function createUser(userData: any){
     return response;
 }
 
-export async function login(userData: any){
+export async function loginAuth(userData: any){
     const response = await api.post("/user/login",userData);
     return response;
 }
