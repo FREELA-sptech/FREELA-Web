@@ -24,7 +24,7 @@ export function UserForm(props: any) {
         </Form.Label>
         <InputGroup>
           <AiOutlineUser
-            className="position-absolute ms-2 h-100"
+            className="position-absolute ms-2 icon-input"
             style={{ zIndex: 99 }}
             fill="#274C77"
             size={"20px"}
@@ -52,7 +52,7 @@ export function UserForm(props: any) {
         </Form.Label>
         <InputGroup hasValidation>
           <BsFillPersonVcardFill
-            className="position-absolute ms-2 h-100"
+            className="position-absolute ms-2 icon-input"
             style={{ zIndex: 99 }}
             fill="#274C77"
             size={"20px"}
@@ -82,7 +82,7 @@ export function UserForm(props: any) {
         </Form.Label>
         <InputGroup>
           <BsFillPersonFill
-            className="position-absolute ms-2 h-100"
+            className="position-absolute ms-2 icon-input"
             style={{ zIndex: 99 }}
             fill="#274C77"
             size={"20px"}
@@ -110,7 +110,7 @@ export function UserForm(props: any) {
         </Form.Label>
         <InputGroup hasValidation>
           <MdAlternateEmail
-            className="position-absolute ms-2 h-100"
+            className="position-absolute ms-2 icon-input"
             style={{ zIndex: 99 }}
             fill="#274C77"
             size={"20px"}
@@ -140,7 +140,7 @@ export function UserForm(props: any) {
         </Form.Label>
         <InputGroup>
           <AiFillEye
-            className="position-absolute ms-2 h-100"
+            className="position-absolute ms-2 icon-input"
             style={{ zIndex: 99 }}
             fill="#274C77"
             size={"20px"}
