@@ -9,7 +9,7 @@ import { MdArrowBack } from "react-icons/md";
 import { useForm } from "../../hooks/useForm";
 import { useContext, useState } from "react";
 import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
-import { createUser } from "../../services/userService";
+import { setCreateUser } from "../../services/userService";
 import UserType from "./components/UserType/UserType";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
