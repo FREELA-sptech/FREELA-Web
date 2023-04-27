@@ -3,7 +3,7 @@ import "./style.scss"
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { login } from "../../../../services/userService";
+import { getLogin } from "../../../../services/userService";
 import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
 import { AuthContext } from "../../../../context/AuthContext";
 import { AiFillEye } from "react-icons/ai";
@@ -65,7 +65,7 @@ function CardLogin() {
       if (!errorsValues) {
         setErrors(errors);
       } else {
-        const response = await login(formData);
+        const response = await getLogin(formData);
         if (response.status == 200) {
           if (response.data == "") {
             setMessageError("Email ou senha inválida, por favor tente novamente")
