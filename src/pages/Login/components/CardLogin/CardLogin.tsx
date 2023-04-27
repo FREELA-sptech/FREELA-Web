@@ -96,7 +96,7 @@ function CardLogin() {
             </Form.Label>
             <InputGroup hasValidation>
               <MdAlternateEmail
-                className="position-absolute ms-2 h-100"
+                className="position-absolute ms-2 icon-input"
                 style={{ zIndex: 99 }}
                 fill="#274C77"
                 size={"20px"}
@@ -125,7 +125,7 @@ function CardLogin() {
             </Form.Label>
             <InputGroup hasValidation>
               <AiFillEye
-                className="position-absolute ms-2 h-100"
+                className="position-absolute ms-2 icon-input"
                 style={{ zIndex: 99 }}
                 fill="#274C77"
                 size={"20px"}

@@ -17,6 +17,7 @@
         }
         .form{
             gap: 1.5rem;
+            
             .form-control:focus{
                 background-color: var(--background-color);
                 outline: none;
@@ -41,4 +42,8 @@
             }
         }
     }
+}
+
+.icon-input{
+    margin-top: 0.8rem;
 }
