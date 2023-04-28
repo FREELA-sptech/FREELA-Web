@@ -1,6 +1,7 @@
-import "./style.scss";
-import { Col, Form, FormCheck } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import {MdPersonOutline,MdWorkOutline} from "react-icons/md";
+
+import "./style.scss";
 
 export default function UserType(props : any) {
     const setField = (field : any, value : any)=>{
@@ -8,6 +9,7 @@ export default function UserType(props : any) {
             ...props.formData, [field]: value
         })
     }
+
     return (
         <Col className="container-type d-flex align-items-center justify-content-center gap-3">
             <Form.Group className="col-lg-6">
@@ -34,5 +36,4 @@ export default function UserType(props : any) {
             </Form.Group>
         </Col>
     )
-
 }

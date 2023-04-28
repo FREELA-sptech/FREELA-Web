@@ -1,25 +1,21 @@
-import { Alert, Card, Col, Form, InputGroup, Toast } from "react-bootstrap";
-import "./style.scss"
-import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
-import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { getLogin } from "../../../../services/userService";
-import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
-import { AuthContext } from "../../../../context/AuthContext";
+
+import { Alert, Col, Form, InputGroup } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
 
+import "./style.scss"
+import { getLogin } from "../../../../services/userService";
+import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
+import { AuthContext } from "../../../../context/AuthContext";
+
 function CardLogin() {
   const [messageError, setMessageError] = useState("");
-  const [messageSuccess, setMessageSuccess] = useState("");
   const [errors, setErrors] = useState<any>({});
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
-
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState<any>();
 
   const setField = (field: any, value: any) => {
     setFormData({
@@ -36,10 +32,7 @@ function CardLogin() {
   const validateForm = () => {
     const { email, password } = formData;
 
-    const newErros = {
-      email: '',
-      password: ''
-    }
+    const newErros: any = {}
 
     if (notBlank(email)) {
       newErros.email = "O campo email não pode estar vazio";
@@ -58,29 +51,32 @@ function CardLogin() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const errors = validateForm();
-      const valores = Object.values(errors);
-      const errorsValues = valores.every(valor => valor === "");
-      if (!errorsValues) {
-        setErrors(errors);
-      } else {
-        const response = await getLogin(formData);
-        if (response.status == 200) {
-          if (response.data == "") {
+
+
+    const errors = validateForm();
+    const valores = Object.values(errors);
+    const errorsValues = valores.every(valor => valor === "");
+
+    if (!errorsValues) {
+      setErrors(errors);
+    } else {
+      await getLogin(formData)
+        .then((res) => {
+          if (res.data == "") {
             setMessageError("Email ou senha inválida, por favor tente novamente")
             return messageError;
           }
+
           setMessageError("")
           login()
           navigate("/home")
-        }
-      }
-    } catch (error) {
-      alert(error)
+        })
+        .catch((error) => {
+          alert(error)
+        })
     }
-
   }
+
   return (
     <Col xs={12} md={6} className="form-login-background d-flex justify-content-center">
       <Col xs={10} lg={8} className="card-login d-flex flex-column align-items-center justify-content-center">

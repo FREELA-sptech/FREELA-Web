@@ -4,18 +4,18 @@ import { AiFillEye, AiOutlineUser } from "react-icons/ai"
 import { BsFillPersonVcardFill, BsFillPersonFill } from "react-icons/bs"
 
 export function UserForm(props: any) {
-  // console.log(props.formData)
   const setField = (field: any, value: any) => {
     props.setFormData({
       ...props.formData, [field]: value
     })
+
     if (!!props.errors[field]) {
       props.setErrors({
         ...props.errors, [field]: null
       })
     }
-
   }
+
   return (
     <Col className="container-form d-flex flex-column justify-content-center align-items-stretch">
       <Form.Group>
@@ -163,6 +163,5 @@ export function UserForm(props: any) {
         </InputGroup>
       </Form.Group>
     </Col>
-
   )
 }

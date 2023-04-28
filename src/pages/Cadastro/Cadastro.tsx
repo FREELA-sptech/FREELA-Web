@@ -1,54 +1,37 @@
+import { useContext, useState } from "react";
+
 import "./style.scss";
-import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstrap";
+import { Col, Container, Row, Form, Tabs, Tab } from "react-bootstrap";
+import { MdArrowBack } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+
 import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
 import { UserForm } from "./components/UserForm/UserForm";
 import { InterestForm } from "../../shared/components/InterestForm/InterestForm";
-import { MdArrowBack } from "react-icons/md";
-
-//Hooks
-import { useForm } from "../../hooks/useForm";
-import { useContext, useState } from "react";
 import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
-import { setCreateUser } from "../../services/userService";
+import { useForm } from "../../hooks/useForm";
 import UserType from "./components/UserType/UserType";
-import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+
 
 
 function Cadastro() {
   const navigate = useNavigate();
   const [dataCategory, setDataCategory] = useState([]);
   const { login } = useContext(AuthContext);
+  const [formData, setFormData] = useState<any>();
+  const [errors, setErrors] = useState<any>();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    userName: '',
-    email: '',
-    cpf: '',
-    password: '',
-    type: ""
-  });
-
-  const [errors, setErrors] = useState({
-    name: '',
-    userName: '',
-    email: '',
-    cpf: '',
-    password: ''
-  });
-
-  const formComponents = [<UserType formData={formData} setFormData={setFormData} />, <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm dataCategory={dataCategory} setDataCategory={setDataCategory} />]
+  const formComponents = [
+    <UserType formData={formData} setFormData={setFormData} />,
+    <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
+    <InterestForm dataCategory={dataCategory} setDataCategory={setDataCategory} />
+  ]
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
   const validateForm = () => {
     const { name, userName, email, cpf, password } = formData;
-    const newErros = {
-      name: '',
-      userName: '',
-      email: '',
-      cpf: '',
-      password: ''
-    }
+    const newErros: any = {};
 
     if (notBlank(name)) {
       newErros.name = "O campo nome não pode estar vazio";
@@ -87,34 +70,28 @@ function Cadastro() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (currentStep == 0) return changeStep(currentStep + 1)
-    if (currentStep == 1) {
-      try {
-        const errors = validateForm();
-        const valores = Object.values(errors);
-        const errorsValues = valores.every(valor => valor === "");
-        if (!errorsValues) {
-          setErrors(errors);
-        } else {
-          console.log(formData);
-          setFormData(formData);
-          changeStep(currentStep + 1)
-          // const response = await createUser(formData);
-          // if (response.status == 201) {
-          // } else {
 
-          // }
-        }
-      } catch (error) {
-        console.log(error);
+    if (currentStep == 0) return changeStep(currentStep + 1)
+
+    if (currentStep == 1) {
+      const errors = validateForm();
+      const valores = Object.values(errors);
+      const errorsValues = valores.every(valor => valor === "");
+
+      if (!errorsValues) {
+        setErrors(errors);
+      } else {
+        setFormData(formData);
+        changeStep(currentStep + 1);
       }
     }
+
     if (dataCategory.length > 0) {
       login()
       navigate("/home")
     }
-
   };
+
   return (
     <Container fluid className="cadastro-background">
       <Container>
@@ -162,7 +139,6 @@ function Cadastro() {
           </Col>
         </Row>
       </Container>
-
     </Container>
   )
 }

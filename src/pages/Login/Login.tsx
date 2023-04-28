@@ -1,11 +1,10 @@
 import { Col, Container, Figure, Row, Toast, ToastContainer } from "react-bootstrap";
+
 import CardLogin from "./components/CardLogin/CardLogin";
 import "./style.scss"
-import React from "react";
 
 
 function Login() {
-
   return (
     <Container fluid className="login-background d-flex justify-content-center align-items-center">
       <Container>
