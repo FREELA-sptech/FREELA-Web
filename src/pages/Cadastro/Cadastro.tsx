@@ -9,10 +9,10 @@ import { MdArrowBack } from "react-icons/md";
 import { useForm } from "../../hooks/useForm";
 import { useContext, useState } from "react";
 import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
-import { createUser } from "../../services/userService";
 import UserType from "./components/UserType/UserType";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { createUser } from "../../services/userService";
 
 
 function Cadastro() {
@@ -26,7 +26,8 @@ function Cadastro() {
     email: '',
     cpf: '',
     password: '',
-    type: ""
+    isFreelancer: false,
+    categoryId: []
   });
 
   const [errors, setErrors] = useState({
@@ -41,7 +42,7 @@ function Cadastro() {
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
   const validateForm = () => {
-    const { name, userName, email, cpf, password } = formData;
+    const { name, userName, email, cpf, password, isFreelancer } = formData;
     const newErros = {
       name: '',
       userName: '',
@@ -89,29 +90,25 @@ function Cadastro() {
     event.preventDefault();
     if (currentStep == 0) return changeStep(currentStep + 1)
     if (currentStep == 1) {
-      try {
-        const errors = validateForm();
-        const valores = Object.values(errors);
-        const errorsValues = valores.every(valor => valor === "");
-        if (!errorsValues) {
-          setErrors(errors);
-        } else {
-          console.log(formData);
-          setFormData(formData);
-          changeStep(currentStep + 1)
-          // const response = await createUser(formData);
-          // if (response.status == 201) {
-          // } else {
+      const errors = validateForm();
+      const valores = Object.values(errors);
+      const errorsValues = valores.every(valor => valor === "");
 
-          // }
-        }
-      } catch (error) {
-        console.log(error);
+      if (!errorsValues) {
+        setErrors(errors);
+      } else {
+        setFormData(formData);
+        changeStep(currentStep + 1)
       }
     }
     if (dataCategory.length > 0) {
-      login()
-      navigate("/home")
+      formData.categoryId = dataCategory
+
+      createUser(formData)
+        .then(() => {
+          login()
+          navigate("/home")
+        })
     }
 
   };
