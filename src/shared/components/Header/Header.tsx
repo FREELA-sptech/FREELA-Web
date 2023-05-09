@@ -2,11 +2,10 @@ import { Link } from 'react-router-dom';
 import './style.scss'
 import { Container, Figure, Nav, Navbar, Offcanvas, Row } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../context/AuthContext';
+import { UserStorage } from '../../../store/userStorage';
 
 function Header() {
   const [menuIsOpen, setMenuIsOpen] = useState(false)
-  const { isAuthenticated } = useContext(AuthContext);
 
   const handleClose = () => setMenuIsOpen(false)
   const handleOpen = () => setMenuIsOpen(true)
@@ -21,7 +20,7 @@ function Header() {
         <Link to='/' className='logo dark-contrast-color' onClick={handleClose}>
           FREELA
         </Link>
-        {isAuthenticated && (
+        {UserStorage.isAuthenticated() && (
           <>
             <Link to='/home' className='tertiary-text d-none d-xl-block' onClick={handleClose}>
               Encontre projetos
@@ -29,7 +28,7 @@ function Header() {
           </>
         )}
         <Row className='d-flex flex-grow-1 flex-nowrap m-0 justify-content-end align-items-center'>
-          {isAuthenticated && (
+          {UserStorage.isAuthenticated() && (
             <>
               <Link to='/perfil' className='w-auto px-2 d-xl-none' onClick={handleClose}>
                 <Figure.Image
@@ -68,7 +67,7 @@ function Header() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="text-center justify-content-xl-end flex-grow-1">
-              {!isAuthenticated ? (
+              {!UserStorage.isAuthenticated() ? (
                 <>
                   <Link to='/login' className='tertiary-text' onClick={handleClose}>
                     login

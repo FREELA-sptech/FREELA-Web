@@ -3,18 +3,17 @@ import "./style.scss"
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { loginAuth } from "../../../../services/userService";
 import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
-import { AuthContext } from "../../../../context/AuthContext";
 import { AiFillEye } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
+import { UserAPI } from "../../../../api/userApi";
+import { UserStorage } from "../../../../store/userStorage";
 
 function CardLogin() {
   const [messageError, setMessageError] = useState("");
   const [messageSuccess, setMessageSuccess] = useState("");
   const [errors, setErrors] = useState<any>({});
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -58,26 +57,35 @@ function CardLogin() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const errors = validateForm();
-      const valores = Object.values(errors);
-      const errorsValues = valores.every(valor => valor === "");
-      if (!errorsValues) {
-        setErrors(errors);
-      } else {
-        const response = await loginAuth(formData);
-        if (response.status == 200) {
-          if (response.data == "") {
-            setMessageError("Email ou senha inválida, por favor tente novamente")
-            return messageError;
-          }
-          setMessageError("")
-          login()
-          navigate("/home")
-        }
-      }
-    } catch (error) {
-      alert(error)
+    const errors = validateForm();
+    const valores = Object.values(errors);
+    const errorsValues = valores.every(valor => valor === "");
+
+    if (!errorsValues) {
+      setErrors(errors);
+    } else {
+      await UserAPI.login(formData)
+      .then((res) => {
+        const userData = res.data
+
+        setMessageError("")
+        UserStorage.setIsFreelancerLocalStorage(userData.freelancer)
+        UserStorage.setTokenUserLocalStorage(userData.token)
+
+        navigate("/home")
+      })
+      .catch(() => {
+        setMessageError("Email ou senha inválida, por favor tente novamente")
+      })
+      // if (response.status == 200) {
+      //   if (response.data == "") {
+      //     setMessageError("Email ou senha inválida, por favor tente novamente")
+      //     return messageError;
+      //   }
+      //   setMessageError("")
+      //   login()
+      //   navigate("/home")
+      // }
     }
 
   }

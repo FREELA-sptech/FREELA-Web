@@ -11,14 +11,12 @@ import { useContext, useState } from "react";
 import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
 import UserType from "./components/UserType/UserType";
 import { Navigate, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import { createUser } from "../../services/userService";
+import { UserAPI } from "../../api/userApi";
 
 
 function Cadastro() {
   const navigate = useNavigate();
   const [dataCategory, setDataCategory] = useState([]);
-  const { login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -104,10 +102,9 @@ function Cadastro() {
     if (dataCategory.length > 0) {
       formData.categoryId = dataCategory
 
-      createUser(formData)
+      UserAPI.register(formData)
         .then(() => {
-          login()
-          navigate("/home")
+          navigate("/login")
         })
     }
 

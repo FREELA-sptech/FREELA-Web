@@ -1,23 +1,38 @@
 import { Accordion, Card, Col, Container, Figure, Form, InputGroup, Modal, Row, useAccordionButton } from "react-bootstrap";
 import ServicesAvailableCard from "../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
 import './style.scss'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FiltersCard from "./components/FiltersCard/FiltersCard";
 import FreelancerProfileCard from "../../shared/components/FreelancerProfileCard/FreelancerProfileCard";
 import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
+import { UserStorage } from "../../store/userStorage";
+import { OrdersAPI } from "../../api/ordersApi";
+import { UserAPI } from "../../api/userApi";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
+  const [responseData, setResponseData] = useState([])
 
   const handleClose = () => setShowModal(false)
   const handleOpen = () => setShowModal(true)
+
+  useEffect(() => {
+    if (UserStorage.getIsFreelancerLocalStorage()) {
+      OrdersAPI.getOrders()
+        .then((res: any) => {
+          setResponseData(res.data)
+        })
+    } else {
+
+    }
+  }, [])
 
   return (
     <section className="home-background">
       <Container>
         <Row className="pt-3 pb-3 d-flex justify-content-end">
           <h1 className="title-underline d-flex flex-column justify-content-end w-auto text-uppercase f-roboto dark-contrast-color fw-bold f-30 dark-contrast-color">
-            projetos disponíveis
+            {UserStorage.getIsFreelancerLocalStorage() ? 'projetos disponíveis' : 'profissionais disponíveis'}
           </h1>
         </Row>
         <Row className="d-flex">
@@ -52,7 +67,7 @@ function Home() {
                   className="m-0 ms-3"
                 />
                 <Form.Control
-                  style={{boxShadow: 'none'}}
+                  style={{ boxShadow: 'none' }}
                   className="primary-input"
                   placeholder="Busque aqui"
                   aria-label="Busque aqui"
@@ -61,20 +76,24 @@ function Home() {
               </InputGroup>
             </Row>
             <Row className="d-flex">
-              <Col xs={12} md={6} lg={4} className="p-3">
-                <ProposalCard />
-              </Col>
-              <Col xs={12} md={6} lg={4} className="p-3">
-                <FreelancerProfileCard />
-              </Col>
-              <Col xs={12} md={6} lg={4} className="p-3">
-                <ServicesAvailableCard />
-              </Col>
+              {UserStorage.getIsFreelancerLocalStorage() ?
+                responseData.map((data: any) => {
+                  console.log(data)
+                  return (
+                    <Col xs={12} md={6} lg={4} className="p-3">
+                      <ServicesAvailableCard data={data} />
+                    </Col>
+                  )
+                }) : (
+                  <Col xs={12} md={6} lg={4} className="p-3">
+                    <FreelancerProfileCard />
+                  </Col>
+                )}
             </Row>
           </Col>
         </Row>
-      </Container>
-    </section>
+      </Container >
+    </section >
   );
 }
 

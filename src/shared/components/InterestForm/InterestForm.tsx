@@ -1,14 +1,14 @@
 import { Accordion, Col, Figure, Form, ListGroup } from "react-bootstrap";
 import "./style.scss";
 import { useEffect, useState } from "react";
-import { getCategoriesService } from "../../../services/categoriesService";
+import { CategoriesAPI } from "../../../api/categoriesApi";
 
 export function InterestForm(props: any) {
   const [searchTerm, setSearchTerm] = useState('');
   const [items, setItems] = useState<[]>();
 
   const getCategories = () => {
-    getCategoriesService()
+    CategoriesAPI.getCategories()
       .then((res) => {
         setItems(res.data)
       })
