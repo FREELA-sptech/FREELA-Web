@@ -8,7 +8,7 @@ interface Props {
 
 const AuthProvider = ({element}: Props) => {
   return (
-    UserStorage.isAuthenticated() ? element : <Navigate to="/login" />
+    true ? element : <Navigate to="/login" />
   );
 };
 

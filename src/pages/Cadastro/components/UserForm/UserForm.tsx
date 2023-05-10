@@ -1,10 +1,12 @@
 import { Col, Form, InputGroup } from "react-bootstrap";
 import { MdAlternateEmail } from "react-icons/md";
-import { AiFillEye, AiOutlineUser } from "react-icons/ai"
+import { useState } from "react";
+import { AiFillEye, AiFillEyeInvisible, AiOutlineUser } from "react-icons/ai"
 import { BsFillPersonVcardFill, BsFillPersonFill } from "react-icons/bs"
 
 export function UserForm(props: any) {
-  // console.log(props.formData)
+  const [showPassword, setShowPassword] = useState(false);
+
   const setField = (field: any, value: any) => {
     props.setFormData({
       ...props.formData, [field]: value
@@ -139,12 +141,23 @@ export function UserForm(props: any) {
           Senha:
         </Form.Label>
         <InputGroup>
-          <AiFillEye
-            className="position-absolute ms-2 h-100"
-            style={{ zIndex: 99 }}
-            fill="#274C77"
-            size={"20px"}
-          />
+          {showPassword ? (
+            <AiFillEyeInvisible
+              className="position-absolute ms-2 h-100"
+              style={{ zIndex: 99 }}
+              fill="#274C77"
+              size={"20px"}
+              onClick={() => { setShowPassword(false) }}
+            />
+          ) : (
+            <AiFillEye
+              className="position-absolute ms-2 h-100"
+              style={{ zIndex: 99 }}
+              fill="#274C77"
+              size={"20px"}
+              onClick={() => { setShowPassword(true) }}
+            />
+          )}
           <Form.Control
             className="rounded"
             style={{
@@ -152,7 +165,7 @@ export function UserForm(props: any) {
             }}
             onChange={(e) => setField("password", e.target.value)}
             size="lg"
-            type="password"
+            type={showPassword ? "text" :"password"}
             name="password"
             value={props.formData.password}
             isInvalid={!!props.errors.password}

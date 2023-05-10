@@ -4,7 +4,7 @@ import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
-import { AiFillEye } from "react-icons/ai";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
 import { UserAPI } from "../../../../api/userApi";
 import { UserStorage } from "../../../../store/userStorage";
@@ -13,6 +13,7 @@ function CardLogin() {
   const [messageError, setMessageError] = useState("");
   const [messageSuccess, setMessageSuccess] = useState("");
   const [errors, setErrors] = useState<any>({});
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -65,18 +66,18 @@ function CardLogin() {
       setErrors(errors);
     } else {
       await UserAPI.login(formData)
-      .then((res) => {
-        const userData = res.data
+        .then((res) => {
+          const userData = res.data
 
-        setMessageError("")
-        UserStorage.setIsFreelancerLocalStorage(userData.freelancer)
-        UserStorage.setTokenUserLocalStorage(userData.token)
+          setMessageError("")
+          UserStorage.setIsFreelancerLocalStorage(userData.freelancer)
+          UserStorage.setTokenUserLocalStorage(userData.token)
 
-        navigate("/home")
-      })
-      .catch(() => {
-        setMessageError("Email ou senha inválida, por favor tente novamente")
-      })
+          navigate("/home")
+        })
+        .catch(() => {
+          setMessageError("Email ou senha inválida, por favor tente novamente")
+        })
       // if (response.status == 200) {
       //   if (response.data == "") {
       //     setMessageError("Email ou senha inválida, por favor tente novamente")
@@ -132,12 +133,23 @@ function CardLogin() {
               Senha:
             </Form.Label>
             <InputGroup hasValidation>
-              <AiFillEye
-                className="position-absolute ms-2 h-100"
-                style={{ zIndex: 99 }}
-                fill="#274C77"
-                size={"20px"}
-              />
+              {showPassword ? (
+                <AiFillEyeInvisible
+                  className="position-absolute ms-2 h-100"
+                  style={{ zIndex: 99 }}
+                  fill="#274C77"
+                  size={"20px"}
+                  onClick={() => { setShowPassword(false) }}
+                />
+              ) : (
+                <AiFillEye
+                  className="position-absolute ms-2 h-100"
+                  style={{ zIndex: 99 }}
+                  fill="#274C77"
+                  size={"20px"}
+                  onClick={() => { setShowPassword(true) }}
+                />
+              )}
               <Form.Control
                 className="rounded"
                 style={{
@@ -145,7 +157,7 @@ function CardLogin() {
                 }}
                 onChange={(e) => setField("password", e.target.value)}
                 size="lg"
-                type="password"
+                type={showPassword ? "text" :"password"}
                 name="password"
                 isInvalid={!!errors.password}
               />

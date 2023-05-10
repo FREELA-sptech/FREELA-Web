@@ -22,36 +22,7 @@ function Profile() {
           <Col lg={7} className="px-3 pt-lg-0 pt-4 d-flex flex-column gap-2">
             <button onClick={() => setShow(true)} className="buttonBase primary-standart">Adicionar Projeto</button>
             <Row className="d-flex">
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <ServicesAvailableCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <ServicesAvailableCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <ServicesAvailableCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <ServicesAvailableCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <ServicesAvailableCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <FreelancerProfileCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <FreelancerProfileCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <FreelancerProfileCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <FreelancerProfileCard />
-              </Col>
-              <Col xs={12} md={6} className="p-3 pt-0">
-                <FreelancerProfileCard />
-              </Col>
+
             </Row>
           </Col>
         </Row>
