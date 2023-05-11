@@ -11,6 +11,8 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import EditIcon from '@mui/icons-material/Edit';
+import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 
 
 function Profile() {
@@ -33,7 +35,7 @@ function Profile() {
           </Col>
           <Col lg={12}>
             <Box
-              className="px-5"
+              className="px-5 pb-4"
               sx={{
                 backgroundColor: 'white',
                 borderRadius: '0 0 16px 16px'
@@ -42,11 +44,17 @@ function Profile() {
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleChange} aria-label="lab API tabs example">
-                    <Tab label="Item One" value="1" />
-                    <Tab label="Item Two" value="2" />
+                    <Tab label="Propostas Enviadas" value="1" />
+                    <Tab label="Meu Portifólio" value="2" />
                   </TabList>
                 </Box>
-                <TabPanel value="1" sx={{backgroundColor: 'red'}}>Item One</TabPanel>
+                <TabPanel value="1" sx={{backgroundColor: 'red'}}>
+                  <Col container xs={12}>
+                    <Col item lg={3}>
+                      <ProposalCard />
+                    </Col>
+                  </Col>
+                </TabPanel>
                 <TabPanel value="2">Item Two</TabPanel>
               </TabContext>
             </Box>
@@ -79,4 +87,3 @@ function Profile() {
 }
 
 export default Profile
-// eu sou gay
