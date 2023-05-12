@@ -22,6 +22,7 @@ export function InfoOrder(props: any) {
     props.setFormData({
       ...props.formData, [field]: value
     })
+
     if (!!props.errors[field]) {
       props.setErrors({
         ...props.errors, [field]: null
