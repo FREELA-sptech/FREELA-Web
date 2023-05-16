@@ -49,11 +49,11 @@ function Profile() {
                   </TabList>
                 </Box>
                 <TabPanel value="1" sx={{backgroundColor: 'red'}}>
-                  <Col container xs={12}>
+                  {/* <Col container xs={12}>
                     <Col item lg={3}>
                       <ProposalCard />
                     </Col>
-                  </Col>
+                  </Col> */}
                 </TabPanel>
                 <TabPanel value="2">Item Two</TabPanel>
               </TabContext>
