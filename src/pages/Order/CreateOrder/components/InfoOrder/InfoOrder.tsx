@@ -75,7 +75,6 @@ export function InfoOrder(props: any) {
     if (file) {
       reader.readAsDataURL(file);
     }
-  };
   const handleImage = (event : any) => {
     const file = event.target.files[0];
     setImages(file);
