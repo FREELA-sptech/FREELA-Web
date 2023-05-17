@@ -11,8 +11,9 @@ import DoneIcon from '@mui/icons-material/Done';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import HtmlTooltip from "../../../../shared/tools/MuiTooltipCustom";
-import uf from "../../../../shared/tools/StateBrazilJSON";
 import Snackbar from '@mui/material/Snackbar';
+import { ExternalAPI } from "../../../../api/externalApi";
+import useSnackbar from "../../../../hooks/useSnackbar";
 
 
 
@@ -23,8 +24,10 @@ function CardProfile() {
   const [loading, setLoading] = useState(true)
   const [loadingImage, setLoadingImage] = useState(false)
   const [editing, setEditing] = useState(false)
-  const [openAlert, setOpenAlert] = useState(false)
-  const [alertData, setAlertData] = useState<any>({})
+  const [disableInputs, setDisableInputs] = useState(false)
+  const [ufsData, setUfsData] = useState<any>([])
+  const [citysData, setCitysData] = useState<any>([])
+  const [SnackbarComponent, showSnackbar] = useSnackbar();
 
   useEffect(() => {
     UserAPI.userDetails(4)
@@ -32,12 +35,8 @@ function CardProfile() {
         updateUserData(res.data)
         setLoading(false)
       })
-      .catch((res) => {
-        setOpenAlert(true)
-        setAlertData({
-          isError: true,
-          message: res.response.data
-        })
+      .catch((error) => {
+        showSnackbar(true, error.response.data);
       })
   }, [])
 
@@ -65,6 +64,39 @@ function CardProfile() {
     setUserDetails(user)
   }
 
+  const getUFS = () => {
+    getCitys(userEditDetails.uf)
+    ExternalAPI.getUFS()
+    .then((res) => {
+      const ufs = res.data.map((response: any) => {
+        return response.sigla
+      })
+
+      setUfsData(ufs)
+      setDisableInputs(false)
+    })
+    .catch(() => {
+      showSnackbar(true, "Problemas para buscar as UFS");
+    })
+  }
+
+  const getCitys = (uf: string) => {
+    uf !== userEditDetails.uf && (userEditDetails.city = "")
+    setField("uf", uf)
+    ExternalAPI.getCitys(uf)
+    .then((res) => {
+      const citys = res.data.map((response: any) => {
+        return response.nome
+      })
+
+      setCitysData(citys)
+      setDisableInputs(false)
+    })
+    .catch(() => {
+      showSnackbar(true, "Problemas para buscar as Cidades");
+    })
+  }
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoadingImage(true)
     const file = event.target.files && event.target.files[0];
@@ -80,18 +112,10 @@ function CardProfile() {
           .then((res) => {
             userDetails.profilePhoto = res.data.profilePhoto
             setUserDetails(userDetails)
-            setOpenAlert(true)
-            setAlertData({
-              isError: false,
-              message: "Imagem atualizada com sucesso"
-            })
+            showSnackbar(false, "Imagem atualizada com sucesso");
           })
           .catch((error) => {
-            setOpenAlert(true)
-            setAlertData({
-              isError: true,
-              message: res.response.data
-            })
+            showSnackbar(true, error.response.data);
           })
           .finally(() => {
             setLoadingImage(false)
@@ -102,6 +126,8 @@ function CardProfile() {
   };
 
   const handleEdit = () => {
+    getUFS()
+    setDisableInputs(true)
     setEditing(true)
   }
 
@@ -114,18 +140,10 @@ function CardProfile() {
       .then((res) => {
         updateUserData(res.data)
         setEditing(false)
-        setOpenAlert(true)
-        setAlertData({
-          isError: false,
-          message: "Informações atualizadas com sucesso!"
-        })
+        showSnackbar(false, "Informações atualizadas com sucesso!");
       })
-      .catch((res) => {
-        setOpenAlert(true)
-        setAlertData({
-          isError: true,
-          message: res.response.data
-        })
+      .catch((error) => {
+        showSnackbar(true, error.response.data);
       })
   }
 
@@ -136,11 +154,7 @@ function CardProfile() {
         borderRadius: '16px 16px 0 0'
       }}
     >
-      <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => {setOpenAlert(false)}}>
-        <Alert onClose={() => {setOpenAlert(false)}} severity={alertData.isError ? "error" : "success"} sx={{ width: '100%' }}>
-          {alertData.message}
-        </Alert>
-      </Snackbar>
+      <SnackbarComponent />
       <Box className="position-relative d-flex flex-row gap-4" sx={{ height: '200px', backgroundColor: 'blue' }}>
         {loading ? (
           <Box
@@ -278,7 +292,7 @@ function CardProfile() {
           )}
         </Box>
       ) : (
-        <Grid container xs={12} lg={12} className="d-flex flex-column px-5" sx={{ paddingTop: '100px' }}>
+        <Grid item container xs={12} lg={12} className="d-flex flex-column px-5" sx={{ paddingTop: '100px' }}>
           <Grid item lg={5} className="p-0 mb-3">
             <Typography variant="body2" className="f-12">
               Nome:
@@ -290,7 +304,7 @@ function CardProfile() {
               fullWidth
               value={userEditDetails.name}
               autoComplete="given-name"
-              variant="outlined"
+              variant="standard"
               helperText={
                 userEditErrorDetails.name
                   ? (
@@ -303,42 +317,53 @@ function CardProfile() {
               onChange={(e) => setField("name", e.target.value)}
             />
           </Grid>
-          <Grid container spacing={2} lg={5} className="ms-0">
-            <Grid item lg={8} className="pt-0 ps-0">
+          <Grid item container spacing={2} lg={5} className="ms-0">
+            <Grid item lg={8} md={9} className="pt-0 ps-0">
               <Typography variant="body2" className="f-12">
                 Cidade:
               </Typography>
-              <TextField
-                error={Boolean(userEditErrorDetails.city)}
-                id="city"
-                name="city"
-                fullWidth
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={citysData}
                 value={userEditDetails.city}
-                autoComplete="given-name"
-                variant="standard"
-                helperText={
-                  userEditErrorDetails.city
-                    ? (
-                      <Typography variant="body2" className="f-14">
-                        {userEditErrorDetails.city || " "}
-                      </Typography>
-                    )
-                    : " "
+                disabled={disableInputs}
+                onChange={(e: any) => {
+                  setField("city", e.target.textContent)
+                }}
+                renderInput={(params) =>
+                  <TextField
+                    {...params}
+                    error={Boolean(userEditErrorDetails.city)}
+                    id="city"
+                    name="city"
+                    autoComplete="given-name"
+                    variant="standard"
+                    helperText={
+                      userEditErrorDetails.city
+                        ? (
+                          <Typography variant="body2" className="f-14">
+                            {userEditErrorDetails.city || " "}
+                          </Typography>
+                        )
+                        : " "
+                    }
+                  />
                 }
-                onChange={(e) => setField("city", e.target.value)}
               />
             </Grid>
-            <Grid item lg={4} className="pt-0">
+            <Grid item lg={4} md={3} className="pt-0">
               <Typography variant="body2" className="f-12">
                 UF:
               </Typography>
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
-                options={uf}
+                options={ufsData}
                 value={userEditDetails.uf}
-                onChange={(e) => {
-                  setField("uf", e.target.textContent)
+                disabled={disableInputs}
+                onChange={(e: any) => {
+                  getCitys(e.target.textContent)
                 }}
                 renderInput={(params) =>
                   <TextField

@@ -1,12 +1,14 @@
-import { Accordion, Col, Figure, Form, ListGroup } from "react-bootstrap";
 import "./style.scss";
-import { useEffect, useState } from "react";
-import { CategoriesAPI } from "../../../api/categoriesApi";
+import { useState } from "react";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { Autocomplete, Box, Checkbox, InputLabel, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Checkbox, TextField, Typography } from "@mui/material";
+import Chip from '@mui/material/Chip';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export function InterestForm(props: any) {
+  const [selectedItems, setSelectedItems] = useState<any>([]);
+
 
   const top100Films = [
     { title: 'The Shawshank Redemption', year: 1994 },
@@ -95,36 +97,60 @@ export function InterestForm(props: any) {
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   return (
-    <Autocomplete
-      fullWidth
-      multiple
-      id="checkboxes-tags-demo"
-      options={top100Films}
-      disableCloseOnSelect
-      getOptionLabel={(option) => option.title}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.title}
-        </li>
-      )}
-      renderInput={(params) => (
-        <Box>
-          <Typography variant="body2" className="f-18">
-            Selecione as Categorias:
-          </Typography>
-          <TextField
-            {...params}
-            helperText=" "
-          />
+    <Box sx={{ gap: 0 }}>
+      <Autocomplete
+        fullWidth
+        multiple
+        renderTags={() => null}
+        size="small"
+        className="d-flex flex-column pt-3"
+        id="checkboxes-tags-demo"
+        options={top100Films}
+        value={selectedItems}
+        disableCloseOnSelect
+        getOptionLabel={(option) => option.title}
+        isOptionEqualToValue={(option, value) => option.title === value.title}
+        onChange={(event, newValue) => {
+          setSelectedItems(newValue);
+        }}
+        renderOption={(props, option) => (
+          <li {...props}>
+            <Checkbox
+              icon={icon}
+              checkedIcon={checkedIcon}
+              style={{ marginRight: 8 }}
+              checked={selectedItems.some((item: any) => item.title === option.title)}
+            />
+            {option.title}
+          </li>
+        )}
+        renderInput={(params) => (
+          <Box>
+            <Typography variant="body2" className="f-18">
+              Busque as Categorias:
+            </Typography>
+            <TextField
+              {...params}
+            />
+          </Box>
+        )}
+      />
+      <Box sx={{minHeight: '200px'}}>
+        <Box sx={{ padding: '15px 0 0 0', display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {selectedItems.map((item: any) => (
+            <Chip
+              key={item.title}
+              label={item.title}
+              onDelete={() => {
+                setSelectedItems(selectedItems.filter((itemFilter: any) => itemFilter.title !== item.title))
+              }}
+              deleteIcon={<DeleteIcon />}
+              variant="outlined"
+            />
+          ))}
         </Box>
-      )}
-    />
+      </Box>
+    </Box>
 
 
     // <Col>

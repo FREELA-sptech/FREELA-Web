@@ -1,16 +1,15 @@
 import "./style.scss";
-import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstrap";
+import { Col, Container, Row, Form, Tabs, Tab } from "react-bootstrap";
 import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
 import { UserForm } from "./components/UserForm/UserForm";
 import { InterestForm } from "../../shared/components/InterestForm/InterestForm";
 import { MdArrowBack } from "react-icons/md";
 
-//Hooks
 import { useForm } from "../../hooks/useForm";
-import { useContext, useState } from "react";
-import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
+import { useState } from "react";
+import { emailValidation, notBlank, passwordValidation } from "../../shared/scripts/validators";
 import UserType from "./components/UserType/UserType";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserAPI } from "../../api/userApi";
 
 
@@ -19,20 +18,22 @@ function Cadastro() {
   const [dataCategory, setDataCategory] = useState([]);
 
   const [formData, setFormData] = useState({
-    name: '',
-    userName: '',
-    email: '',
-    cpf: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
+    userName: "",
+    uf: "",
+    city: "",
+    subCategoryId: [],
     isFreelancer: false,
-    categoryId: []
-  });
+    profilePhoto: [],
+    description: ""
+});
 
   const [errors, setErrors] = useState({
     name: '',
     userName: '',
     email: '',
-    cpf: '',
     password: ''
   });
 
@@ -40,37 +41,36 @@ function Cadastro() {
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
   const validateForm = () => {
-    const { name, userName, email, cpf, password, isFreelancer } = formData;
+    const { name, email, password, city, uf } = formData;
     const newErros = {
       name: '',
       userName: '',
+      city: '',
+      uf: '',
       email: '',
-      cpf: '',
       password: ''
     }
 
     if (notBlank(name)) {
-      newErros.name = "O campo nome não pode estar vazio";
+      newErros.name = "Informe o seu nome";
     }
 
-    if (notBlank(userName)) {
-      newErros.userName = "O campo usuário não pode estar vazio";
+    if (notBlank(city)) {
+      newErros.city = "Selecione uma cidade";
+    }
+
+    if (notBlank(uf)) {
+      newErros.uf = "Selecione uma UF";
     }
 
     if (notBlank(email)) {
-      newErros.email = "O campo email não pode estar vazio";
+      newErros.email = "Informe seu email";
     } else if (!emailValidation(email)) {
       newErros.email = "Email inválido";
     }
 
-    if (notBlank(cpf)) {
-      newErros.cpf = "O campo CPF não pode estar vazio";
-    } else if (!isValidCPF(cpf)) {
-      newErros.cpf = "CPF inválido";
-    }
-
     if (notBlank(password)) {
-      newErros.password = "O campo senha não pode estar vazio";
+      newErros.password = "Informe a sua senha";
     } else if (passwordValidation(password)) {
       newErros.password = "Senha muito curta";
     }
@@ -86,7 +86,9 @@ function Cadastro() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (currentStep == 0) return changeStep(currentStep + 1)
+
     if (currentStep == 1) {
       const errors = validateForm();
       const valores = Object.values(errors);
@@ -99,16 +101,17 @@ function Cadastro() {
         changeStep(currentStep + 1)
       }
     }
+
     if (dataCategory.length > 0) {
-      formData.categoryId = dataCategory
+      formData.subCategoryId = dataCategory
 
       UserAPI.register(formData)
         .then(() => {
           navigate("/login")
         })
     }
-
   };
+
   return (
     <Container fluid className="cadastro-background">
       <Container>
@@ -156,7 +159,6 @@ function Cadastro() {
           </Col>
         </Row>
       </Container>
-
     </Container>
   )
 }
