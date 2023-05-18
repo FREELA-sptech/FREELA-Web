@@ -14,6 +14,7 @@ import HtmlTooltip from "../../../../shared/tools/MuiTooltipCustom";
 import Snackbar from '@mui/material/Snackbar';
 import { ExternalAPI } from "../../../../api/externalApi";
 import useSnackbar from "../../../../hooks/useSnackbar";
+import { InterestForm } from "../../../../shared/components/InterestForm/InterestForm";
 
 
 
@@ -57,7 +58,8 @@ function CardProfile() {
       name: user.name,
       city: user.city,
       uf: user.uf,
-      description: user.description
+      description: user.description,
+      subCategoryId: user.subcategories
     }
 
     setUserEditDetails(initalEditingValues)
@@ -67,34 +69,34 @@ function CardProfile() {
   const getUFS = () => {
     getCitys(userEditDetails.uf)
     ExternalAPI.getUFS()
-    .then((res) => {
-      const ufs = res.data.map((response: any) => {
-        return response.sigla
-      })
+      .then((res) => {
+        const ufs = res.data.map((response: any) => {
+          return response.sigla
+        })
 
-      setUfsData(ufs)
-      setDisableInputs(false)
-    })
-    .catch(() => {
-      showSnackbar(true, "Problemas para buscar as UFS");
-    })
+        setUfsData(ufs)
+        setDisableInputs(false)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para buscar as UFS");
+      })
   }
 
   const getCitys = (uf: string) => {
     uf !== userEditDetails.uf && (userEditDetails.city = "")
     setField("uf", uf)
     ExternalAPI.getCitys(uf)
-    .then((res) => {
-      const citys = res.data.map((response: any) => {
-        return response.nome
-      })
+      .then((res) => {
+        const citys = res.data.map((response: any) => {
+          return response.nome
+        })
 
-      setCitysData(citys)
-      setDisableInputs(false)
-    })
-    .catch(() => {
-      showSnackbar(true, "Problemas para buscar as Cidades");
-    })
+        setCitysData(citys)
+        setDisableInputs(false)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para buscar as Cidades");
+      })
   }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,6 +138,17 @@ function CardProfile() {
   }
 
   const handleSendEdit = () => {
+    const isArrayOfNumbers = userEditDetails.subCategoryId.every(
+      (element: any) => typeof element === "number"
+    );
+
+    if (!isArrayOfNumbers) {
+      userEditDetails.subCategoryId = userEditDetails.subCategoryId.map((value: any) => {
+        return value.id
+      })
+    }
+
+
     UserAPI.updateUser(4, userEditDetails)
       .then((res) => {
         updateUserData(res.data)
@@ -292,125 +305,148 @@ function CardProfile() {
           )}
         </Box>
       ) : (
-        <Grid item container xs={12} lg={12} className="d-flex flex-column px-5" sx={{ paddingTop: '100px' }}>
-          <Grid item lg={5} className="p-0 mb-3">
-            <Typography variant="body2" className="f-12">
-              Nome:
-            </Typography>
-            <TextField
-              error={Boolean(userEditErrorDetails.name)}
-              id="name"
-              name="name"
-              fullWidth
-              value={userEditDetails.name}
-              autoComplete="given-name"
-              variant="standard"
-              helperText={
-                userEditErrorDetails.name
-                  ? (
-                    <Typography variant="body2" className="f-14">
-                      {userEditErrorDetails.name || " "}
-                    </Typography>
-                  )
-                  : " "
-              }
-              onChange={(e) => setField("name", e.target.value)}
-            />
-          </Grid>
-          <Grid item container spacing={2} lg={5} className="ms-0">
-            <Grid item lg={8} md={9} className="pt-0 ps-0">
+        <Grid item container spacing={3} xs={12} lg={12} className="px-5" sx={{ paddingTop: '100px' }}>
+          <Grid item container xs={12} md={6} lg={5}>
+            <Grid item xs={12} lg={12} className="p-0 mb-3">
               <Typography variant="body2" className="f-12">
-                Cidade:
+                Nome:
               </Typography>
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={citysData}
-                value={userEditDetails.city}
-                disabled={disableInputs}
-                onChange={(e: any) => {
-                  setField("city", e.target.textContent)
-                }}
-                renderInput={(params) =>
-                  <TextField
-                    {...params}
-                    error={Boolean(userEditErrorDetails.city)}
-                    id="city"
-                    name="city"
-                    autoComplete="given-name"
-                    variant="standard"
-                    helperText={
-                      userEditErrorDetails.city
-                        ? (
-                          <Typography variant="body2" className="f-14">
-                            {userEditErrorDetails.city || " "}
-                          </Typography>
-                        )
-                        : " "
-                    }
-                  />
+              <TextField
+                error={Boolean(userEditErrorDetails.name)}
+                id="name"
+                name="name"
+                fullWidth
+                value={userEditDetails.name}
+                autoComplete="given-name"
+                variant="standard"
+                helperText={
+                  userEditErrorDetails.name
+                    ? (
+                      <Typography variant="body2" className="f-14">
+                        {userEditErrorDetails.name || " "}
+                      </Typography>
+                    )
+                    : " "
                 }
+                onChange={(e) => setField("name", e.target.value)}
               />
             </Grid>
-            <Grid item lg={4} md={3} className="pt-0">
-              <Typography variant="body2" className="f-12">
-                UF:
-              </Typography>
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={ufsData}
-                value={userEditDetails.uf}
-                disabled={disableInputs}
-                onChange={(e: any) => {
-                  getCitys(e.target.textContent)
-                }}
-                renderInput={(params) =>
-                  <TextField
-                    {...params}
-                    error={Boolean(userEditErrorDetails.uf)}
-                    id="uf"
-                    name="uf"
-                    autoComplete="given-name"
-                    variant="standard"
-                    helperText={
-                      userEditErrorDetails.uf
-                        ? (
-                          <Typography variant="body2" className="f-14">
-                            {userEditErrorDetails.uf || " "}
-                          </Typography>
-                        )
-                        : " "
+            <Grid item container spacing={2} lg={12} className="ms-0 p-0">
+              <Grid item lg={3} xs={3} className="ps-0">
+                <Typography variant="body2" className="f-12">
+                  UF:
+                </Typography>
+                <Autocomplete
+                  id="uf-autocomplete"
+                  options={ufsData}
+                  value={userEditDetails.uf}
+                  disabled={disableInputs}
+                  noOptionsText="Não Encontrado"
+                  onKeyUp={(e: any) => {
+                    const selectedValue = e.target.textContent || e.target.defaultValue
+                    if (ufsData.includes(selectedValue) || selectedValue === '') {
+                      getCitys(selectedValue)
                     }
-                  />
+                  }}
+                  onSelect={(e: any) => {
+                    const selectedValue = e.target.textContent || e.target.defaultValue
+                    if (ufsData.includes(selectedValue) || selectedValue === '') {
+                      getCitys(selectedValue)
+                    }
+                  }}
+                  renderInput={(params) =>
+                    <TextField
+                      {...params}
+                      error={Boolean(userEditErrorDetails.uf)}
+                      id="uf"
+                      name="uf"
+                      autoComplete="uf-autocomplete"
+                      variant="standard"
+                      helperText={
+                        userEditErrorDetails.uf
+                          ? (
+                            <Typography variant="body2" className="f-14">
+                              {userEditErrorDetails.uf || " "}
+                            </Typography>
+                          )
+                          : " "
+                      }
+                    />
+                  }
+                />
+              </Grid>
+              <Grid item lg={9} xs={9}>
+                <Typography variant="body2" className="f-12">
+                  Cidade:
+                </Typography>
+                <Autocomplete
+                  id="city-autocomplete"
+                  options={citysData}
+                  value={userEditDetails.city}
+                  disabled={disableInputs || !userEditDetails.uf}
+                  onKeyUp={(e: any) => {
+                    const selectedValue = e.target.textContent || e.target.defaultValue
+                    if (citysData.includes(selectedValue) || selectedValue === '') {
+                      setField("city", selectedValue)
+                    }
+                  }}
+                  onSelect={(e: any) => {
+                    const selectedValue = e.target.textContent || e.target.defaultValue
+                    if (citysData.includes(selectedValue) || selectedValue === '') {
+                      setField("city", selectedValue)
+                    }
+                  }}
+                  renderInput={(params) =>
+                    <TextField
+                      {...params}
+                      error={Boolean(userEditErrorDetails.city)}
+                      id="city"
+                      name="city"
+                      variant="standard"
+                      helperText={
+                        userEditErrorDetails.city
+                          ? (
+                            <Typography variant="body2" className="f-14">
+                              {userEditErrorDetails.city || " "}
+                            </Typography>
+                          )
+                          : " "
+                      }
+                    />
+                  }
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={12} lg={12}>
+              <Typography variant="body2" className="f-12">
+                Descrição:
+              </Typography>
+              <TextField
+                error={Boolean(userEditErrorDetails.description)}
+                id="description"
+                name="description"
+                fullWidth
+                value={userEditDetails.description}
+                variant="outlined"
+                helperText={
+                  userEditErrorDetails.description
+                    ? (
+                      <Typography variant="body2" className="f-14">
+                        {userEditErrorDetails.description || " "}
+                      </Typography>
+                    )
+                    : " "
                 }
+                onChange={(e) => setField("description", e.target.value)}
+                multiline
+                rows={2}
               />
             </Grid>
           </Grid>
-          <Grid item lg={5}>
-            <Typography variant="body2" className="f-12">
-              Descrição:
-            </Typography>
-            <TextField
-              error={Boolean(userEditErrorDetails.description)}
-              id="description"
-              name="description"
-              fullWidth
-              value={userEditDetails.description}
-              variant="outlined"
-              helperText={
-                userEditErrorDetails.description
-                  ? (
-                    <Typography variant="body2" className="f-14">
-                      {userEditErrorDetails.description || " "}
-                    </Typography>
-                  )
-                  : " "
-              }
-              onChange={(e) => setField("description", e.target.value)}
-              multiline
-              rows={2}
-            />
+          <Grid item container xs={12} md={6} lg={5}>
+            <Grid item xs={12}>
+              <InterestForm formData={userEditDetails} setFormData={setUserEditDetails} errors={userEditErrorDetails} setErrors={setUserEditErrorDetails} />
+            </Grid>
           </Grid>
         </Grid>
       )}

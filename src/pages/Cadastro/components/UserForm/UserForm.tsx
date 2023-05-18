@@ -138,6 +138,7 @@ export function UserForm(props: any) {
           <Autocomplete
             id="uf-autocomplete"
             options={ufsData}
+            value={props.formData.uf}
             disabled={disableInputs}
             noOptionsText="Não Encontrado"
             onKeyUp={(e: any) => {
@@ -180,6 +181,7 @@ export function UserForm(props: any) {
           <Autocomplete
             id="city-autocomplete"
             options={citysData}
+            value={props.formData.city}
             disabled={disableInputs || !props.formData.uf}
             noOptionsText="Não Encontrado"
             onKeyUp={(e: any) => {

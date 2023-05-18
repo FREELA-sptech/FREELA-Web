@@ -11,43 +11,49 @@ import { emailValidation, notBlank, passwordValidation } from "../../shared/scri
 import UserType from "./components/UserType/UserType";
 import { useNavigate } from "react-router-dom";
 import { UserAPI } from "../../api/userApi";
+import useSnackbar from "../../hooks/useSnackbar";
 
 
 function Cadastro() {
   const navigate = useNavigate();
-  const [dataCategory, setDataCategory] = useState([]);
+  const [SnackbarComponent, showSnackbar] = useSnackbar();
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    userName: "",
     uf: "",
     city: "",
     subCategoryId: [],
     isFreelancer: false,
     profilePhoto: [],
     description: ""
-});
+  });
 
   const [errors, setErrors] = useState({
     name: '',
     userName: '',
     email: '',
+    subCategoryId: '',
     password: ''
   });
 
-  const formComponents = [<UserType formData={formData} setFormData={setFormData} />, <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm dataCategory={dataCategory} setDataCategory={setDataCategory} />]
+  const formComponents = [
+    <UserType formData={formData} setFormData={setFormData} />,
+    <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
+    <InterestForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />
+  ]
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
   const validateForm = () => {
-    const { name, email, password, city, uf } = formData;
+    const { name, email, password, city, uf, subCategoryId } = formData;
     const newErros = {
       name: '',
       userName: '',
       city: '',
       uf: '',
       email: '',
+      subCategoryId: '',
       password: ''
     }
 
@@ -96,24 +102,33 @@ function Cadastro() {
 
       if (!errorsValues) {
         setErrors(errors);
+        return
       } else {
         setFormData(formData);
-        changeStep(currentStep + 1)
+        return changeStep(currentStep + 1)
       }
     }
 
-    if (dataCategory.length > 0) {
-      formData.subCategoryId = dataCategory
+    if (formData.subCategoryId.length <= 0) {
+      const newErrors = errors;
+      newErrors.subCategoryId = "Você precisa selecionar pelo menos 1 categoria"
 
+      setErrors(newErrors)
+    } else {
       UserAPI.register(formData)
         .then(() => {
-          navigate("/login")
+          showSnackbar(false, "Cadastro realizado com sucesso!");
+          navigate("/perfil")
+        })
+        .catch(() => {
+          showSnackbar(true, "Problemas para efetuar o cadastro, Tente novamente!");
         })
     }
   };
 
   return (
     <Container fluid className="cadastro-background">
+      <SnackbarComponent />
       <Container>
         <Row className="content d-flex align-items-stretch justify-content-center">
           <Col className="image-section d-none d-lg-flex flex-column align-items-center justify-content-center gap-3" md={12} lg={6}>
