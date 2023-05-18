@@ -6,7 +6,6 @@ import ButtonBase from "../ButtonBase/ButtonBase";
 function ServicesAvailableCard(data: any) {
   const localData = data.data
 
-  console.log(localData, " localData")
   return (
     <Card className="services-available-background b-radius position-relative overflow-hidden">
         {localData.categories.map((category: any) => {

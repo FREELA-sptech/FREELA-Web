@@ -78,7 +78,6 @@ function Home() {
             <Row className="d-flex">
               {UserStorage.getIsFreelancerLocalStorage() ?
                 responseData.map((data: any) => {
-                  console.log(data)
                   return (
                     <Col xs={12} md={6} lg={4} className="p-3">
                       <ServicesAvailableCard data={data} />

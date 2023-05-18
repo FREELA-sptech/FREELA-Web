@@ -5,4 +5,9 @@ export class CategoriesAPI {
     const response = await api.get("/categories");
     return response;
   }
+
+  public static async getSubCategories() {
+    const response = await api.get("/sub-categories");
+    return response;
+  }
 }
