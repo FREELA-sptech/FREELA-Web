@@ -1,0 +1,15 @@
+.container-files {
+    height: 30vh;
+    overflow-y: auto;
+    .preview {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        overflow: hidden;
+        .img-preview{
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
