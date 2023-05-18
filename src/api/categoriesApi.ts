@@ -1,13 +1,20 @@
-import api from "./api";
+import { useApi } from "./api";
 
-export class CategoriesAPI {
-  public static async getCategories() {
+export function CategoriesAPI() {
+  const api = useApi();
+
+  async function getCategories() {
     const response = await api.get("/categories");
     return response;
   }
 
-  public static async getSubCategories() {
+  async function getSubCategories() {
     const response = await api.get("/sub-categories");
     return response;
   }
+
+  return {
+    getCategories,
+    getSubCategories,
+  };
 }

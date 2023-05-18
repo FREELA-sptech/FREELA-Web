@@ -19,7 +19,7 @@ import { InterestForm } from "../../../../shared/components/InterestForm/Interes
 
 
 function CardProfile() {
-  const [userDetails, setUserDetails] = useState<any>({})
+  const [userDetailsData, setUserDetailsData] = useState<any>({})
   const [userEditDetails, setUserEditDetails] = useState<any>({})
   const [userEditErrorDetails, setUserEditErrorDetails] = useState<any>({})
   const [loading, setLoading] = useState(true)
@@ -29,9 +29,10 @@ function CardProfile() {
   const [ufsData, setUfsData] = useState<any>([])
   const [citysData, setCitysData] = useState<any>([])
   const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { userDetails, uploadPicture, updateUser } = UserAPI();
 
   useEffect(() => {
-    UserAPI.userDetails(4)
+    userDetails()
       .then((res) => {
         updateUserData(res.data)
         setLoading(false)
@@ -63,7 +64,7 @@ function CardProfile() {
     }
 
     setUserEditDetails(initalEditingValues)
-    setUserDetails(user)
+    setUserDetailsData(user)
   }
 
   const getUFS = () => {
@@ -110,10 +111,10 @@ function CardProfile() {
         const formData = new FormData();
         formData.append('image', file);
 
-        UserAPI.uploadPicture(4, formData)
+        uploadPicture(formData)
           .then((res) => {
-            userDetails.profilePhoto = res.data.profilePhoto
-            setUserDetails(userDetails)
+            userDetailsData.profilePhoto = res.data.profilePhoto
+            setUserDetailsData(userDetailsData)
             showSnackbar(false, "Imagem atualizada com sucesso");
           })
           .catch((error) => {
@@ -149,7 +150,7 @@ function CardProfile() {
     }
 
 
-    UserAPI.updateUser(4, userEditDetails)
+    updateUser(userEditDetails)
       .then((res) => {
         updateUserData(res.data)
         setEditing(false)
@@ -201,7 +202,7 @@ function CardProfile() {
                 left: '50px'
               }}
               alt="Remy Sharp"
-              src={`data:image/png;base64,${userDetails.profilePhoto}`}
+              src={`data:image/png;base64,${userDetailsData.profilePhoto}`}
             />
             {editing && (
               <Fab
@@ -263,18 +264,18 @@ function CardProfile() {
           ) : (
             <>
               <Box className="d-flex align-items-end gap-2">
-                <span className="f-30 f-inter dark-contrast-color fw-bold">{userDetails.name}</span>
+                <span className="f-30 f-inter dark-contrast-color fw-bold">{userDetailsData.name}</span>
                 <Box className="h-100 d-flex flex-row align-items-center pb-2">
-                  <span className="aditional-color f-16">{userDetails.rate}</span>
+                  <span className="aditional-color f-16">{userDetailsData.rate}</span>
                   <StarIcon color="primary" sx={{ fontSize: '12px' }} />
                 </Box>
               </Box>
-              <span className="text-color fw-normal f-16 f-inter">{userDetails.city}, {userDetails.uf}</span>
-              <span className="py-3 f-poppings aditional-color f-16">"{userDetails.description}"</span>
+              <span className="text-color fw-normal f-16 f-inter">{userDetailsData.city}, {userDetailsData.uf}</span>
+              <span className="py-3 f-poppings aditional-color f-16">"{userDetailsData.description}"</span>
               <h1 className="text-color f-18 f-inter fw-bold mt-2">Minhas Especialidades</h1>
               <Box className="w-auto d-flex gap-2">
-                {userDetails &&
-                  userDetails.categories.map((categories: any) => (
+                {userDetailsData &&
+                  userDetailsData.categories.map((categories: any) => (
                     <HtmlTooltip
                       key={categories.name}
                       title={

@@ -1,11 +1,14 @@
-import { UserStorage } from "../store/userStorage";
-import api from "./api";
-import { addToken } from "./interceptor";
+import { useApi } from "./api";
 
-export class OrdersAPI {
-  public static async getOrders() {
-    addToken(UserStorage.getTokenUserLocalStorage()!)
+export function OrdersAPI() {
+  const api = useApi();
+
+  async function getOrders() {
     const response = await api.get("/orders");
     return response;
   }
+
+  return {
+    getOrders,
+  };
 }

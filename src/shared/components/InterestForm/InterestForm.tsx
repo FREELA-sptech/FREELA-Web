@@ -5,9 +5,9 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Autocomplete, Box, Checkbox, TextField, Typography } from "@mui/material";
 import Chip from '@mui/material/Chip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CategoriesAPI } from "../../../api/categoriesApi";
 import { styled, lighten, darken } from '@mui/system';
 import useSnackbar from "../../../hooks/useSnackbar";
+import { CategoriesAPI } from "../../../api/categoriesApi";
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -28,6 +28,7 @@ export function InterestForm(props: any) {
   const [selectedItems, setSelectedItems] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([])
   const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { getSubCategories } = CategoriesAPI();
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -49,7 +50,7 @@ export function InterestForm(props: any) {
   }, [props.errors])
 
   useEffect(() => {
-    CategoriesAPI.getSubCategories()
+    getSubCategories()
       .then((res) => {
         setSubCategories(res.data)
         setSelectedItems(props.formData.subCategoryId)

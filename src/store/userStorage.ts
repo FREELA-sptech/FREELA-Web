@@ -7,7 +7,7 @@ export class UserStorage {
   }
 
   public static getIsFreelancerLocalStorage() {
-    return JSON.parse(localStorage.getItem(this.isFreelancerKey)!)
+    return localStorage.getItem(this.isFreelancerKey)
   }
 
   public static removeIsFreelancerLocalStorage() {

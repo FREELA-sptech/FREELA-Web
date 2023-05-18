@@ -4,7 +4,6 @@ const apiExternal = axios.create({
     baseURL: "https://servicodados.ibge.gov.br/api/v1/localidades",
 })
 
-
 export class ExternalAPI {
   public static async getUFS() {
     const response = await apiExternal.get("/estados?orderBy=nome");

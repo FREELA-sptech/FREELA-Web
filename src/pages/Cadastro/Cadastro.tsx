@@ -17,6 +17,7 @@ import useSnackbar from "../../hooks/useSnackbar";
 function Cadastro() {
   const navigate = useNavigate();
   const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { register } = UserAPI();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -115,10 +116,10 @@ function Cadastro() {
 
       setErrors(newErrors)
     } else {
-      UserAPI.register(formData)
+      register(formData)
         .then(() => {
-          showSnackbar(false, "Cadastro realizado com sucesso!");
-          navigate("/perfil")
+          showSnackbar(false, "Cadastro realizado com sucesso! Faça Login");
+          navigate("/login")
         })
         .catch(() => {
           showSnackbar(true, "Problemas para efetuar o cadastro, Tente novamente!");

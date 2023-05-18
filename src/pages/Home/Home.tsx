@@ -7,18 +7,18 @@ import FreelancerProfileCard from "../../shared/components/FreelancerProfileCard
 import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { OrdersAPI } from "../../api/ordersApi";
-import { UserAPI } from "../../api/userApi";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
   const [responseData, setResponseData] = useState([])
+  const { getOrders } = OrdersAPI();
 
   const handleClose = () => setShowModal(false)
   const handleOpen = () => setShowModal(true)
 
   useEffect(() => {
     if (UserStorage.getIsFreelancerLocalStorage()) {
-      OrdersAPI.getOrders()
+      getOrders()
         .then((res: any) => {
           setResponseData(res.data)
         })

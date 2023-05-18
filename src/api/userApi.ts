@@ -1,28 +1,38 @@
-import api from "./api";
+import { useApi } from "./api";
 
-export class UserAPI {
-  public static async register(userData: any) {
+export function UserAPI() {
+  const api = useApi();
+
+  async function register(userData: any) {
     const response = await api.post("/user", userData);
     return response;
   }
 
-  public static async login(userData: any) {
+  async function login(userData: any) {
     const response = await api.post("/user/login", userData);
     return response;
   }
 
-  public static async userDetails(idUser: number) {
-    const response = await api.get(`/user/edit/${idUser}`);
+  async function userDetails() {
+    const response = await api.get(`/user/edit`);
     return response;
   }
 
-  public static async uploadPicture(idUser: number, file: any) {
-    const response = await api.post(`/user/upload-image/${idUser}`, file);
+  async function uploadPicture(file: any) {
+    const response = await api.post(`/user/upload-image`, file);
     return response;
   }
 
-  public static async updateUser(idUser: number, newUser: any) {
-    const response = await api.patch(`/user/${idUser}`, newUser);
+  async function updateUser(newUser: any) {
+    const response = await api.patch(`/user`, newUser);
     return response;
   }
+
+  return {
+    register,
+    login,
+    userDetails,
+    uploadPicture,
+    updateUser,
+  };
 }
