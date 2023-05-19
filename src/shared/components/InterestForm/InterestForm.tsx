@@ -53,12 +53,27 @@ export function InterestForm(props: any) {
     getSubCategories()
       .then((res) => {
         setSubCategories(res.data)
-        setSelectedItems(props.formData.subCategoryId)
+        let filteredData = []
+
+
+        if (typeof props.formData.subCategoryId[0] === "number") {
+          filteredData = res.data.filter((item: any) => props.formData.subCategoryId.includes(item.id))
+        } else {
+          filteredData = res.data.filter((item: any) => props.formData.subCategoryId.some((obj: any) => obj.id === item.id))
+        }
+
+        console.log(props.formData.subCategoryId)
+        console.log(res.data)
+        console.log(filteredData)
+
+        setSelectedItems(filteredData)
       })
       .catch((error) => {
         showSnackbar(true, error.response.data);
       })
   }, [])
+
+  console.log(selectedItems)
 
 
   return (
@@ -115,7 +130,7 @@ export function InterestForm(props: any) {
           )}
           renderGroup={(params) => (
             <li key={params.key}>
-              <GroupHeader>{params.group}</GroupHeader>
+              <GroupHeader style={{zIndex: 1}}>{params.group}</GroupHeader>
               <GroupItems>{params.children}</GroupItems>
             </li>
           )}
@@ -126,6 +141,7 @@ export function InterestForm(props: any) {
               <Chip
                 key={item.id}
                 label={item.name}
+                color="primary"
                 onDelete={() => {
                   const newItems = selectedItems.filter((itemFilter: any) => itemFilter.name !== item.name)
 

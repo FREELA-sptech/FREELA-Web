@@ -13,6 +13,7 @@ export function useApi() {
     (response) => response,
     (error) => {
       if (error.response && error.response.status === 401) {
+        UserStorage.removeTokenUserLocalStorage();
         navigate("/login");
       }
       return Promise.reject(error);

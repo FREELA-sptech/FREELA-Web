@@ -130,8 +130,8 @@ export function UserForm(props: any) {
           onChange={(e) => setField("email", e.target.value)}
         />
       </Grid>
-      <Grid item container spacing={2} lg={12} className="ms-0 p-0">
-        <Grid item lg={3} md={3} className="ps-0">
+      <Grid item container spacing={2} lg={12} xs={12} className="ms-0 p-0">
+        <Grid item lg={3} xs={3} className="ps-0">
           <Typography variant="body2" className="f-16">
             UF:
           </Typography>
@@ -174,7 +174,7 @@ export function UserForm(props: any) {
             }
           />
         </Grid>
-        <Grid item lg={9} md={9}>
+        <Grid item lg={9} xs={9}>
           <Typography variant="body2" className="f-16">
             Cidade:
           </Typography>

@@ -41,8 +41,8 @@ function Cadastro() {
 
   const formComponents = [
     <UserType formData={formData} setFormData={setFormData} />,
-    <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
-    <InterestForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />
+    <InterestForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
+    <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />
   ]
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
@@ -85,47 +85,74 @@ function Cadastro() {
     return newErros;
   }
 
-  const handleHeaderText = (currentStep: number) => {
-    if (currentStep == 0) { return (<h1 className="f-36 dark-contrast-color text-center w-100">Escolha um Perfil</h1>) }
-    if (currentStep == 1) { return (<h1 className="f-36 dark-contrast-color text-center">Informe seus Dados</h1>) }
-    return <h1 className="f-36 dark-contrast-color text-center">Selecione seus Interesses</h1>;
+  const setFieldError = (field: any, value: any) => {
+    setErrors({
+      ...errors, [field]: value
+    })
   }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleHeaderText = (currentStep: number) => {
+    if (currentStep == 0) { return (<h1 className="f-36 dark-contrast-color text-center w-100">Escolha um Perfil</h1>) }
+    if (currentStep == 1) { return (<h1 className="f-36 dark-contrast-color text-center">Selecione seus Interesses</h1>) }
+    return <h1 className="f-36 dark-contrast-color text-center">Informe seus Dados</h1>;
+  }
 
-    if (currentStep == 0) return changeStep(currentStep + 1)
-
-    if (currentStep == 1) {
-      const errors = validateForm();
-      const valores = Object.values(errors);
-      const errorsValues = valores.every(valor => valor === "");
-
-      if (!errorsValues) {
-        setErrors(errors);
-        return
-      } else {
-        setFormData(formData);
-        return changeStep(currentStep + 1)
-      }
-    }
-
+  const handleValidateInterest = () => {
     if (formData.subCategoryId.length <= 0) {
       const newErrors = errors;
       newErrors.subCategoryId = "Você precisa selecionar pelo menos 1 categoria"
 
       setErrors(newErrors)
-    } else {
-      register(formData)
-        .then(() => {
-          showSnackbar(false, "Cadastro realizado com sucesso! Faça Login");
-          navigate("/login")
-        })
-        .catch(() => {
-          showSnackbar(true, "Problemas para efetuar o cadastro, Tente novamente!");
-        })
+      return false
     }
-  };
+    return true
+  }
+
+  const handleValidadeForm = () => {
+    const errors = validateForm()
+    const valores = Object.values(errors)
+    const errorsValues = valores.every(valor => valor === "")
+
+    if (!errorsValues) {
+      setErrors(errors)
+      return false
+    } else {
+      setFormData(formData)
+      return true
+    }
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (currentStep == 0)
+      return changeStep(currentStep + 1)
+
+    if (currentStep == 1) {
+      if (handleValidateInterest()) {
+        return changeStep(currentStep + 1)
+      }
+    }
+
+    if (currentStep == 2) {
+      if (handleValidadeForm()) {
+        register(formData)
+          .then(() => {
+            showSnackbar(false, "Cadastro realizado com sucesso! Faça Login");
+            navigate("/login")
+          })
+          .catch((error) => {
+            switch (error.response.status) {
+              case 409:
+                setFieldError("email", "Email já cadastrado!")
+                break;
+              default:
+                showSnackbar(true, "Houve algum erro interno, tente novamente mais tarde!")
+            }
+          })
+      }
+    }
+  }
 
   return (
     <Container fluid className="cadastro-background">
@@ -161,7 +188,7 @@ function Cadastro() {
                 )}
                 {handleHeaderText(currentStep)}
               </Col>
-              <Form onSubmit={handleSubmit} className="form d-flex flex-column col-md-10 col-lg-8">
+              <Form onSubmit={handleSubmit} className="form d-flex flex-column w-100">
                 {currentComponent}
                 <Col className="d-flex justify-content-center align-items-center gap-3">
                   {!isLastStep ? (

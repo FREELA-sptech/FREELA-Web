@@ -10,7 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { UploadImage } from "../UploadImage/UploadImage";
 import { File } from "../File/File";
 import { useState } from "react";
-import { uniqueId } from 'lodash'; 
+import { uniqueId } from 'lodash';
 import {filesize} from "filesize";
 
 
@@ -72,7 +72,7 @@ export function InfoOrder(props: any) {
         </Box>
       </Grid>
       <Grid item md={7} className="ps-4 mb-3">
-        <Grid item xs={12} xs={12} className="p-0 mb-3">
+        <Grid item xs={12} className="p-0 mb-3">
           <Typography variant="body2" className="f-18">
             Titulo:
           </Typography>

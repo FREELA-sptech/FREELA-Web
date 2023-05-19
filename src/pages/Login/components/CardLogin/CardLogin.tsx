@@ -39,6 +39,12 @@ function CardLogin() {
     }
   }
 
+  const setFieldError = (field: any, value: any) => {
+    setErrors({
+      ...errors, [field]: value
+    })
+  }
+
   const validateForm = () => {
     const { email, password } = formData;
 
@@ -75,13 +81,22 @@ function CardLogin() {
         .then((res) => {
           const userData = res.data
 
-          UserStorage.setIsFreelancerLocalStorage(userData.isFreelancer)
+          UserStorage.setIsFreelancerLocalStorage(userData.freelancer)
           UserStorage.setTokenUserLocalStorage(userData.token)
 
           navigate("/perfil")
         })
-        .catch(() => {
-          showSnackbar(true, "Email ou Senha incorreta, Tente Novamente!")
+        .catch((error) => {
+          switch (error.response.status) {
+            case 404:
+              setFieldError("email", "Email incorreto ou não cadastrado!")
+              break;
+            case 403:
+              setFieldError("password", "Senha incorreta!")
+              break;
+            default:
+              showSnackbar(true, "Houve algum erro interno, tente novamente mais tarde!")
+          }
         })
     }
   }
