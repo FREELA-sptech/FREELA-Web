@@ -182,22 +182,24 @@ function Cadastro() {
           </Col>
           <Col xs={12} md={12} lg={6} className="container-form d-flex flex-column justify-content-center align-items-center">
             <Col xs={10} md={11} lg={12} className="d-flex flex-column align-items-center justify-content-center">
-              <Col lg={10} xs={12} className="d-flex align-items-center gap-3">
+              <Col lg={10} xs={10} className="d-flex align-items-center gap-3 pb-3">
                 {!isFirstStep && (
                   <a className="link" onClick={() => changeStep(currentStep - 1)}><MdArrowBack size={"2rem"} /></a>
                 )}
                 {handleHeaderText(currentStep)}
               </Col>
-              <Form onSubmit={handleSubmit} className="form d-flex flex-column w-100">
-                {currentComponent}
-                <Col className="d-flex justify-content-center align-items-center gap-3">
-                  {!isLastStep ? (
-                    <button className="button-base primary-standart w-100" type="submit">Avançar</button>
-                  ) : (
-                    <button className="button-base primary-standart w-100" type="submit">Concluir</button>
-                  )}
-                </Col>
-              </Form>
+              <Col lg={10} xs={10}>
+                <Form onSubmit={handleSubmit} className="form d-flex flex-column">
+                  {currentComponent}
+                  <Col lg={12} xs={12}>
+                    {!isLastStep ? (
+                      <button className="button-base primary-standart w-100" type="submit">Avançar</button>
+                    ) : (
+                      <button className="button-base primary-standart w-100" type="submit">Concluir</button>
+                    )}
+                  </Col>
+                </Form>
+              </Col>
             </Col>
           </Col>
         </Row>

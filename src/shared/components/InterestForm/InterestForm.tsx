@@ -135,8 +135,8 @@ export function InterestForm(props: any) {
             </li>
           )}
         />
-        <Box sx={{ minHeight: '200px' }}>
-          <Box sx={{ padding: '15px 0 0 0', display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <Box sx={{ maxHeight: '200px', overflow: 'scroll' }}>
+          <Box sx={{ padding: '15px', display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {selectedItems.map((item: any) => (
               <Chip
                 key={item.id}

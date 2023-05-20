@@ -8,6 +8,9 @@ const theme = createTheme({
     primary: {
       main: '#274C77',
     },
+    secondary: {
+      main: '#6096BA'
+    }
   },
 });
 

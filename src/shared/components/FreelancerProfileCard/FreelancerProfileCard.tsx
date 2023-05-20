@@ -1,74 +1,95 @@
 import { Button, Card, Figure, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import "./style.scss"
 import ButtonBase from "../ButtonBase/ButtonBase";
+import Chip from '@mui/material/Chip';
+import { Avatar, Box } from "@mui/material";
+import { deepOrange } from '@mui/material/colors';
+import HtmlTooltip from "../../tools/MuiTooltipCustom";
 
 
-function FreelancerProfileCard() {
+function FreelancerProfileCard(props: any) {
+  const {
+    name,
+    description,
+    rate,
+    subcategories,
+    profilePhoto
+  } = props.props
+
   return (
     <Card className="services-available-background b-radius position-relative overflow-hidden">
-      <OverlayTrigger
-        trigger={["hover", "focus"]}
-        key='teste'
-        placement='left'
-        overlay={
-          <h1 className="tooltip b-radius px-3 fw-bold">Tradução</h1>
-        }
-      >
-        <Figure.Image
-          width='40px'
-          height='40px'
-          alt="dollar"
-          src="/assets/icons/tradution.svg"
-          className="position-absolute ms-2 mt-2"
-        />
-      </OverlayTrigger>
-      <Card.Img style={{ borderRadius: '16px 16px 0 0' }} width='100%' height='45%' variant="top" src="https://focalizando.com.br/sites/default/files/2023-03/ideias-de-tatuagens-no-antebraco-masculina-e-feminina.jpg" />
-      <Card.Body className="mb-4">
+      <Card.Body>
         <Card.Title className="title">
           <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
-            <Row style={{
-              borderRadius: '99%',
-              padding: '3px',
-              margin: 0,
-              width: '50px',
-              height: '43px',
-              backgroundColor: 'var(--contrast-background-color)',
-              overflow: 'hidden'
-            }}>
-              <Figure.Image
-                width='100%'
-                height='100%'
-                style={{ padding: 0 }}
-                alt="dollar"
-                src="https://www.ogol.com.br/img/jogadores/58/976658_med__20230131161334_cassio.png"
-                className="m-0"
-              />
-            </Row>
+            <Avatar
+              sx={{
+                width: "50px",
+                height: "50px",
+                bgcolor: "#274C77",
+              }}
+              alt={name}
+              src={`data:image/png;base64,${profilePhoto}`}
+            />
             <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
               <div className="d-flex flex-column">
-                <span className="text-color fw-bold f-16 f-inter">Cassio Ramos</span>
-                <span className="f-12 f-roboto fw-semibold">Design</span>
+                <span className="text-color fw-bold f-18 f-inter">{name}</span>
+                <Figure className="d-flex align-items-center m-0">
+                  <Figure.Image
+                    width='13px'
+                    height='13px'
+                    alt="dollar"
+                    src="/assets/icons/star.svg"
+                    className="m-0"
+                  />
+                  <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
+                    {rate}
+                  </Figure.Caption>
+                </Figure>
               </div>
-              <Figure className="d-flex align-items-center m-0">
-                <Figure.Image
-                  width='15px'
-                  height='15px'
-                  alt="dollar"
-                  src="/assets/icons/star.svg"
-                  className="m-0"
-                />
-                <Figure.Caption className="f-14 f-inter">
-                  4.9
-                </Figure.Caption>
-              </Figure>
             </Figure.Caption>
           </Figure>
         </Card.Title>
-        <Row className="d-flex justify-content-between my-3 text-center">
-          <span className="f-14 aditional-color">"Sou um jogador que está sempre buscando evoluir e aprimorar minhas habilidades, seja através de treinos específicos ou análise de jogos."</span>
+        <Row className="d-flex justify-content-between my-1 text-start">
+          <span className="f-14 aditional-color">
+            "{description}"
+          </span>
         </Row>
+        <Box>
+          <Box className="my-2 d-flex justify-content-start">
+            <span className="f-14">Expecialidades</span>
+          </Box>
+          <Box className="d-flex justify-content-start gap-2 w-100 flex-wrap">
+            {subcategories.map((item: any) => (
+              <HtmlTooltip
+                key={item.name}
+                title={
+                  <h1 key={item.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{item.name}</h1>
+                }
+                placement="top"
+                PopperProps={{
+                  sx: {
+                    padding: 0
+                  },
+                  disablePortal: true,
+                }}
+              >
+                <Box >
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      bgcolor: "#6096BA",
+                    }}
+                    alt={item.name}
+                    src={`data:image/png;base64,${item.photo}`}
+                  />
+                </Box>
+              </HtmlTooltip>
+            ))}
+          </Box>
+        </Box>
       </Card.Body>
-      <ButtonBase onClick={() => { }} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
+      <ButtonBase onClick={() => { }} className="b-radius-button z-index-2 w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
     </Card>
   );
 }

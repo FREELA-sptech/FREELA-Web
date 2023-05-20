@@ -28,11 +28,17 @@ export function UserAPI() {
     return response;
   }
 
+  async function getFreelancersByInterests() {
+    const response = await api.get(`/user/subcategory`);
+    return response;
+  }
+
   return {
     register,
     login,
     userDetails,
     uploadPicture,
     updateUser,
+    getFreelancersByInterests,
   };
 }

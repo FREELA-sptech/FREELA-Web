@@ -7,11 +7,13 @@ import FreelancerProfileCard from "../../shared/components/FreelancerProfileCard
 import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { OrdersAPI } from "../../api/ordersApi";
+import { UserAPI } from "../../api/userApi";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
   const [responseData, setResponseData] = useState([])
-  const { getOrders } = OrdersAPI();
+  const { getOrders } = OrdersAPI()
+  const { getFreelancersByInterests } = UserAPI()
 
   const handleClose = () => setShowModal(false)
   const handleOpen = () => setShowModal(true)
@@ -23,7 +25,11 @@ function Home() {
           setResponseData(res.data)
         })
     } else {
-
+      getFreelancersByInterests()
+        .then((res: any) => {
+          console.log(res)
+          setResponseData(res.data)
+        })
     }
   }, [])
 
@@ -76,18 +82,17 @@ function Home() {
               </InputGroup>
             </Row>
             <Row className="d-flex">
-              {UserStorage.getIsFreelancerLocalStorage() ?
-                responseData.map((data: any) => {
-                  return (
-                    <Col xs={12} md={6} lg={4} className="p-3">
-                      <ServicesAvailableCard data={data} />
-                    </Col>
-                  )
-                }) : (
+              {responseData.map((data: any) => {
+                return UserStorage.getIsFreelancerLocalStorage() ? (
                   <Col xs={12} md={6} lg={4} className="p-3">
-                    <FreelancerProfileCard />
+                    <ServicesAvailableCard data={data} />
                   </Col>
-                )}
+                ) : (
+                  <Col xs={12} md={6} lg={4} className="p-3">
+                    <FreelancerProfileCard props={data} />
+                  </Col>
+                )
+              })}
             </Row>
           </Col>
         </Row>

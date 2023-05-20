@@ -1,6 +1,6 @@
 import { Figure } from "react-bootstrap";
 import "./style.scss"
-import { Alert, Autocomplete, Avatar, Box, CircularProgress, Dialog, Grid, Input, Skeleton, TextField, Typography } from "@mui/material";
+import { Alert, Autocomplete, Avatar, Box, Chip, CircularProgress, Dialog, Grid, Input, Skeleton, TextField, Typography } from "@mui/material";
 import { deepOrange } from '@mui/material/colors';
 import StarIcon from '@mui/icons-material/Star';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,6 +15,7 @@ import Snackbar from '@mui/material/Snackbar';
 import { ExternalAPI } from "../../../../api/externalApi";
 import useSnackbar from "../../../../hooks/useSnackbar";
 import { InterestForm } from "../../../../shared/components/InterestForm/InterestForm";
+import { UserStorage } from "../../../../store/userStorage";
 
 
 
@@ -30,6 +31,7 @@ function CardProfile() {
   const [citysData, setCitysData] = useState<any>([])
   const [SnackbarComponent, showSnackbar] = useSnackbar();
   const { userDetails, uploadPicture, updateUser } = UserAPI();
+  const isFreelancer = UserStorage.getIsFreelancerLocalStorage();
 
   useEffect(() => {
     userDetails()
@@ -196,12 +198,12 @@ function CardProfile() {
               sx={{
                 width: 150,
                 height: 150,
-                bgcolor: deepOrange[500],
+                bgcolor: "#274C77",
                 border: '4px solid white',
                 bottom: '-75px',
                 left: '50px'
               }}
-              alt="Remy Sharp"
+              alt={userDetailsData.name}
               src={`data:image/png;base64,${userDetailsData.profilePhoto}`}
             />
             {editing && (
@@ -270,12 +272,18 @@ function CardProfile() {
                   <StarIcon color="primary" sx={{ fontSize: '12px' }} />
                 </Box>
               </Box>
-              <span className="text-color fw-normal f-16 f-inter">{userDetailsData.city}, {userDetailsData.uf}</span>
-              <span className="py-3 f-poppings aditional-color f-16">"{userDetailsData.description}"</span>
-              <h1 className="text-color f-18 f-inter fw-bold mt-2">Minhas Especialidades</h1>
+              <span className="text-color fw-normal f-poppings aditional-color  ">{userDetailsData.city}, {userDetailsData.uf}</span>
+              {isFreelancer ? (
+                <span className="py-3 f-poppings aditional-color f-16">
+                  "{userDetailsData.description}"
+                </span>
+              ) : null}
+              <h1 className="text-color f-18 f-inter fw-bold mt-3">
+                {isFreelancer ? "Minhas Especialidades" : "Meus Interesses"}
+              </h1>
               <Box className="w-auto d-flex gap-2">
                 {userDetailsData &&
-                  userDetailsData.categories.map((categories: any) => (
+                  userDetailsData.subcategories.map((categories: any) => (
                     <HtmlTooltip
                       key={categories.name}
                       title={
@@ -290,12 +298,14 @@ function CardProfile() {
                       }}
                     >
                       <Box >
-                        <Figure.Image
-                          width='40px'
-                          height='40px'
-                          alt="dollar"
-                          src="/assets/icons/tradution.svg"
-                          className=""
+                        <Avatar
+                          sx={{
+                            width: 40,
+                            height: 40,
+                            bgcolor: "#6096BA",
+                          }}
+                          alt={categories.name}
+                          src={`data:image/png;base64,${userDetailsData.profilePhoto}`}
                         />
                       </Box>
                     </HtmlTooltip>
@@ -306,9 +316,23 @@ function CardProfile() {
           )}
         </Box>
       ) : (
-        <Grid item container spacing={3} xs={12} lg={12} className="px-5" sx={{ paddingTop: '100px' }}>
-          <Grid item container xs={12} md={6} lg={5}>
-            <Grid item xs={12} lg={12} className="p-0 mb-3">
+        <Grid
+          item
+          container
+          spacing={3} xs={12} lg={12}
+          className="px-5"
+          sx={{ paddingTop: '100px' }}
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="flex-start">
+          <Grid
+            item
+            container
+            xs={12} md={6} lg={5}
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start">
+            <Grid item xs={12} lg={12} className="p-0">
               <Typography variant="body2" className="f-12">
                 Nome:
               </Typography>
@@ -418,31 +442,33 @@ function CardProfile() {
                 />
               </Grid>
             </Grid>
-            <Grid item xs={12} lg={12}>
-              <Typography variant="body2" className="f-12">
-                Descrição:
-              </Typography>
-              <TextField
-                error={Boolean(userEditErrorDetails.description)}
-                id="description"
-                name="description"
-                fullWidth
-                value={userEditDetails.description}
-                variant="outlined"
-                helperText={
-                  userEditErrorDetails.description
-                    ? (
-                      <Typography variant="body2" className="f-14">
-                        {userEditErrorDetails.description || " "}
-                      </Typography>
-                    )
-                    : " "
-                }
-                onChange={(e) => setField("description", e.target.value)}
-                multiline
-                rows={2}
-              />
-            </Grid>
+            {isFreelancer ? (
+              <Grid item xs={12} lg={12}>
+                <Typography variant="body2" className="f-12">
+                  Descrição:
+                </Typography>
+                <TextField
+                  error={Boolean(userEditErrorDetails.description)}
+                  id="description"
+                  name="description"
+                  fullWidth
+                  value={userEditDetails.description}
+                  variant="outlined"
+                  helperText={
+                    userEditErrorDetails.description
+                      ? (
+                        <Typography variant="body2" className="f-14">
+                          {userEditErrorDetails.description || " "}
+                        </Typography>
+                      )
+                      : " "
+                  }
+                  onChange={(e) => setField("description", e.target.value)}
+                  multiline
+                  rows={2}
+                />
+              </Grid>
+            ) : null}
           </Grid>
           <Grid item container xs={12} md={6} lg={5}>
             <Grid item xs={12}>

@@ -4,12 +4,19 @@ import { Container, Figure, Nav, Navbar, Offcanvas, Row } from 'react-bootstrap'
 import { useContext, useEffect, useState } from 'react';
 import { UserStorage } from '../../../store/userStorage';
 import { Box } from '@mui/system';
+import { UserAPI } from '../../../api/userApi';
 
 function Header() {
   const [menuIsOpen, setMenuIsOpen] = useState(false)
+  const isFreelancer = UserStorage.getIsFreelancerLocalStorage()
 
   const handleClose = () => setMenuIsOpen(false)
   const handleOpen = () => setMenuIsOpen(true)
+
+  const handleLogof = () => {
+    handleClose()
+    UserStorage.clearAllLocalStorage()
+  }
 
   return (
     <Navbar
@@ -39,16 +46,30 @@ function Header() {
                   FREELA
                 </Link>
                 <Link to='/home' className='tertiary-text' onClick={handleClose}>
-                  Encontre projetos
+                  {isFreelancer ? "Encontre projetos" : "Encontre Profissionais"}
                 </Link>
               </Box>
               <Box className="d-flex flex-column flex-xl-row">
-                <Link to='/login' className='tertiary-text' onClick={handleClose}>
-                  login
-                </Link>
-                <Link to='/cadastro' className='primary-standart' onClick={handleClose}>
-                  cadastro
-                </Link>
+                {!UserStorage.isAuthenticated() ?
+                  (
+                    <>
+                      <Link to='/login' className='tertiary-text' onClick={handleClose}>
+                        login
+                      </Link>
+                      <Link to='/cadastro' className='primary-standart' onClick={handleClose}>
+                        cadastro
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to='/perfil' className='tertiary-text' onClick={handleClose}>
+                        meu perfil
+                      </Link>
+                      <Link to='/' className='primary-standart' onClick={handleLogof}>
+                        sair
+                      </Link>
+                    </>
+                  )}
               </Box>
             </Nav>
           </Offcanvas.Body>
