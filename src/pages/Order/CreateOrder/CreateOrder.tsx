@@ -3,44 +3,46 @@ import { MdArrowBack, MdOutlineHome } from "react-icons/md";
 import { InterestForm } from "../../../shared/components/InterestForm/InterestForm";
 import { useState } from "react";
 import { InfoOrder } from "./components/InfoOrder/InfoOrder";
-import { PrevisionOrder } from "./components/PrevisionOrder/PrevisionOrder";
 import { useForm } from "../../../hooks/useForm";
 import { notBlank } from "../../../shared/scripts/validators";
-import { Stepper, Step, StepLabel,Breadcrumbs,Link,Typography } from "@mui/material";
+import { Stepper, Step, StepLabel, Breadcrumbs, Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const steps = ['Informe os dados do pedido', 'asdasd', 'Create an ad', 'asdasd'];
 
 export function CreateOrder() {
-    const [activeStep, setActiveStep] = useState(0)
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [uploadedFiles, setUploadedFiles] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         category: '',
-        subCategoryIds: '',
+        subCategoryId: [],
         maxValue: '',
-        deadline: ''
+        deadline: '',
+        Foto: []
     });
 
     const [errors, setErrors] = useState({
         title: '',
         description: '',
         category: '',
-        subCategoryIds: '',
+        subCategoryId: [],
         maxValue: '',
-        deadline: ""
+        deadline: "",
+        Foto: []
     });
 
     const validateFormInfo = () => {
-        const { title, description } = formData;
+        const { title, description, deadline, maxValue } = formData;
         const newErros = {
             title: '',
             description: '',
             category: '',
-            subCategoryIds: '',
+            subCategoryId: [],
             maxValue: '',
-            deadline: ""
+            deadline: "",
+            Foto: []
         }
 
         if (notBlank(title)) {
@@ -51,24 +53,25 @@ export function CreateOrder() {
         } else if (description.length < 30) {
             newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
         }
+        if (notBlank(deadline)) {
+            newErros.deadline = "O campo prazo não pode estar vazio";
+        }
+        if (notBlank(maxValue)) {
+            newErros.maxValue = "O campo preço não pode estar vazio";
+        }
 
         return newErros;
     }
 
-
     const handleSubmit = () => {
-        if (activeStep === steps.length - 1) {
-
-        } else {
-            const errors = validateFormInfo();
-            const valores = Object.values(errors);
-            const errorsValues = valores.every(valor => valor === "");
-
-            if (!errorsValues) {
-                setErrors(errors)
-            } else {
-                setActiveStep(activeStep + 1)
-            }
+        const errors = validateFormInfo();
+        const valores = Object.values(errors);
+        const errorsValues = valores.every(valor => valor === "");
+        if (!errorsValues) {
+            setErrors(errors)
+            console.log(uploadedFiles);
+            console.log(formData);
+        
         }
     }
 
@@ -93,7 +96,7 @@ export function CreateOrder() {
                             </h1>
                         </Row>
                         <Row>
-                            <InfoOrder formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />
+                            <InfoOrder formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} />
                         </Row>
                         <Row className="d-flex flex-row justify-content-between">
                             <button className="primary-text w-auto" onClick={handleCancel}>{"Cancelar"}</button>

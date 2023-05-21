@@ -11,7 +11,7 @@ import { UploadImage } from "../UploadImage/UploadImage";
 import { File } from "../File/File";
 import { useState } from "react";
 import { uniqueId } from 'lodash';
-import {filesize} from "filesize";
+import { filesize } from "filesize";
 
 
 
@@ -19,7 +19,6 @@ export function InfoOrder(props: any) {
   const theme = useTheme();
 
   const setField = (field: any, value: any) => {
-    console.log(state.uploadedFiles)
     props.setFormData({
       ...props.formData, [field]: value
     });
@@ -29,20 +28,19 @@ export function InfoOrder(props: any) {
       });
     }
   };
-  const [state, setState] = useState({
-    uploadedFiles: [],
-  })
 
-  const handleDelete = id =>{
-    setState({
-      uploadedFiles: state.uploadedFiles.filter(file => file.id !== id)
-    })
+  const handleDelete = id => {
+    props.setUploadedFiles(props.uploadedFiles.filter(file => file.id !== id))
   }
 
+  const handleImageChange = (file) => {
+    props.formData.Foto.includes(file);
+  };
+
   const handleUpload = files => {
-    const uploadedFiles = files.map(file => ({
+    const filesUpload = files.map(file => ({
       file,
-      id:uniqueId(),
+      id: uniqueId(),
       name: file.name,
       preview: URL.createObjectURL(file),
       readableSize: filesize(file.size),
@@ -50,24 +48,20 @@ export function InfoOrder(props: any) {
       error: false,
       url: null,
     }))
-
-    setState({
-      uploadedFiles: state.uploadedFiles.concat(uploadedFiles)
-    })
-
+    props.setUploadedFiles(props.uploadedFiles.concat(filesUpload));
+    setField("Foto",filesUpload);
   };
-  const { uploadedFiles } = state;
 
   return (
     <Grid container className="pt-4 px-0" maxWidth={"100%"}>
       <Grid item xs={12} className="p-0 mb-3">
-        <InterestForm />
+        <InterestForm formData={props.formData} setFormData={props.setFormData} errors={props.errors} setErrors={props.setErrors} />
       </Grid>
       <Grid item md={5} xs={12} className="p-0 mb-3">
         <Box>
           <UploadImage onUpload={handleUpload} />
-          {!!uploadedFiles.length && (
-            <File files={uploadedFiles} onDelete={handleDelete}/>
+          {!!props.uploadedFiles.length && (
+            <File files={props.uploadedFiles} onDelete={handleDelete} />
           )}
         </Box>
       </Grid>
@@ -131,6 +125,7 @@ export function InfoOrder(props: any) {
               id="maxValue"
               name="maxValue"
               fullWidth
+              type="number"
               InputProps={{
                 startAdornment: <InputAdornment position="start">$</InputAdornment>
               }}
