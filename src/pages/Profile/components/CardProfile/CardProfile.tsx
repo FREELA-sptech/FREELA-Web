@@ -171,7 +171,11 @@ function CardProfile() {
       }}
     >
       <SnackbarComponent />
-      <Box className="position-relative d-flex flex-row gap-4" sx={{ height: '200px', backgroundColor: 'blue' }}>
+      <Box className="position-relative d-flex flex-row gap-4"
+        sx={{
+          height: '200px',
+          background: 'var(--ligth-contrast-color)'
+        }}>
         {loading ? (
           <Box
             className="position-absolute"

@@ -1,6 +1,8 @@
 import { Button, Card, Figure, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import "./style.scss"
 import ButtonBase from "../ButtonBase/ButtonBase";
+import { Avatar, Typography, Box } from "@mui/material"
+import HtmlTooltip from "../../../shared/tools/MuiTooltipCustom";
 
 
 function ServicesAvailableCard(data: any) {
@@ -8,28 +10,8 @@ function ServicesAvailableCard(data: any) {
 
   return (
     <Card className="services-available-background b-radius position-relative overflow-hidden">
-        {localData.categories.map((category: any) => {
-          return (
-            <OverlayTrigger
-              trigger={["hover", "focus"]}
-              key={category.id}
-              placement='left'
-              overlay={
-                <h1 className="tooltip b-radius px-3 fw-bold">{category.name}</h1>
-              }
-            >
-              <Figure.Image
-                width='40px'
-                height='40px'
-                alt="dollar"
-                src="/assets/icons/tradution.svg"
-                className="position-absolute ms-2 mt-2"
-              />
-            </OverlayTrigger>
-          )
-        })}
       <Card.Img style={{ borderRadius: '16px 16px 0 0' }} width='100%' height='45%' variant="top" src="https://focalizando.com.br/sites/default/files/2023-03/ideias-de-tatuagens-no-antebraco-masculina-e-feminina.jpg" />
-      <Card.Body className="mb-4">
+      <Card.Body className="mb-0">
         <Card.Title className="text-color f-20 fw-semibold">{localData.title}</Card.Title>
         <Row className="d-flex justify-content-between my-3 pe-3 gap-2">
           <Figure className="d-flex align-items-center gap-2 w-auto m-0">
@@ -63,8 +45,43 @@ function ServicesAvailableCard(data: any) {
             </Figure.Caption>
           </Figure>
         </Row>
+        <Row>
+          <Typography variant="body2" className="f-14">
+            Categorias:
+          </Typography>
+          <Box className="d-flex">
+            {localData.subCategories.map((subCategory: any) => {
+              return (
+                <HtmlTooltip
+                  key={subCategory.name}
+                  title={
+                    <h1 key={subCategory.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{subCategory.name}</h1>
+                  }
+                  placement="top"
+                  PopperProps={{
+                    sx: {
+                      padding: 0
+                    },
+                    disablePortal: true,
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      bgcolor: "#274C77",
+                      border: '4px solid white'
+                    }}
+                    alt={subCategory.name}
+                    src={`data:image/png;base64,asdasd`}
+                  />
+                </HtmlTooltip>
+              )
+            })}
+          </Box>
+        </Row>
       </Card.Body>
-      <ButtonBase onClick={() => { }} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
+      <ButtonBase onClick={() => { }} className="b-radius-button w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
     </Card>
   );
 }

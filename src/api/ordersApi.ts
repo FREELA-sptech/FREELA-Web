@@ -8,7 +8,13 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function getOrdersByUser() {
+    const response = await api.get("/orders/by-user");
+    return response;
+  }
+
   return {
     getOrders,
+    getOrdersByUser
   };
 }
