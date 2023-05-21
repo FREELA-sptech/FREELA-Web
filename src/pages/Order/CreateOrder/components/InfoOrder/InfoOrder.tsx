@@ -12,11 +12,13 @@ import { File } from "../File/File";
 import { useState } from "react";
 import { uniqueId } from 'lodash';
 import { filesize } from "filesize";
+import dayjs from 'dayjs';
 
 
 
 export function InfoOrder(props: any) {
   const theme = useTheme();
+  const updatedFormData = { ...props.formData }; 
 
   const setField = (field: any, value: any) => {
     props.setFormData({
@@ -33,8 +35,9 @@ export function InfoOrder(props: any) {
     props.setUploadedFiles(props.uploadedFiles.filter(file => file.id !== id))
   }
 
-  const handleImageChange = (file) => {
-    props.formData.Foto.includes(file);
+  const handleDateChange = (date) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    setField('deadline', formattedDate);
   };
 
   const handleUpload = files => {
@@ -49,7 +52,18 @@ export function InfoOrder(props: any) {
       url: null,
     }))
     props.setUploadedFiles(props.uploadedFiles.concat(filesUpload));
-    setField("Foto",filesUpload);
+    filesUpload.forEach(fileItem => {
+      const file = fileItem.file;
+      const reader = new FileReader();
+    
+      reader.onloadend = function() {
+        const base64Data = reader.result;
+        updatedFormData.photo.push(base64Data);
+      };
+    
+      reader.readAsDataURL(file);
+    });
+    props.setFormData(updatedFormData);
   };
 
   return (
@@ -152,7 +166,7 @@ export function InfoOrder(props: any) {
               <DatePicker
                 sx={{ width: '100%' }}
                 value={props.formData.deadline}
-                onChange={(e) => setField("deadline", e.target.value)}
+                onChange={handleDateChange}
                 className="p-0"
                 slotProps={{
                   textField: {

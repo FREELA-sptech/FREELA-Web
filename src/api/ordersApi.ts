@@ -8,7 +8,13 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function createOrder(userId:any,data:any){
+    const response = await api.post(`/orders/${userId}`,data);
+    return response;
+  }
+
   return {
     getOrders,
+    createOrder
   };
 }

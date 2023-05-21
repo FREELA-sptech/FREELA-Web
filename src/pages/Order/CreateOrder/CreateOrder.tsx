@@ -7,20 +7,26 @@ import { useForm } from "../../../hooks/useForm";
 import { notBlank } from "../../../shared/scripts/validators";
 import { Stepper, Step, StepLabel, Breadcrumbs, Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { OrdersAPI } from "../../../api/ordersApi";
+import { UserAPI } from "../../../api/userApi";
+import useSnackbar from "../../../hooks/useSnackbar";
 
 const steps = ['Informe os dados do pedido', 'asdasd', 'Create an ad', 'asdasd'];
 
 export function CreateOrder() {
+    const [SnackbarComponent, showSnackbar] = useSnackbar();
     const navigate = useNavigate();
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const { createOrder } = OrdersAPI();
+    const { userDetails } = UserAPI();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: '',
+        category: 0,
         subCategoryId: [],
         maxValue: '',
         deadline: '',
-        Foto: []
+        photo: []
     });
 
     const [errors, setErrors] = useState({
@@ -30,7 +36,7 @@ export function CreateOrder() {
         subCategoryId: [],
         maxValue: '',
         deadline: "",
-        Foto: []
+        photo: []
     });
 
     const validateFormInfo = () => {
@@ -42,7 +48,7 @@ export function CreateOrder() {
             subCategoryId: [],
             maxValue: '',
             deadline: "",
-            Foto: []
+            photo: []
         }
 
         if (notBlank(title)) {
@@ -69,9 +75,15 @@ export function CreateOrder() {
         const errorsValues = valores.every(valor => valor === "");
         if (!errorsValues) {
             setErrors(errors)
-            console.log(uploadedFiles);
+            userDetails()
+                .then((res) => {
+                    console.log(res.data);
+                    createOrder(res.data.id, formData);
+                }).catch((error) => {
+                    showSnackbar(true, error.response.data);
+                })
             console.log(formData);
-        
+
         }
     }
 
