@@ -1,9 +1,11 @@
 import { Button, Card, Figure, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import "./style.scss"
 import ButtonBase from "../ButtonBase/ButtonBase";
+import { useNavigate } from "react-router-dom";
 
 
 function ServicesAvailableCard(data: any) {
+  const navigate = useNavigate();
   const localData = data.data
 
   return (
@@ -64,7 +66,7 @@ function ServicesAvailableCard(data: any) {
           </Figure>
         </Row>
       </Card.Body>
-      <ButtonBase onClick={() => { }} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
+      <ButtonBase onClick={() => navigate(`/order-details/${localData.id}`)} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
     </Card>
   );
 }

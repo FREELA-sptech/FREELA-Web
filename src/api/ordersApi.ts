@@ -13,8 +13,15 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function editOrder(orderId:any) {
+    const response = await api.get(`/orders/edit/${orderId}`);
+    return response;
+  }
+
+
   return {
     getOrders,
-    createOrder
+    createOrder,
+    editOrder
   };
 }
