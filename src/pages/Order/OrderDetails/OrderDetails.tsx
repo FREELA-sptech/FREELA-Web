@@ -10,39 +10,28 @@ import { Avatar, Backdrop, Box, CircularProgress } from '@mui/material';
 import HtmlTooltip from "../../../shared/tools/MuiTooltipCustom";
 
 export function OrderDetails() {
-    interface Order {
-        id: number;
-        description: string;
-        title: string;
-        maxValue: number;
-        category: any;
-        deadline: Date;
-        user: any;
-        subCategories:any;
-        proposals: any; 
-        isAccepted: boolean;
-        photo: any;
-    }
 
     const params = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [show, setShow] = useState(false);
     const { editOrder } = OrdersAPI();
-    const [idUser,setIdUser] = useState(null);
+    const [idUser, setIdUser] = useState(null);
     const { id } = params;
-    const [order, setOrder] = useState<Order>({} as Order)
+    const [order, setOrder] = useState({})
     const handleClose = () => setIsLoading(false);
     const handleCloseModal = () => setShow(false);
     const handleShow = () => setIsLoading(false);
     useEffect(() => {
         editOrder(id)
             .then((res) => {
+                console.log(res.data)
                 setOrder(res.data);
             })
             .catch((error) => {
                 console.log(error)
             })
             .finally(() => {
+                console.log(order)
                 setIsLoading(false)
             })
     }, [id])
@@ -56,7 +45,7 @@ export function OrderDetails() {
             <CircularProgress color="inherit" />
         </Backdrop>
     )
-    !order ? (
+    return (
         <Container fluid className="order-details">
             <Container className="container d-flex flex-column justify-content-start">
                 <Row>
@@ -78,7 +67,7 @@ export function OrderDetails() {
                                     size={"24px"}
                                 />
                             </div>
-                            <p>Orçamento esperado : <b>{order.maxValue}</b></p>
+                            <p>Orçamento esperado : <b>R${order.maxValue},00</b></p>
                         </div>
                         <div className="info-line d-flex align-items-center ">
                             <div className='fill-icon'>
@@ -87,7 +76,7 @@ export function OrderDetails() {
                                     size={"24px"}
                                 />
                             </div>
-                            <p>Prazo de Entrega : <b>{order.deadline.getDay()} de {order.deadline.getMonth()}</b></p>
+                            <p>Prazo de Entrega : <b>{order.deadline }</b></p>
                         </div>
                         <div className="info-line d-flex align-items-center ">
                             <div className='fill-icon'>
@@ -96,7 +85,7 @@ export function OrderDetails() {
                                     size={"24px"}
                                 />
                             </div>
-                            <Box className="w-auto d-flex gap-2">
+                            {/* <Box className="w-auto d-flex gap-2">
                                 {order &&
                                     order.subCategories.map((categories: any) => (
                                         <HtmlTooltip
@@ -126,7 +115,7 @@ export function OrderDetails() {
                                         </HtmlTooltip>
                                     ))
                                 }
-                            </Box>
+                            </Box> */}
                         </div>
                     </Col>
                     <Col className="d-flex justify-content-end align-items-start gap-3">
@@ -150,11 +139,11 @@ export function OrderDetails() {
                                     <ListGroup variant="flush">
                                         <ListGroup.Item className="info-category-item">
                                             <div className="image-container">
-                                                <img src={`data:image/png;base64,${order.photo[0]}`} alt="" />
+                                                <img src={`data:image/png;base64,${order.photo}`} alt="" />
                                             </div>
                                             <h4 className="title-info">Descrição</h4>
                                             <p>{order.description}</p>
-                                            </ListGroup.Item>
+                                        </ListGroup.Item>
                                     </ListGroup>
                                 </Card>
                             </Tab>
@@ -185,8 +174,5 @@ export function OrderDetails() {
                 </Modal.Body>
             </Modal>
         </Container>
-
-    ):(
-        <h1>Serviço não encontrado</h1>
     )
 }
