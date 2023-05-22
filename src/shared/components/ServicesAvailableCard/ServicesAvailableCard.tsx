@@ -3,6 +3,7 @@ import "./style.scss"
 import ButtonBase from "../ButtonBase/ButtonBase";
 import { Avatar, Typography, Box } from "@mui/material"
 import HtmlTooltip from "../../../shared/tools/MuiTooltipCustom";
+import { useNavigate } from "react-router";
 
 
 function ServicesAvailableCard(data: any) {
@@ -83,7 +84,7 @@ function ServicesAvailableCard(data: any) {
           </Box>
         </Row>
       </Card.Body>
-      <ButtonBase onClick={() => navigate(`/order-details/${localData.id}`)} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
+      <ButtonBase onClick={() => navigate(`/order-details/${localData.id}`)} className="b-radius-button w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
     </Card>
   );
 }

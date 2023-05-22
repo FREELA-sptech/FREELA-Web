@@ -172,7 +172,7 @@ export function InfoOrder(props: any) {
                 fullWidth
                 variant="standard"
                 value={props.formData.deadline}
-                onChange={handleDateChange}
+                onChange={() => {}}
                 className="p-0"
                 slotProps={{
                   textField: {
