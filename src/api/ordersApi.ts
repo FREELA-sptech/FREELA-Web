@@ -13,8 +13,20 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function createOrder(formData: any) {
+    const response = await api.post("/orders/4", formData);
+    return response;
+  }
+
+  async function updatePicture(formData: any, orderId: number) {
+    const response = await api.post(`/orders/upload-pictures/${orderId}`, formData);
+    return response;
+  }
+
   return {
     getOrders,
-    getOrdersByUser
+    getOrdersByUser,
+    createOrder,
+    updatePicture
   };
 }

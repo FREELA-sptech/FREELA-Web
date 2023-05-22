@@ -112,7 +112,6 @@ function CardProfile() {
       reader.onloadend = () => {
         const formData = new FormData();
         formData.append('image', file);
-
         uploadPicture(formData)
           .then((res) => {
             userDetailsData.profilePhoto = res.data.profilePhoto

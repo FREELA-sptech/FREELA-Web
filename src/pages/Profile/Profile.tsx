@@ -80,7 +80,7 @@ function Profile() {
                       alignItems="center"
                       xs={12}
                     >
-                      <Link to='/login' className='primary-standart'>
+                      <Link to='/create-order' className='primary-standart'>
                         faça um pedido
                       </Link>
                     </Grid>
@@ -97,7 +97,7 @@ function Profile() {
                         <Typography variant="body2" className="f-22">
                           Você ainda não fez nenhum pedido.
                         </Typography>
-                        <Link to='/login' className='primary-standart'>
+                        <Link to='/create-order' className='primary-standart'>
                           faça um pedido
                         </Link>
                       </Grid>

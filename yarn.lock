@@ -1300,6 +1300,13 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@material-ui/types@^4.0.0":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@material-ui/types/-/types-4.1.1.tgz#b65e002d926089970a3271213a3ad7a21b17f02b"
+  integrity sha512-AN+GZNXytX9yxGi0JOfxHrRTbhFybjUJ05rnsBVjcB+16e466Z0Xe5IxawuOayVZgTBNDxmPKo5j4V6OnMtaSQ==
+  dependencies:
+    "@types/react" "*"
+
 "@mui/base@5.0.0-alpha.128":
   version "5.0.0-alpha.128"
   resolved "https://registry.npmjs.org/@mui/base/-/base-5.0.0-alpha.128.tgz"
@@ -1515,6 +1522,22 @@
   integrity sha512-FLzd0K9pnaEvKz4D1vYxK9JmgQPiGk1lu23o1kqGsLeT0iPbRSF7b76+S5T9fD8aRa0B8bY7I/3DebEj+1ysBA==
   dependencies:
     "@types/react" "^17"
+
+"@types/react-swipeable-views-utils@^0.13.4":
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/@types/react-swipeable-views-utils/-/react-swipeable-views-utils-0.13.4.tgz#2a48da267b48467887b146178673f4020dec5b1e"
+  integrity sha512-v0nDk6mMIPAu/kaEnqQpDz2Z7O8ewqy2in7xwobcAAkUKKsdw3MSWFW1BkQ+dPgTrBnj/KXUzx3ZIS6UYviwyA==
+  dependencies:
+    "@material-ui/types" "^4.0.0"
+    "@types/react" "*"
+    "@types/react-swipeable-views" "*"
+
+"@types/react-swipeable-views@*", "@types/react-swipeable-views@^0.13.1":
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/@types/react-swipeable-views/-/react-swipeable-views-0.13.1.tgz#381c8513deef5426623aa851033ff4f4831ae15c"
+  integrity sha512-Nuvywkv9CkwcUgItOCBszkc/pc8YSdiKV5E1AzOJ/p32Db50LgwhJFi5b1ANPgyWxB0Q5yn69aMURHyGi3MLyg==
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-transition-group@^4.4.4", "@types/react-transition-group@^4.4.5", "@types/react-transition-group@^4.4.6":
   version "4.4.6"
@@ -2360,6 +2383,14 @@ react-router@6.10.0:
   dependencies:
     "@remix-run/router" "1.5.0"
 
+react-swipeable-views-core@^0.13.0:
+  version "0.13.7"
+  resolved "https://registry.yarnpkg.com/react-swipeable-views-core/-/react-swipeable-views-core-0.13.7.tgz#c082b553f26e83fd20fc17f934200eb717023c8a"
+  integrity sha512-ekn9oDYfBt0oqJSGGwLEhKvn+QaqMGTy//9dURTLf+vp7W5j6GvmKryYdnwJCDITaPFI2hujXV4CH9krhvaE5w==
+  dependencies:
+    "@babel/runtime" "7.0.0"
+    warning "^4.0.1"
+
 react-swipeable-views-core@^0.14.0:
   version "0.14.0"
   resolved "https://registry.npmjs.org/react-swipeable-views-core/-/react-swipeable-views-core-0.14.0.tgz"
@@ -2367,6 +2398,13 @@ react-swipeable-views-core@^0.14.0:
   dependencies:
     "@babel/runtime" "7.0.0"
     warning "^4.0.1"
+
+react-swipeable-views-native@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/react-swipeable-views-native/-/react-swipeable-views-native-0.13.2.tgz#4190f4d5e338c6815a282d63b44682a8f38ff952"
+  integrity sha512-Q8nV1pKfjFRDyjzk7UYvPfriLKizd54SA59hdc97Pi7pcrsxk3uSZ8EZlrGXILdUw9Iswqj8c62ZKvFH0LF6ew==
+  dependencies:
+    react-swipeable-views-core "^0.13.0"
 
 react-swipeable-views-utils@^0.14.0:
   version "0.14.0"

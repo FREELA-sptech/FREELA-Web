@@ -12,6 +12,7 @@ import { File } from "../File/File";
 import { useState } from "react";
 import { uniqueId } from 'lodash';
 import { filesize } from "filesize";
+import { DateField } from '@mui/x-date-pickers/DateField';
 
 
 
@@ -19,9 +20,12 @@ export function InfoOrder(props: any) {
   const theme = useTheme();
 
   const setField = (field: any, value: any) => {
+    console.log(field, value, " field and value")
+
     props.setFormData({
       ...props.formData, [field]: value
     });
+
     if (!!props.errors[field]) {
       props.setErrors({
         ...props.errors, [field]: null
@@ -29,27 +33,46 @@ export function InfoOrder(props: any) {
     }
   };
 
-  const handleDelete = id => {
-    props.setUploadedFiles(props.uploadedFiles.filter(file => file.id !== id))
+  const handleDelete = (name: any) => {
+    console.log(props.formData.photo, " formData")
+
+
+    setField("photo", props.formData.photo.filter((file: any) => file.name !== name))
+    props.setUploadedFiles(props.uploadedFiles.filter((file: any) => file.name !== name))
   }
 
-  const handleImageChange = (file) => {
-    props.formData.Foto.includes(file);
+  const handleImageChange = (file: any) => {
+    props.formData.photo.includes(file);
   };
 
-  const handleUpload = files => {
-    const filesUpload = files.map(file => ({
-      file,
-      id: uniqueId(),
-      name: file.name,
-      preview: URL.createObjectURL(file),
-      readableSize: filesize(file.size),
-      uploaded: false,
-      error: false,
-      url: null,
-    }))
-    props.setUploadedFiles(props.uploadedFiles.concat(filesUpload));
-    setField("Foto",filesUpload);
+  const handleUpload = (event: any) => {
+    const files = Array.from(event.target.files);
+
+    const newFiles: any[] = props.uploadedFiles || []
+
+    files.forEach((fileData: any) => {
+      if (fileData) {
+        const reader = new FileReader();
+        const readerUrl = new FileReader();
+
+        reader.onloadend = () => {
+          setField("photo", [...props.formData.photo, fileData]);
+        };
+
+        readerUrl.onloadend = () => {
+          const fileObject = {
+            name: fileData.name,
+            data: readerUrl.result,
+          };
+
+          !props.uploadedFiles.includes(fileObject) && newFiles.push(fileObject)
+          props.setUploadedFiles(newFiles);
+        }
+
+        reader.readAsArrayBuffer(fileData);
+        readerUrl.readAsDataURL(fileData);
+      }
+    });
   };
 
   return (
@@ -57,17 +80,12 @@ export function InfoOrder(props: any) {
       <Grid item xs={12} className="p-0 mb-3">
         <InterestForm formData={props.formData} setFormData={props.setFormData} errors={props.errors} setErrors={props.setErrors} />
       </Grid>
-      <Grid item md={5} xs={12} className="p-0 mb-3">
-        <Box>
-          <UploadImage onUpload={handleUpload} />
-          {!!props.uploadedFiles.length && (
-            <File files={props.uploadedFiles} onDelete={handleDelete} />
-          )}
-        </Box>
+      <Grid item md={5} xs={12} className="p-0 mb-5">
+          <File files={props.uploadedFiles} onDelete={handleDelete} onUpload={handleUpload} />
       </Grid>
       <Grid item md={7} className="ps-4 mb-3">
         <Grid item xs={12} className="p-0 mb-3">
-          <Typography variant="body2" className="f-18">
+          <Typography variant="body2" className="f-12">
             Titulo:
           </Typography>
           <TextField
@@ -77,7 +95,7 @@ export function InfoOrder(props: any) {
             fullWidth
             value={props.formData.title}
             autoComplete="given-name"
-            variant="outlined"
+            variant="standard"
             helperText={
               props.errors.title
                 ? (
@@ -91,7 +109,7 @@ export function InfoOrder(props: any) {
           />
         </Grid>
         <Grid item xs={12} className="p-0 mb-3">
-          <Typography variant="body2" className="f-18">
+          <Typography variant="body2" className="f-12">
             Descrição:
           </Typography>
           <TextField
@@ -115,9 +133,9 @@ export function InfoOrder(props: any) {
             rows={4}
           />
         </Grid>
-        <Grid container xs={12} className="p-0 mb-3">
+        <Grid container item xs={12} className="p-0 mb-3">
           <Grid item xs={6} className="p-0 pe-2 mb-3">
-            <Typography variant="body2" className="f-18">
+            <Typography variant="body2" className="f-12">
               Preço:
             </Typography>
             <TextField
@@ -131,7 +149,7 @@ export function InfoOrder(props: any) {
               }}
               value={props.formData.maxValue}
               autoComplete="given-name"
-              variant="outlined"
+              variant="standard"
               helperText={
                 props.errors.maxValue
                   ? (
@@ -145,12 +163,13 @@ export function InfoOrder(props: any) {
             />
           </Grid>
           <Grid item xs={6} className="p-0 ps-2 mb-3">
-            <Typography variant="body2" className="f-18">
+            <Typography variant="body2" className="f-12">
               Prazo:
             </Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{ width: '100%' }}
+              <DateField
+                fullWidth
+                variant="standard"
                 value={props.formData.deadline}
                 onChange={(e) => setField("deadline", e.target.value)}
                 className="p-0"
@@ -163,6 +182,7 @@ export function InfoOrder(props: any) {
                     ) : null
                   }
                 }}
+                format="MM-DD-YYYY"
               />
             </LocalizationProvider>
           </Grid>
