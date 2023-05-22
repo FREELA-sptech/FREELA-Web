@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 export function InfoOrder(props: any) {
   const theme = useTheme();
   const updatedFormData = { ...props.formData }; 
-
+  
   const setField = (field: any, value: any) => {
     props.setFormData({
       ...props.formData, [field]: value
@@ -51,7 +51,6 @@ export function InfoOrder(props: any) {
       error: false,
       url: null,
     }))
-    props.setUploadedFiles(props.uploadedFiles.concat(filesUpload));
     filesUpload.forEach(fileItem => {
       const file = fileItem.file;
       const reader = new FileReader();
@@ -59,11 +58,13 @@ export function InfoOrder(props: any) {
       reader.onloadend = function() {
         const base64Data = reader.result;
         updatedFormData.photo.push(base64Data);
+        props.setUploadedFiles(props.uploadedFiles.concat({id:fileItem.id,image:base64Data}));
       };
-    
       reader.readAsDataURL(file);
+      
     });
     props.setFormData(updatedFormData);
+    console.log(props.uploadedFiles)
   };
 
   return (

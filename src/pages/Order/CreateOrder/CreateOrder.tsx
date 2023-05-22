@@ -23,7 +23,7 @@ export function CreateOrder() {
         title: '',
         description: '',
         category: 0,
-        subCategoryId: [],
+        subCategoryIds: [],
         maxValue: '',
         deadline: '',
         photo: []
@@ -33,7 +33,7 @@ export function CreateOrder() {
         title: '',
         description: '',
         category: '',
-        subCategoryId: [],
+        subCategoryIds: [],
         maxValue: '',
         deadline: "",
         photo: []
@@ -45,7 +45,7 @@ export function CreateOrder() {
             title: '',
             description: '',
             category: '',
-            subCategoryId: [],
+            subCategoryIds: [],
             maxValue: '',
             deadline: "",
             photo: []

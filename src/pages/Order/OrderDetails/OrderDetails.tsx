@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Container, ListGroup, Row, Tab, Tabs, Image, Modal, Button } from "react-bootstrap";
 import { MdAttachMoney, MdCalendarToday, MdCategory, MdDelete, MdOutlineDelete, MdOutlineEdit, MdOutlineHome } from "react-icons/md";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./style.scss";
 import ProposalCard from "../../../shared/components/ProposalCard/ProposalCard";
 import { OrderUpdate } from "../OrderUpdate/OrderUpdate";
@@ -10,7 +10,7 @@ import { Avatar, Backdrop, Box, CircularProgress } from '@mui/material';
 import HtmlTooltip from "../../../shared/tools/MuiTooltipCustom";
 
 export function OrderDetails() {
-
+    const navigate = useNavigate();
     const params = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [show, setShow] = useState(false);
@@ -45,6 +45,7 @@ export function OrderDetails() {
             <CircularProgress color="inherit" />
         </Backdrop>
     )
+    if(order.title)
     return (
         <Container fluid className="order-details">
             <Container className="container d-flex flex-column justify-content-start">
@@ -59,7 +60,7 @@ export function OrderDetails() {
                 <Row className="d-flex w-100 justify-content-between">
                     <Col>
                         <h1>{order.title}</h1>
-                        <h3 className="category">Criado em 19 de abril por Marcos Cliente</h3>
+                        <h3 className="category">Criado por <span>{order.user.name}</span></h3>
                         <div className="info-line d-flex align-items-center ">
                             <div className='fill-icon'>
                                 <MdAttachMoney
@@ -85,13 +86,13 @@ export function OrderDetails() {
                                     size={"24px"}
                                 />
                             </div>
-                            {/* <Box className="w-auto d-flex gap-2">
-                                {order &&
-                                    order.subCategories.map((categories: any) => (
+                            <Box className="w-auto d-flex gap-2">
+                                {order.subCategories ? (order.subCategories.map((subCategory: any) => subCategory && (
+
                                         <HtmlTooltip
-                                            key={categories.name}
+                                            key={subCategory.name}
                                             title={
-                                                <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
+                                                <h1 key={subCategory.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{subCategory.name}</h1>
                                             }
                                             placement="top"
                                             PopperProps={{
@@ -108,14 +109,13 @@ export function OrderDetails() {
                                                         height: 40,
                                                         bgcolor: "#6096BA",
                                                     }}
-                                                    alt={categories.name}
-                                                    src={`data:image/png;base64,${order.photo[0]}`}
+                                                    alt={subCategory.name}
+                                                    src={`data:image/png;base64,${order.photo}`}
                                                 />
                                             </Box>
                                         </HtmlTooltip>
-                                    ))
-                                }
-                            </Box> */}
+                                    ))): "Nenhuma sub categoria cadastrada" }
+                            </Box>
                         </div>
                     </Col>
                     <Col className="d-flex justify-content-end align-items-start gap-3">
@@ -150,6 +150,7 @@ export function OrderDetails() {
                             <Tab eventKey="propostas" title="Propostas :  1" tabClassName="painel">
                                 <Card>
                                     <Card.Body className="d-flex gap-3">
+                                        {order.proposals}
                                         <ProposalCard />
                                     </Card.Body>
                                 </Card>

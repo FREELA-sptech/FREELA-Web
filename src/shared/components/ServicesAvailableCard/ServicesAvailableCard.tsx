@@ -7,10 +7,11 @@ import { useNavigate } from "react-router-dom";
 function ServicesAvailableCard(data: any) {
   const navigate = useNavigate();
   const localData = data.data
+  console.log(localData)
 
   return (
     <Card className="services-available-background b-radius position-relative overflow-hidden">
-        {localData.categories.map((category: any) => {
+        {localData.subCategories ? localData.subCategories.map((category: any) => {
           return (
             <OverlayTrigger
               trigger={["hover", "focus"]}
@@ -29,7 +30,7 @@ function ServicesAvailableCard(data: any) {
               />
             </OverlayTrigger>
           )
-        })}
+        }):"Sem Subcategorias"}
       <Card.Img style={{ borderRadius: '16px 16px 0 0' }} width='100%' height='45%' variant="top" src="https://focalizando.com.br/sites/default/files/2023-03/ideias-de-tatuagens-no-antebraco-masculina-e-feminina.jpg" />
       <Card.Body className="mb-4">
         <Card.Title className="text-color f-20 fw-semibold">{localData.title}</Card.Title>
@@ -61,7 +62,7 @@ function ServicesAvailableCard(data: any) {
               className="m-0"
             />
             <Figure.Caption className="d-flex flex-column f-12 f-poppings">
-              Prazo: <span className="f-roboto f-18 text-color fw-bold">{localData.expirationTime}</span>
+              Prazo: <span className="f-roboto f-18 text-color fw-bold">{localData.deadline}</span>
             </Figure.Caption>
           </Figure>
         </Row>
