@@ -14,7 +14,7 @@ export function OrderDetails() {
     const params = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [show, setShow] = useState(false);
-    const { editOrder } = OrdersAPI();
+    const { editOrder,deleteOrder } = OrdersAPI();
     const [idUser, setIdUser] = useState(null);
     const { id } = params;
     const [order, setOrder] = useState({})
@@ -35,6 +35,17 @@ export function OrderDetails() {
                 setIsLoading(false)
             })
     }, [id])
+
+    const handleDeleteOrder = ()=>{
+        deleteOrder(id)
+        .then((res)=>{
+            console.log(res.data);
+            navigate("/home")
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
+    }
 
     if (isLoading) return (
         <Backdrop
@@ -121,7 +132,7 @@ export function OrderDetails() {
                     <Col className="d-flex justify-content-end align-items-start gap-3">
 
                         <button className="btn-update" onClick={handleShow}><MdOutlineEdit fill="#274c77" size={"32px"} /></button>
-                        <button className="btn-delete"><MdOutlineDelete fill="#BA1A1A" size={"32px"} /></button>
+                        <button className="btn-delete" onClick={handleDeleteOrder}><MdOutlineDelete fill="#BA1A1A" size={"32px"} /></button>
                         {/* <button className="buttonBase primary-standart">Fazer Proposta</button> */}
                     </Col>
                 </Row>
