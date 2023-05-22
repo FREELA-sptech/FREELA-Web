@@ -1,59 +1,164 @@
-import { Accordion, Col, Figure, Form, ListGroup } from "react-bootstrap";
 import "./style.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Autocomplete, Box, Checkbox, TextField, Typography } from "@mui/material";
+import Chip from '@mui/material/Chip';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { styled, lighten, darken } from '@mui/system';
+import useSnackbar from "../../../hooks/useSnackbar";
+import { CategoriesAPI } from "../../../api/categoriesApi";
+
+const GroupHeader = styled('div')(({ theme }) => ({
+  position: 'sticky',
+  top: '-8px',
+  padding: '4px 10px',
+  color: theme.palette.primary.main,
+  backgroundColor:
+    theme.palette.mode === 'light'
+      ? lighten(theme.palette.primary.light, 0.85)
+      : darken(theme.palette.primary.main, 0.8),
+}));
+
+const GroupItems = styled('ul')({
+  padding: 0,
+});
+
 export function InterestForm(props: any) {
-    const [searchTerm, setSearchTerm] = useState('');
-    const items = [
-        { id: 1, label: 'Programação' },
-        { id: 2, label: 'Redação' },
-        { id: 3, label: 'Tradução' },
-        { id: 4, label: 'Artes' },
-        { id: 5, label: 'Design' }
-    ];
+  const [selectedItems, setSelectedItems] = useState<any>([]);
+  const [subCategories, setSubCategories] = useState<any>([])
+  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { getSubCategories } = CategoriesAPI();
 
-    const handleSearchChange = (event: any) => {
-        setSearchTerm(event.target.value);
-    };
-    const handleCheckBoxChange = (event : any) => {
-        const { value } = event.target;
-        props.setDataCategory((dataSelected : any) => {
-            if (dataSelected.includes(value)) {
-                return dataSelected.filter((val : any) => val !== value);
-            } else {
-                return [...props.dataCategory, value];
-            }
-        });
-        
-    };
-    const filteredItems = items.filter((item) =>
-        item.label.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    return (
-        <Col>
-            <Col className="d-flex flex-column align-items-center justify-content-center gap-3">
-                <Form.Control
-                    type="text"
-                    placeholder="Busque categorias"
-                    value={searchTerm}
-                    size="lg"
-                    onChange={handleSearchChange}
-                />
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-                <Form.Group className="item-checkbox w-100">
-                    {filteredItems.map((item) => (
-                        <Form.Check
-                            className="checkbox d-flex align-items-center flex-row-reverse"
-                            key={item.id}
-                            type="checkbox"
-                        >
-                            <Form.Check.Input type="checkbox" id={`checkbox-${item.id}`} value={item.label} className="checkbox-input" checked={props.dataCategory.includes(item.label)} onChange={handleCheckBoxChange}/>
-                            <Form.Check.Label htmlFor={`checkbox-${item.id}`} className="w-100" title={"Clique para selecionar a categoria " + item.label}>{item.label}</Form.Check.Label>
-                        </Form.Check>
-                    ))}
-                </Form.Group>
-                <p>Categorias Selecionadas: {props.dataCategory.join(', ')}</p>
-            </Col>
-        </Col >
+  const setField = (field: any, value: any) => {
+    props.setFormData({
+      ...props.formData, [field]: value
+    })
 
-    )
+    if (!!props.errors[field]) {
+      props.setErrors({
+        ...props.errors, [field]: null
+      })
+    }
+  }
+
+  useEffect(() => {
+    props.errors.subCategoryId && showSnackbar(true, props.errors.subCategoryId)
+  }, [props.errors])
+
+  useEffect(() => {
+    getSubCategories()
+      .then((res) => {
+        setSubCategories(res.data)
+        let filteredData = []
+
+
+        if (typeof props.formData.subCategoryId[0] === "number") {
+          filteredData = res.data.filter((item: any) => props.formData.subCategoryId.includes(item.id))
+        } else {
+          filteredData = res.data.filter((item: any) => props.formData.subCategoryId.some((obj: any) => obj.id === item.id))
+        }
+
+        console.log(props.formData.subCategoryId)
+        console.log(res.data)
+        console.log(filteredData)
+
+        setSelectedItems(filteredData)
+      })
+      .catch((error) => {
+        showSnackbar(true, error.response.data);
+      })
+  }, [])
+
+  console.log(selectedItems)
+
+
+  return (
+    <Box>
+      <SnackbarComponent />
+      <Box sx={{ gap: 0 }}>
+        <Typography variant="body2" className="f-12">
+          Busque as Categorias:
+        </Typography>
+        <Autocomplete
+          multiple
+          renderTags={() => null}
+          className="d-flex flex-column"
+          id="checkboxes-tags-demo"
+          options={subCategories}
+          value={selectedItems}
+          disableCloseOnSelect
+          getOptionLabel={(option) => option.name}
+          groupBy={(option) => option.category.name}
+          noOptionsText="Nenhuma Categoria"
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          onChange={(event, newValue) => {
+            const ids = newValue.map((value: any) => {
+              return value.id
+            })
+            setField("subCategoryId", ids)
+            setSelectedItems(newValue)
+          }}
+          renderOption={(props, option) => (
+            <li {...props}>
+              <Checkbox
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selectedItems.some((item: any) => item.id === option.id)}
+              />
+              {option.name}
+            </li>
+          )}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              helperText={
+                props.errors.subCategoryId
+                  ? (
+                    <Typography variant="body2" className="f-14">
+                      {props.errors.subCategoryId || " "}
+                    </Typography>
+                  )
+                  : " "
+              }
+            />
+          )}
+          renderGroup={(params) => (
+            <li key={params.key}>
+              <GroupHeader style={{zIndex: 1}}>{params.group}</GroupHeader>
+              <GroupItems>{params.children}</GroupItems>
+            </li>
+          )}
+        />
+        <Box sx={{ maxHeight: '200px', overflow: 'scroll' }}>
+          <Box sx={{ padding: '15px', display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {selectedItems.map((item: any) => (
+              <Chip
+                key={item.id}
+                label={item.name}
+                color="primary"
+                onDelete={() => {
+                  const newItems = selectedItems.filter((itemFilter: any) => itemFilter.name !== item.name)
+
+                  const ids = newItems.map((value: any) => {
+                    return value.id
+                  })
+
+                  setField("subCategoryId", ids)
+                  setSelectedItems(newItems)
+                }}
+                deleteIcon={<DeleteIcon />}
+                variant="outlined"
+              />
+            ))}
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  )
 }

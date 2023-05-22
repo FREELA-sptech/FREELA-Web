@@ -3,18 +3,24 @@ import "./style.scss"
 import ButtonBase from "../../../../shared/components/ButtonBase/ButtonBase";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { loginAuth } from "../../../../services/userService";
 import { emailValidation, notBlank, passwordValidation } from "../../../../shared/scripts/validators";
-import { AuthContext } from "../../../../context/AuthContext";
-import { AiFillEye } from "react-icons/ai";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
+import { UserAPI } from "../../../../api/userApi";
+import { UserStorage } from "../../../../store/userStorage";
+import { Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EmailIcon from '@mui/icons-material/Email';
+import useSnackbar from "../../../../hooks/useSnackbar";
 
 function CardLogin() {
-  const [messageError, setMessageError] = useState("");
-  const [messageSuccess, setMessageSuccess] = useState("");
   const [errors, setErrors] = useState<any>({});
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { login } = UserAPI();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -33,6 +39,12 @@ function CardLogin() {
     }
   }
 
+  const setFieldError = (field: any, value: any) => {
+    setErrors({
+      ...errors, [field]: value
+    })
+  }
+
   const validateForm = () => {
     const { email, password } = formData;
 
@@ -42,13 +54,13 @@ function CardLogin() {
     }
 
     if (notBlank(email)) {
-      newErros.email = "O campo email não pode estar vazio";
+      newErros.email = "Informe seu email";
     } else if (!emailValidation(email)) {
       newErros.email = "Email inválido";
     }
 
     if (notBlank(password)) {
-      newErros.password = "O campo senha não pode estar vazio";
+      newErros.password = "Informe sua senha";
     } else if (passwordValidation(password)) {
       newErros.password = "Senha muito curta";
     }
@@ -58,94 +70,109 @@ function CardLogin() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const errors = validateForm();
-      const valores = Object.values(errors);
-      const errorsValues = valores.every(valor => valor === "");
-      if (!errorsValues) {
-        setErrors(errors);
-      } else {
-        const response = await loginAuth(formData);
-        if (response.status == 200) {
-          if (response.data == "") {
-            setMessageError("Email ou senha inválida, por favor tente novamente")
-            return messageError;
-          }
-          setMessageError("")
-          login()
-          navigate("/home")
-        }
-      }
-    } catch (error) {
-      alert(error)
-    }
+    const errors = validateForm();
+    const valores = Object.values(errors);
+    const errorsValues = valores.every(valor => valor === "");
 
+    if (!errorsValues) {
+      setErrors(errors);
+    } else {
+      login(formData)
+        .then((res) => {
+          const userData = res.data
+
+          UserStorage.setIsFreelancerLocalStorage(userData.freelancer)
+          UserStorage.setTokenUserLocalStorage(userData.token)
+
+          navigate("/perfil")
+        })
+        .catch((error) => {
+          switch (error.response.status) {
+            case 404:
+              setFieldError("email", "Email incorreto ou não cadastrado!")
+              break;
+            case 403:
+              setFieldError("password", "Senha incorreta!")
+              break;
+            default:
+              showSnackbar(true, "Houve algum erro interno, tente novamente mais tarde!")
+          }
+        })
+    }
   }
+
   return (
     <Col xs={12} md={6} className="form-login-background d-flex justify-content-center">
       <Col xs={10} lg={8} className="card-login d-flex flex-column align-items-center justify-content-center">
         <h1 className="f-32 dark-contrast-color text-center">Entrar</h1>
         <h1 className="text-muted f-roboto aditional-color f-16 text-center">Digite suas credenciais e faça login</h1>
-        <Form onSubmit={handleSubmit} className="form d-flex w-100 flex-column justify-content-center">
-          <Alert variant={"danger"} show={!!messageError}>
-            {messageError}
-          </Alert>
-          <Form.Group>
-            <Form.Label className="f-roboto fw-bold">
+        <Form onSubmit={handleSubmit} className="form d-flex w-100 flex-column justify-content-center gap-0">
+          <SnackbarComponent />
+          <Grid item lg={12} xs={12} className="p-0 mb-3">
+            <Typography variant="body2" className="f-16">
               Email:
-            </Form.Label>
-            <InputGroup hasValidation>
-              <MdAlternateEmail
-                className="position-absolute ms-2 h-100"
-                style={{ zIndex: 99 }}
-                fill="#274C77"
-                size={"20px"}
-              />
-              <Form.Control
-                className="rounded"
-                style={{
-                  paddingLeft: "35px"
-                }}
-                onChange={(e) => setField("email", e.target.value)}
-                name="email"
-                size="lg"
-                type="text"
-                placeholder=""
-                aria-describedby="inputGroupPrepend"
-                isInvalid={!!errors.email}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.email}
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label className="f-roboto fw-bold">
+            </Typography>
+            <TextField
+              error={Boolean(errors.email)}
+              id="email"
+              name="email"
+              fullWidth
+              value={formData.email}
+              autoComplete="given-name"
+              variant="standard"
+              helperText={
+                errors.email
+                  ? (
+                    <Typography variant="body2" className="f-14">
+                      {errors.email || " "}
+                    </Typography>
+                  )
+                  : " "
+              }
+              InputProps={{
+                startAdornment:
+                  <InputAdornment position="start">
+                    <EmailIcon />
+                  </ InputAdornment>
+              }}
+              onChange={(e) => setField("email", e.target.value)}
+            />
+          </Grid>
+          <Grid item lg={12} xs={12} className="p-0 mb-4">
+            <Typography variant="body2" className="f-16">
               Senha:
-            </Form.Label>
-            <InputGroup hasValidation>
-              <AiFillEye
-                className="position-absolute ms-2 h-100"
-                style={{ zIndex: 99 }}
-                fill="#274C77"
-                size={"20px"}
-              />
-              <Form.Control
-                className="rounded"
-                style={{
-                  paddingLeft: "35px"
-                }}
-                onChange={(e) => setField("password", e.target.value)}
-                size="lg"
-                type="password"
-                name="password"
-                isInvalid={!!errors.password}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.password}
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
+            </Typography>
+            <TextField
+              error={Boolean(errors.password)}
+              id="password"
+              name="password"
+              fullWidth
+              value={formData.password}
+              autoComplete="given-name"
+              variant="standard"
+              type={showPassword ? 'text' : 'password'}
+              helperText={
+                errors.password
+                  ? (
+                    <Typography variant="body2" className="f-14">
+                      {errors.password || " "}
+                    </Typography>
+                  )
+                  : " "
+              }
+              InputProps={{
+                startAdornment:
+                  <InputAdornment
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => { setShowPassword(!showPassword) }}
+                    position="start"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </InputAdornment>
+              }}
+              onChange={(e) => setField("password", e.target.value)}
+            />
+          </Grid>
           <button className="button-base primary-standart" type="submit">Entrar</button>
           <Form.Text className="summary mt-3 text-center w-100 d-block">
             <p className="f-roboto f-16 aditional-color">Ainda não tem uma conta? &nbsp;<Link to='/cadastro' className="f-roboto f-16 contrast-color">Cadastre-se</Link></p>

@@ -1,12 +1,23 @@
 import './style.scss'
 
 import AppRoutes from "./AppRoutes"
-import { AuthProvider } from './context/AuthContext'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#274C77',
+    },
+    secondary: {
+      main: '#6096BA'
+    }
+  },
+});
 
 const App = () => (
-  <AuthProvider>
+  <ThemeProvider theme={theme}>
     <AppRoutes />
-  </AuthProvider>
+  </ThemeProvider>
 )
 
 export default App

@@ -1,77 +1,83 @@
 import "./style.scss";
-import { Col, Container, Row, Form, Tabs, Tab, InputGroup } from "react-bootstrap";
+import { Col, Container, Row, Form, Tabs, Tab } from "react-bootstrap";
 import BenefitsCard from "../Index/components/BenefitsCard/BenefitsCard";
 import { UserForm } from "./components/UserForm/UserForm";
 import { InterestForm } from "../../shared/components/InterestForm/InterestForm";
 import { MdArrowBack } from "react-icons/md";
 
-//Hooks
 import { useForm } from "../../hooks/useForm";
-import { useContext, useState } from "react";
-import { emailValidation, isValidCPF, notBlank, passwordValidation } from "../../shared/scripts/validators";
-import { createUser } from "../../services/userService";
+import { useState } from "react";
+import { emailValidation, notBlank, passwordValidation } from "../../shared/scripts/validators";
 import UserType from "./components/UserType/UserType";
-import { Navigate, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { UserAPI } from "../../api/userApi";
+import useSnackbar from "../../hooks/useSnackbar";
 
 
 function Cadastro() {
   const navigate = useNavigate();
-  const [dataCategory, setDataCategory] = useState([]);
-  const { login } = useContext(AuthContext);
+  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { register } = UserAPI();
 
   const [formData, setFormData] = useState({
-    name: '',
-    userName: '',
-    email: '',
-    cpf: '',
-    password: '',
-    type: ""
+    name: "",
+    email: "",
+    password: "",
+    uf: "",
+    city: "",
+    subCategoryId: [],
+    isFreelancer: false,
+    profilePhoto: [],
+    description: ""
   });
 
   const [errors, setErrors] = useState({
     name: '',
     userName: '',
     email: '',
-    cpf: '',
+    subCategoryId: '',
     password: ''
   });
 
-  const formComponents = [<UserType formData={formData} setFormData={setFormData} />, <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />, <InterestForm dataCategory={dataCategory} setDataCategory={setDataCategory} />]
+  const formComponents = [
+    <UserType formData={formData} setFormData={setFormData} />,
+    <InterestForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
+    <UserForm formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />
+  ]
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
   const validateForm = () => {
-    const { name, userName, email, cpf, password } = formData;
+    const { name, email, password, city, uf, subCategoryId } = formData;
     const newErros = {
       name: '',
       userName: '',
+      city: '',
+      uf: '',
       email: '',
-      cpf: '',
+      subCategoryId: '',
       password: ''
     }
 
     if (notBlank(name)) {
-      newErros.name = "O campo nome não pode estar vazio";
+      newErros.name = "Informe o seu nome";
     }
 
-    if (notBlank(userName)) {
-      newErros.userName = "O campo usuário não pode estar vazio";
+    if (notBlank(city)) {
+      newErros.city = "Selecione uma cidade";
+    }
+
+    if (notBlank(uf)) {
+      newErros.uf = "Selecione uma UF";
     }
 
     if (notBlank(email)) {
-      newErros.email = "O campo email não pode estar vazio";
+      newErros.email = "Informe seu email";
     } else if (!emailValidation(email)) {
       newErros.email = "Email inválido";
     }
 
-    if (notBlank(cpf)) {
-      newErros.cpf = "O campo CPF não pode estar vazio";
-    } else if (!isValidCPF(cpf)) {
-      newErros.cpf = "CPF inválido";
-    }
-
     if (notBlank(password)) {
-      newErros.password = "O campo senha não pode estar vazio";
+      newErros.password = "Informe a sua senha";
     } else if (passwordValidation(password)) {
       newErros.password = "Senha muito curta";
     }
@@ -79,44 +85,78 @@ function Cadastro() {
     return newErros;
   }
 
+  const setFieldError = (field: any, value: any) => {
+    setErrors({
+      ...errors, [field]: value
+    })
+  }
+
   const handleHeaderText = (currentStep: number) => {
     if (currentStep == 0) { return (<h1 className="f-36 dark-contrast-color text-center w-100">Escolha um Perfil</h1>) }
-    if (currentStep == 1) { return (<h1 className="f-36 dark-contrast-color text-center">Informe seus Dados</h1>) }
-    return <h1 className="f-36 dark-contrast-color text-center">Selecione seus Interesses</h1>;
+    if (currentStep == 1) { return (<h1 className="f-36 dark-contrast-color text-center">Selecione seus Interesses</h1>) }
+    return <h1 className="f-36 dark-contrast-color text-center">Informe seus Dados</h1>;
+  }
+
+  const handleValidateInterest = () => {
+    if (formData.subCategoryId.length <= 0) {
+      const newErrors = errors;
+      newErrors.subCategoryId = "Você precisa selecionar pelo menos 1 categoria"
+
+      setErrors(newErrors)
+      return false
+    }
+    return true
+  }
+
+  const handleValidadeForm = () => {
+    const errors = validateForm()
+    const valores = Object.values(errors)
+    const errorsValues = valores.every(valor => valor === "")
+
+    if (!errorsValues) {
+      setErrors(errors)
+      return false
+    } else {
+      setFormData(formData)
+      return true
+    }
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (currentStep == 0) return changeStep(currentStep + 1)
-    if (currentStep == 1) {
-      try {
-        const errors = validateForm();
-        const valores = Object.values(errors);
-        const errorsValues = valores.every(valor => valor === "");
-        if (!errorsValues) {
-          setErrors(errors);
-        } else {
-          console.log(formData);
-          setFormData(formData);
-          changeStep(currentStep + 1)
-          // const response = await createUser(formData);
-          // if (response.status == 201) {
-          // } else {
 
-          // }
-        }
-      } catch (error) {
-        console.log(error);
+    if (currentStep == 0)
+      return changeStep(currentStep + 1)
+
+    if (currentStep == 1) {
+      if (handleValidateInterest()) {
+        return changeStep(currentStep + 1)
       }
     }
-    if (dataCategory.length > 0) {
-      login()
-      navigate("/home")
-    }
 
-  };
+    if (currentStep == 2) {
+      if (handleValidadeForm()) {
+        register(formData)
+          .then(() => {
+            showSnackbar(false, "Cadastro realizado com sucesso! Faça Login");
+            navigate("/login")
+          })
+          .catch((error) => {
+            switch (error.response.status) {
+              case 409:
+                setFieldError("email", "Email já cadastrado!")
+                break;
+              default:
+                showSnackbar(true, "Houve algum erro interno, tente novamente mais tarde!")
+            }
+          })
+      }
+    }
+  }
+
   return (
     <Container fluid className="cadastro-background">
+      <SnackbarComponent />
       <Container>
         <Row className="content d-flex align-items-stretch justify-content-center">
           <Col className="image-section d-none d-lg-flex flex-column align-items-center justify-content-center gap-3" md={12} lg={6}>
@@ -142,27 +182,28 @@ function Cadastro() {
           </Col>
           <Col xs={12} md={12} lg={6} className="container-form d-flex flex-column justify-content-center align-items-center">
             <Col xs={10} md={11} lg={12} className="d-flex flex-column align-items-center justify-content-center">
-              <Col lg={10} xs={12} className="d-flex align-items-center gap-3">
+              <Col lg={10} xs={10} className="d-flex align-items-center gap-3 pb-3">
                 {!isFirstStep && (
                   <a className="link" onClick={() => changeStep(currentStep - 1)}><MdArrowBack size={"2rem"} /></a>
                 )}
                 {handleHeaderText(currentStep)}
               </Col>
-              <Form onSubmit={handleSubmit} className="form d-flex flex-column col-md-10 col-lg-8">
-                {currentComponent}
-                <Col className="d-flex justify-content-center align-items-center gap-3">
-                  {!isLastStep ? (
-                    <button className="button-base primary-standart w-100" type="submit">Avançar</button>
-                  ) : (
-                    <button className="button-base primary-standart w-100" type="submit">Concluir</button>
-                  )}
-                </Col>
-              </Form>
+              <Col lg={10} xs={10}>
+                <Form onSubmit={handleSubmit} className="form d-flex flex-column">
+                  {currentComponent}
+                  <Col lg={12} xs={12}>
+                    {!isLastStep ? (
+                      <button className="button-base primary-standart w-100" type="submit">Avançar</button>
+                    ) : (
+                      <button className="button-base primary-standart w-100" type="submit">Concluir</button>
+                    )}
+                  </Col>
+                </Form>
+              </Col>
             </Col>
           </Col>
         </Row>
       </Container>
-
     </Container>
   )
 }

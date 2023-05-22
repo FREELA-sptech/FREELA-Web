@@ -9,24 +9,22 @@ import Profile from './pages/Profile/Profile'
 import { OrderDetails } from './pages/Order/OrderDetails/OrderDetails'
 import { CreateOrder } from './pages/Order/CreateOrder/CreateOrder'
 import Proposta from './pages/Proposta/Proposta'
-import { AuthContext, AuthProvider } from './context/AuthContext'
-import { useContext, useEffect } from 'react'
+import AuthProvider from './core/Auth/AuthContext'
+import RedirectProvider from './core/Auth/RedirectContext'
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Login />} />
-        <Route path='/home' element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/perfil" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-        <Route path="/order-details/:id" element={isAuthenticated ? <OrderDetails /> : <OrderDetails />} />
-        <Route path="/create-order" element={isAuthenticated ? <CreateOrder /> : <CreateOrder />} />
-        <Route path="/proposta" element={isAuthenticated ? <Proposta /> : <Proposta />} />
+        <Route path="/" element={<RedirectProvider element={<Index />} path='/home' />} />
+        <Route path="/login" element={<RedirectProvider element={<Login />} path='/home' />} />
+        <Route path='/home' element={<AuthProvider element={<Home/>} />} />
+        <Route path="/cadastro" element={<RedirectProvider element={<Cadastro />} path='/home' />} />
+        <Route path="/perfil" element={<AuthProvider element={<Profile/>} />} />
+        <Route path="/order-details/:id" element={<AuthProvider element={<OrderDetails/>} />} />
+        <Route path="/create-order" element={<AuthProvider element={<CreateOrder/>} />} />
+        <Route path="/proposta" element={<AuthProvider element={<Proposta/>} />} />
       </Routes>
     </BrowserRouter>
   )

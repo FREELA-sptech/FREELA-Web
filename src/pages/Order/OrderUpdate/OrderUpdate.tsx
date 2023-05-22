@@ -4,7 +4,8 @@ import { useState } from "react";
 import "./style.scss";
 import { MdAttachMoney } from "react-icons/md";
 
-export function OrderUpdate() {
+export function OrderUpdate(props:any) {
+    const {order} = props;
     const [dataCategory, setDataCategory] = useState([]);
     return (
         <Form className="container-form-update d-flex flex-column ">
