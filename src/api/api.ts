@@ -3,7 +3,7 @@ import { UserStorage } from "../store/userStorage";
 import { useNavigate } from "react-router";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: "http://localhost:8080/"
 });
 
 export function useApi() {

@@ -62,19 +62,12 @@ export function InterestForm(props: any) {
           filteredData = res.data.filter((item: any) => props.formData.subCategoryId.some((obj: any) => obj.id === item.id))
         }
 
-        console.log(props.formData.subCategoryId)
-        console.log(res.data)
-        console.log(filteredData)
-
         setSelectedItems(filteredData)
       })
       .catch((error) => {
         showSnackbar(true, error.response.data);
       })
   }, [])
-
-  console.log(selectedItems)
-
 
   return (
     <Box>

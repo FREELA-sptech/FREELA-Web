@@ -8,26 +8,25 @@ export function OrdersAPI() {
     return response;
   }
 
-  async function createOrder(userId:any,data:any){
-    const response = await api.post(`/orders/${userId}`,data);
+  async function getOrdersByUser() {
+    const response = await api.get("/orders/by-user");
     return response;
   }
 
-  async function deleteOrder(orderId:any){
-    const response = await api.delete(`/orders/${orderId}`);
+  async function createOrder(formData: any) {
+    const response = await api.post("/orders/4", formData);
     return response;
   }
 
-  async function editOrder(orderId:any) {
-    const response = await api.get(`/orders/edit/${orderId}`);
+  async function updatePicture(formData: any, orderId: number) {
+    const response = await api.post(`/orders/upload-pictures/${orderId}`, formData);
     return response;
   }
-
 
   return {
     getOrders,
+    getOrdersByUser,
     createOrder,
-    editOrder,
-    deleteOrder
+    updatePicture
   };
 }

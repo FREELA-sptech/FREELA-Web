@@ -112,7 +112,6 @@ function CardProfile() {
       reader.onloadend = () => {
         const formData = new FormData();
         formData.append('image', file);
-
         uploadPicture(formData)
           .then((res) => {
             userDetailsData.profilePhoto = res.data.profilePhoto
@@ -171,7 +170,11 @@ function CardProfile() {
       }}
     >
       <SnackbarComponent />
-      <Box className="position-relative d-flex flex-row gap-4" sx={{ height: '200px', backgroundColor: 'blue' }}>
+      <Box className="position-relative d-flex flex-row gap-4"
+        sx={{
+          height: '200px',
+          background: 'var(--ligth-contrast-color)'
+        }}>
         {loading ? (
           <Box
             className="position-absolute"
