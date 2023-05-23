@@ -21,8 +21,6 @@ export function InfoOrder(props: any) {
   const updatedFormData = { ...props.formData };
 
   const setField = (field: any, value: any) => {
-    console.log(field, value, " field and value")
-
     props.setFormData({
       ...props.formData, [field]: value
     });
@@ -35,9 +33,6 @@ export function InfoOrder(props: any) {
   };
 
   const handleDelete = (name: any) => {
-    console.log(props.formData.photo, " formData")
-
-
     setField("photo", props.formData.photo.filter((file: any) => file.name !== name))
     props.setUploadedFiles(props.uploadedFiles.filter((file: any) => file.name !== name))
   }
@@ -50,6 +45,7 @@ export function InfoOrder(props: any) {
     const files = Array.from(event.target.files);
 
     const newFiles: any[] = props.uploadedFiles || []
+    const newPhotos: any[] = props.formData.photo || []
 
     files.forEach((fileData: any) => {
       if (fileData) {
@@ -57,7 +53,8 @@ export function InfoOrder(props: any) {
         const readerUrl = new FileReader();
 
         reader.onloadend = () => {
-          setField("photo", [...props.formData.photo, fileData]);
+          !props.formData.photo.includes(fileData) && newPhotos.push(fileData)
+          setField("photo", newPhotos);
         };
 
         readerUrl.onloadend = () => {

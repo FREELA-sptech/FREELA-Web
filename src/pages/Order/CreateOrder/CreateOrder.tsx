@@ -92,6 +92,7 @@ export function CreateOrder() {
           updatePicture(newFormData, res.data.id)
           .then(() => {
             showSnackbar(false, "Ordem Criada com sucesso!")
+            navigate("/perfil")
           })
           .catch(() => {
             showSnackbar(true, "Problemas para salvar imagens!")
