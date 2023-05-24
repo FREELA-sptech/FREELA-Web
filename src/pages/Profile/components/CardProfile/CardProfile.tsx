@@ -62,7 +62,7 @@ function CardProfile() {
       city: user.city,
       uf: user.uf,
       description: user.description,
-      subCategoryId: user.subcategories
+      subCategoryId: user.subCategories
     }
 
     setUserEditDetails(initalEditingValues)
@@ -286,7 +286,7 @@ function CardProfile() {
               </h1>
               <Box className="w-auto d-flex gap-2">
                 {userDetailsData &&
-                  userDetailsData.subcategories.map((categories: any) => (
+                  userDetailsData.subCategories.map((categories: any) => (
                     <HtmlTooltip
                       key={categories.name}
                       title={
@@ -308,7 +308,7 @@ function CardProfile() {
                             bgcolor: "#6096BA",
                           }}
                           alt={categories.name}
-                          src={`data:image/png;base64,${userDetailsData.profilePhoto}`}
+                          src={`data:image/png;base64,`}
                         />
                       </Box>
                     </HtmlTooltip>

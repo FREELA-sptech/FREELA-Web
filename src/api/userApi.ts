@@ -14,7 +14,7 @@ export function UserAPI() {
   }
 
   async function userDetails() {
-    const response = await api.get(`/user/edit`);
+    const response = await api.get(`/user/details`);
     return response;
   }
 
@@ -29,7 +29,7 @@ export function UserAPI() {
   }
 
   async function getFreelancersByInterests() {
-    const response = await api.get(`/user/subcategory`);
+    const response = await api.get(`/user/by-subcategories`);
     return response;
   }
 

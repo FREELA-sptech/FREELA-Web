@@ -68,22 +68,23 @@ function Profile() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleChange} aria-label="lab API tabs example">
                     <Tab label={isFreelancer ? "Propostas Enviadas" : "Pedidos Criados"} value="1" />
-                    {isFreelancer && (<Tab label="Meu Portifólio" value="2" />)}
+                    {/* {isFreelancer && (<Tab label="Meu Portifólio" value="2" />)} */}
                   </TabList>
                 </Box>
-                <TabPanel value="1">
-                  <Grid container>
-                    <Grid
-                      container
-                      item
-                      justifyContent="flex-end"
-                      alignItems="center"
-                      xs={12}
-                    >
-                      <Link to='/create-order' className='primary-standart'>
-                        faça um pedido
-                      </Link>
-                    </Grid>
+                <TabPanel value="1" className="px-0">
+                  <Grid container spacing={4}>
+                    {data.length > 0 && !isFreelancer &&
+                      <Grid
+                        container
+                        item
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        xs={12}
+                      >
+                        <Link to='/create-order' className='primary-standart'>
+                          faça um pedido
+                        </Link>
+                      </Grid>}
                     {data.length <= 0 ? (
                       <Grid
                         item
@@ -95,24 +96,43 @@ function Profile() {
                         gap={2}
                       >
                         <Typography variant="body2" className="f-22">
-                          Você ainda não fez nenhum pedido.
+                          {!isFreelancer
+                            ? "Você ainda não fez nenhum pedido."
+                            : "Você ainda não fez nenhuma proposta"}
                         </Typography>
-                        <Link to='/create-order' className='primary-standart'>
-                          faça um pedido
+                        <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart'>
+                          {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
                         </Link>
                       </Grid>
                     ) : (
-                      <>
-                        {data.map((localData: any) => (
+                        data.map((localData: any) => (
                           <Grid item xs={12} md={6} lg={4}>
                             <ServicesAvailableCard data={localData} />
                           </Grid>
-                        ))}
-                      </>
+                        ))
                     )}
                   </Grid>
                 </TabPanel>
-                <TabPanel value="2">Item Two</TabPanel>
+                {/* <TabPanel value="2">
+                  <Grid container>
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      justifyContent="flex-end"
+                      alignItems="center"
+                      flexDirection="column"
+                      gap={2}
+                    >
+                      <Typography variant="body2" className="f-22">
+                        Você ainda não tem nenhum projeto no portfólio.
+                      </Typography>
+                      <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart'>
+                        Poste um Projeto
+                      </Link>
+                    </Grid>
+                  </Grid>
+                </TabPanel> */}
               </TabContext>
             </Box>
           </Col>

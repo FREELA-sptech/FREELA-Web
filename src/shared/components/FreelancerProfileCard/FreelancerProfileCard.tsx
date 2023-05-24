@@ -12,7 +12,7 @@ function FreelancerProfileCard(props: any) {
     name,
     description,
     rate,
-    subcategories,
+    subCategories,
     profilePhoto
   } = props.props
 
@@ -59,7 +59,7 @@ function FreelancerProfileCard(props: any) {
             <span className="f-14">Expecialidades</span>
           </Box>
           <Box className="d-flex justify-content-start gap-2 w-100 flex-wrap">
-            {subcategories.map((item: any) => (
+            {subCategories.map((item: any) => (
               <HtmlTooltip
                 key={item.name}
                 title={

@@ -1,89 +1,112 @@
+import { Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateField } from "@mui/x-date-pickers";
 import { Container, Figure, Form, InputGroup, Row } from "react-bootstrap";
 import { MdAttachMoney } from "react-icons/md";
+import { notBlank } from "../../../scripts/validators";
 
-export function ProposalUpdate() {
-    return (
-        <Container>
-            <Row>
-                <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
-                    <Row style={{
-                        borderRadius: '99%',
-                        padding: '3px',
-                        margin: 0,
-                        width: '50px',
-                        height: '43px',
-                        backgroundColor: 'var(--contrast-background-color)',
-                        overflow: 'hidden'
-                    }}>
-                        <Figure.Image
-                            width='100%'
-                            height='100%'
-                            style={{ padding: 0 }}
-                            alt="dollar"
-                            src="https://www.ogol.com.br/img/jogadores/58/976658_med__20230131161334_cassio.png"
-                            className="m-0"
-                        />
-                    </Row>
-                    <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
-                        <div className="d-flex flex-column">
-                            <span className="text-color fw-bold f-16 f-inter">Cassio Ramos</span>
-                            <span className="f-12 f-roboto fw-semibold">Design</span>
-                        </div>
-                        <Figure className="d-flex align-items-center m-0">
-                            <Figure.Image
-                                width='15px'
-                                height='15px'
-                                alt="dollar"
-                                src="/assets/icons/star.svg"
-                                className="m-0"
-                            />
-                            <Figure.Caption className="f-14 f-inter">
-                                4.9
-                            </Figure.Caption>
-                        </Figure>
-                    </Figure.Caption>
-                </Figure>
-            </Row>
-            <Row>
-                <Form className="d-flex flex-column gap-3">
-                    <Form.Group>
-                        <Form.Label>
-                            Valor que você espera receber
-                        </Form.Label>
-                        <InputGroup hasValidation>
-                            <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
-                            <Form.Control
-                                name="maxValue"
-                                size="lg"
-                                type="number"
-                            />
-                        </InputGroup>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>
-                            Prazo de entrega
-                        </Form.Label>
-                        <Form.Control
-                            name="deadline"
-                            size="lg"
-                            type="date"
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>
-                            Descrição
-                        </Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            name="description"
-                            size="lg"
-                            type="description"
-                        />
-                    </Form.Group>
+export function ProposalUpdate(props: any) {
+  const setField = (field: any, value: any) => {
+    props.setFormData({
+      ...props.formData, [field]: value
+    })
 
-                    <button type="submit" className="buttonBase primary-standart">Atualizar</button>
-                </Form>
-            </Row>
-        </Container>
-    )
+    if (!!props.errors[field]) {
+      props.setErrors({
+        ...props.errors, [field]: null
+      })
+    }
+  }
+
+  return (
+    <Grid container className="pt-0 px-0" maxWidth={"100%"}>
+      <Grid item xs={12} className="ps-0 mb-3">
+        <Grid container item xs={5} className="p-0 mb-3">
+          <Grid item xs={6} className="p-0 pe-2 mb-3">
+            <Typography variant="body2" className="f-12 f-poppings">
+              Orçamento:
+            </Typography>
+            <TextField
+              error={!!props.errors.maxValue}
+              id="maxValue"
+              name="maxValue"
+              fullWidth
+              type="number"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
+              value={props.formData.maxValue}
+              autoComplete="given-name"
+              variant="standard"
+              helperText={
+                props.errors.maxValue
+                  ? (
+                    <Typography variant="body2" className="f-14">
+                      {props.errors.maxValue || " "}
+                    </Typography>
+                  )
+                  : " "
+              }
+              onChange={(e) => setField("maxValue", e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={6} className="p-0 ps-2 mb-3">
+            <Typography variant="body2" className="f-12">
+              Prazo:
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                fullWidth
+                variant="standard"
+                value={props.formData.expirationTime}
+                onChange={() => { }}
+                className="p-0"
+                slotProps={{
+                  textField: {
+                    helperText: props.errors.expirationTime ? (
+                      <Typography variant="body2" className="f-14">
+                        {props.errors.expirationTime}
+                      </Typography>
+                    ) : null
+                  }
+                }}
+                format="MM-DD-YYYY"
+              />
+            </LocalizationProvider>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className="p-0 mb-3">
+          <Typography variant="body2" className="f-12">
+            Descrição:
+          </Typography>
+          <TextField
+            error={!!props.errors.description}
+            id="description"
+            name="description"
+            fullWidth
+            value={props.formData.description}
+            variant="outlined"
+            helperText={
+              props.errors.description
+                ? (
+                  <Typography variant="body2" className="f-14">
+                    {props.errors.description || " "}
+                  </Typography>
+                )
+                : " "
+            }
+            onChange={(e) => setField("description", e.target.value)}
+            multiline
+            rows={4}
+          />
+        </Grid>
+        <Grid container item justifyContent="space-between" xs={12}>
+          <button className="primary-outline w-auto" onClick={props.handleCancel}>{"Cancelar"}</button>
+          <button className="primary-standart w-auto" onClick={props.handleSubmit}>{"Finalizar"}</button>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
 }

@@ -26,9 +26,7 @@ function Cadastro() {
     uf: "",
     city: "",
     subCategoryId: [],
-    isFreelancer: false,
-    profilePhoto: [],
-    description: ""
+    isFreelancer: false
   });
 
   const [errors, setErrors] = useState({

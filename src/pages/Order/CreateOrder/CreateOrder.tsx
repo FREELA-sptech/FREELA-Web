@@ -42,7 +42,7 @@ export function CreateOrder() {
       description: '',
       subCategoryIds: '',
       maxValue: '',
-      expirationTime: 'asda',
+      expirationTime: '',
       photo: ''
     }
 
@@ -54,12 +54,16 @@ export function CreateOrder() {
     } else if (description.length < 30) {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
-    if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O campo prazo não pode estar vazio";
-    }
+
+    // if (Number(expirationTime) <= 0) {
+    //   newErros.expirationTime = "O prazo não pode menor ou igual a zero";
+    // }
+
     if (notBlank(maxValue)) {
       newErros.maxValue = "O campo preço não pode estar vazio";
     }
+
+    console.log(newErros)
 
     return newErros;
   }
@@ -69,9 +73,7 @@ export function CreateOrder() {
     const valores = Object.values(errors);
     const errorsValues = valores.every(valor => valor === "");
 
-    if (!errorsValues) {
-      setErrors(errors)
-
+    if (errorsValues) {
       const newFormData = new FormData()
       console.log(formData.photo, " photos")
 
@@ -84,7 +86,7 @@ export function CreateOrder() {
         description: formData.description,
         maxValue: formData.maxValue,
         subCategoryId: formData.subCategoryId,
-        expirationTime: "8 dias"
+        expirationTime: `${formData.expirationTime} dias`
       };
 
       createOrder(order)
@@ -101,6 +103,8 @@ export function CreateOrder() {
         .catch((error) => {
           showSnackbar(true, "Problemas para criar ordem!")
         })
+    } else {
+      setErrors(errors)
     }
   }
 
@@ -129,7 +133,7 @@ export function CreateOrder() {
               <InfoOrder formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} />
             </Row>
             <Row className="d-flex flex-row justify-content-between">
-              <button className="primary-text w-auto" onClick={handleCancel}>{"Cancelar"}</button>
+              <button className="primary-outline w-auto" onClick={handleCancel}>{"Cancelar"}</button>
               <button className="primary-standart w-auto" onClick={handleSubmit}>{"Finalizar"}</button>
             </Row>
           </Row>

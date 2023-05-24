@@ -54,8 +54,6 @@ export function InterestForm(props: any) {
       .then((res) => {
         setSubCategories(res.data)
         let filteredData = []
-
-
         if (typeof props.formData.subCategoryId[0] === "number") {
           filteredData = res.data.filter((item: any) => props.formData.subCategoryId.includes(item.id))
         } else {
@@ -128,7 +126,7 @@ export function InterestForm(props: any) {
             </li>
           )}
         />
-        <Box sx={{ maxHeight: '200px', overflow: 'scroll' }}>
+        <Box sx={{ maxHeight: '200px', overflowY: 'scroll' }}>
           <Box sx={{ padding: '15px', display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {selectedItems.map((item: any) => (
               <Chip

@@ -15,7 +15,6 @@ import { filesize } from "filesize";
 import { DateField } from '@mui/x-date-pickers/DateField';
 
 
-
 export function InfoOrder(props: any) {
   const theme = useTheme();
   const updatedFormData = { ...props.formData };
@@ -162,25 +161,25 @@ export function InfoOrder(props: any) {
           </Grid>
           <Grid item xs={6} className="p-0 ps-2 mb-3">
             <Typography variant="body2" className="f-12">
-              Prazo:
+              Prazo Dias:
             </Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateField
                 fullWidth
                 variant="standard"
-                value={props.formData.deadline}
+                value={props.formData.expirationTime}
                 onChange={() => {}}
                 className="p-0"
                 slotProps={{
                   textField: {
-                    helperText: props.errors.deadline ? (
+                    helperText: props.errors.expirationTime ? (
                       <Typography variant="body2" className="f-14">
-                        {props.errors.deadline}
+                        {props.errors.expirationTime}
                       </Typography>
                     ) : null
                   }
                 }}
-                format="MM-DD-YYYY"
+                format="DD"
               />
             </LocalizationProvider>
           </Grid>
