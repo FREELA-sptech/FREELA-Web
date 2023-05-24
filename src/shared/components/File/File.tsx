@@ -15,7 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 import "./style.scss";
 import { Chip, CircularProgress, Fab, Input } from '@mui/material';
-import { UploadImage } from '../UploadImage/UploadImage';
+import { UploadImage } from '../../../pages/Order/CreateOrder/components/UploadImage/UploadImage';
 
 export function File({ files, onDelete, onUpload }: any) {
   const theme = useTheme();

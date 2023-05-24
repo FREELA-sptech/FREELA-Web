@@ -23,6 +23,15 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function editOrder(orderId: number) {
+    const response = await api.get(`/orders/edit/${orderId}`);
+    return response;
+  }
+  async function deleteOrder(orderId: number) {
+    const response = await api.delete(`/orders/${orderId}`);
+    return response;
+  }
+
   async function getOrdersById(orderId: number) {
     const response = await api.get(`/orders/edit/${orderId}`);
     return response;
@@ -34,5 +43,7 @@ export function OrdersAPI() {
     createOrder,
     updatePicture,
     getOrdersById
+    editOrder,
+    deleteOrder
   };
 }

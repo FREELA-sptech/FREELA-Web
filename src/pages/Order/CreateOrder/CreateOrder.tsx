@@ -1,7 +1,7 @@
 import { Breadcrumb, Card, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
 import { MdArrowBack, MdOutlineHome } from "react-icons/md";
 import { InterestForm } from "../../../shared/components/InterestForm/InterestForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InfoOrder } from "./components/InfoOrder/InfoOrder";
 import { useForm } from "../../../hooks/useForm";
 import { notBlank } from "../../../shared/scripts/validators";
@@ -9,6 +9,7 @@ import { Stepper, Step, StepLabel, Breadcrumbs, Link, Typography } from "@mui/ma
 import { useNavigate } from "react-router-dom";
 import { OrdersAPI } from "../../../api/ordersApi";
 import useSnackbar from "../../../hooks/useSnackbar";
+import { UserAPI } from "../../../api/userApi";
 
 const steps = ['Informe os dados do pedido', 'asdasd', 'Create an ad', 'asdasd'];
 
@@ -16,6 +17,16 @@ export function CreateOrder() {
   const navigate = useNavigate();
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const { createOrder, updatePicture } = OrdersAPI()
+  const { userDetails } = UserAPI();
+  const [userId,setUserId] = useState(null);
+  useEffect(()=>{
+    userDetails()
+    .then(res => { 
+      console.log(res.data)
+      setUserId(res.data.id) 
+    })
+    .catch(e=> console.log(e))
+  },[userId])
   const [SnackbarComponent, showSnackbar] = useSnackbar()
   const [formData, setFormData] = useState({
     title: '',
@@ -88,17 +99,17 @@ export function CreateOrder() {
         subCategoryId: formData.subCategoryId,
         expirationTime: `${formData.expirationTime} dias`
       };
-
-      createOrder(order)
+      console.log(userId)
+      createOrder(userId,order)
         .then((res) => {
           updatePicture(newFormData, res.data.id)
-          .then(() => {
-            showSnackbar(false, "Ordem Criada com sucesso!")
-            navigate("/perfil")
-          })
-          .catch(() => {
-            showSnackbar(true, "Problemas para salvar imagens!")
-          })
+            .then(() => {
+              showSnackbar(false, "Ordem Criada com sucesso!")
+              navigate("/perfil")
+            })
+            .catch(() => {
+              showSnackbar(true, "Problemas para salvar imagens!")
+            })
         })
         .catch((error) => {
           showSnackbar(true, "Problemas para criar ordem!")
