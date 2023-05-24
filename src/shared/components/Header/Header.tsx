@@ -28,7 +28,7 @@ function Header(props: any) {
   return (
     <Navbar
       expand='xl'
-      className='py-3 header-background'
+      className='py-3 header-background z-index-9'
       sticky='top'
     >
       <Container>
@@ -46,8 +46,8 @@ function Header(props: any) {
         >
           <Offcanvas.Header closeButton className='align-items-end'>
           </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="text-center justify-content-between h-100 flex-grow-1">
+          <Offcanvas.Body style={{ zIndex: 9}}>
+            <Nav className="text-center justify-content-between h-100 flex-grow-1" style={{ zIndex: 9}}>
               <Box className="d-flex flex-column flex-xl-row">
                 <Link to='/' className='logo dark-contrast-color' onClick={handleClose}>
                   FREELA

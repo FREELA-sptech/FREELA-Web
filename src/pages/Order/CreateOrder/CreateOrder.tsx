@@ -21,9 +21,9 @@ export function CreateOrder() {
   const [userId,setUserId] = useState(null);
   useEffect(()=>{
     userDetails()
-    .then(res => { 
+    .then(res => {
       console.log(res.data)
-      setUserId(res.data.id) 
+      setUserId(res.data.id)
     })
     .catch(e=> console.log(e))
   },[userId])
@@ -100,7 +100,7 @@ export function CreateOrder() {
         expirationTime: `${formData.expirationTime} dias`
       };
       console.log(userId)
-      createOrder(userId,order)
+      createOrder(order)
         .then((res) => {
           updatePicture(newFormData, res.data.id)
             .then(() => {

@@ -27,6 +27,7 @@ export function OrdersAPI() {
     const response = await api.get(`/orders/edit/${orderId}`);
     return response;
   }
+
   async function deleteOrder(orderId: number) {
     const response = await api.delete(`/orders/${orderId}`);
     return response;
@@ -42,7 +43,7 @@ export function OrdersAPI() {
     getOrdersByUser,
     createOrder,
     updatePicture,
-    getOrdersById
+    getOrdersById,
     editOrder,
     deleteOrder
   };

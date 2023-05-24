@@ -16,7 +16,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ServicesAvailableCard from "../../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
 import { Col, Row } from "react-bootstrap";
-import { HeaderOrder } from "./components/HeaderOrder/HeaderOrder";
+import HeaderOrder from "./components/HeaderOrder/HeaderOrder";
 
 function OrderDetails() {
     const params = useParams();
