@@ -13,8 +13,8 @@ export function OrdersAPI() {
     return response;
   }
 
-  async function createOrder(formData: any) {
-    const response = await api.post("/orders/4", formData);
+  async function createOrder(userId: number,formData: any) {
+    const response = await api.post(`/orders/${userId}`, formData);
     return response;
   }
 
@@ -23,10 +23,21 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function editOrder(orderId: number) {
+    const response = await api.get(`/orders/edit/${orderId}`);
+    return response;
+  }
+  async function deleteOrder(orderId: number) {
+    const response = await api.delete(`/orders/${orderId}`);
+    return response;
+  }
+
   return {
     getOrders,
     getOrdersByUser,
     createOrder,
-    updatePicture
+    updatePicture,
+    editOrder,
+    deleteOrder
   };
 }

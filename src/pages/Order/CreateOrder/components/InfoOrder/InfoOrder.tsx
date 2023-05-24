@@ -6,12 +6,7 @@ import { Box, Button, Fab, Input, InputAdornment, InputLabel, MobileStepper, use
 import { InterestForm } from "../../../../../shared/components/InterestForm/InterestForm";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { UploadImage } from "../UploadImage/UploadImage";
-import { File } from "../File/File";
-import { useState } from "react";
-import { uniqueId } from 'lodash';
-import { filesize } from "filesize";
+import { File } from "../../../../../shared/components/File/File";
 import { DateField } from '@mui/x-date-pickers/DateField';
 
 
