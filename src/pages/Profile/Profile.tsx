@@ -16,7 +16,9 @@ import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { UserAPI } from "../../api/userApi";
 import { OrdersAPI } from "../../api/ordersApi";
+import CardProposta from "../Proposta/components/CardProposta/CardProposta";
 
 
 function Profile() {
@@ -28,6 +30,7 @@ function Profile() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const { getOrdersByUser } = OrdersAPI()
+  const { getProposalsByUser } = UserAPI();
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -40,11 +43,19 @@ function Profile() {
       })
   }
 
+  const getProposals = () => {
+    getProposalsByUser()
+      .then((res) => {
+        setData(res.data)
+        console.log(res)
+      })
+  }
+
   useEffect(() => {
     if (!isFreelancer) {
       getOrders()
     } else {
-
+      getProposals();
     }
   }, [])
 
@@ -103,12 +114,17 @@ function Profile() {
                           {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
                         </Link>
                       </Grid>
-                    ) : (
-                        data.map((localData: any) => (
-                          <Grid item xs={12} md={6} lg={4}>
-                            <ServicesAvailableCard data={localData} />
-                          </Grid>
-                        ))
+                    ) : !isFreelancer ? (
+                      data.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ServicesAvailableCard data={localData} />
+                        </Grid>
+                      ))
+                    ) : (data.map((localData: any) => (
+                      <Grid item xs={12} md={6} lg={4}>
+                        <ProposalCard data={localData} />
+                      </Grid>
+                    ))
                     )}
                   </Grid>
                 </TabPanel>

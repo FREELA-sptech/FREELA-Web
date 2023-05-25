@@ -5,7 +5,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
 import { OrdersAPI } from "../../../api/ordersApi";
-import { Avatar, Backdrop, Box, Breadcrumbs, Button, CircularProgress, Container, Grid, MobileStepper, Skeleton, Tab, TextField, Typography, useTheme } from '@mui/material';
+import { Avatar, Backdrop, Box, Breadcrumbs, Button, CircularProgress, Grid, MobileStepper, Skeleton, Tab, TextField, Typography, useTheme } from '@mui/material';
 import HtmlTooltip from "../../../shared/tools/MuiTooltipCustom";
 import useSnackbar from "../../../hooks/useSnackbar";
 import { InterestForm } from "../../../shared/components/InterestForm/InterestForm";
@@ -15,7 +15,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ServicesAvailableCard from "../../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row,Container } from "react-bootstrap";
 import HeaderOrder from "./components/HeaderOrder/HeaderOrder";
 import ProposalCard from "../../../shared/components/ProposalCard/ProposalCard";
 

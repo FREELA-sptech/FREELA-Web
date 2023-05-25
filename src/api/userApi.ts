@@ -33,6 +33,11 @@ export function UserAPI() {
     return response;
   }
 
+  async function getProposalsByUser(){
+    const response = await api.get(`/proposals/user`);
+    return response;
+  }
+
   return {
     register,
     login,
@@ -40,5 +45,6 @@ export function UserAPI() {
     uploadPicture,
     updateUser,
     getFreelancersByInterests,
+    getProposalsByUser
   };
 }
