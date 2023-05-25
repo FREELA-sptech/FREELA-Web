@@ -49,7 +49,7 @@ export function ProposalUpdate(props: any) {
                   )
                   : " "
               }
-              onChange={(e) => setField("proposalValue  ", e.target.value)}
+              onChange={(e) => setField("proposalValue", e.target.value)}
             />
           </Grid>
           <Grid item xs={6} className="p-0 ps-2 mb-3">
@@ -101,10 +101,6 @@ export function ProposalUpdate(props: any) {
             multiline
             rows={4}
           />
-        </Grid>
-        <Grid container item justifyContent="space-between" xs={12}>
-          <button className="primary-outline w-auto" onClick={props.handleCancel}>{"Cancelar"}</button>
-          <button className="primary-standart w-auto" onClick={props.handleSubmit}>{"Finalizar"}</button>
         </Grid>
       </Grid>
     </Grid>

@@ -19,9 +19,10 @@ import { File } from "../../../../../shared/components/File/File";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateField } from '@mui/x-date-pickers/DateField';
-import { Figure } from "react-bootstrap";
+import { Figure, Modal } from "react-bootstrap";
 import { UserStorage } from "../../../../../store/userStorage";
 import AddIcon from '@mui/icons-material/Add';
+import CardProposta from "../../../../Proposta/components/CardProposta/CardProposta";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -73,20 +74,19 @@ function HeaderOrder(props: any) {
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      editOrder(id)
-        .then((res) => {
-          setOrder(res.data);
-          props.setProposals(res.data.proposals)
-          updateOrderData(res.data);
-        })
-        .catch((error) => {
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    }, 1200);
+    editOrder(id)
+      .then((res) => {
+        setOrder(res.data);
+        props.setProposals(res.data.proposals)
+        updateOrderData(res.data);
+      })
+      .catch((error) => {
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [id])
+
 
   const setField = (field: any, value: any) => {
     setOrderEditDetails({
@@ -141,11 +141,8 @@ function HeaderOrder(props: any) {
   }
 
   const handleDelete = (name: any) => {
-    console.log(name)
-    console.log(orderEditDetails.photos.filter((file: any) => file !== name))
-
-    setField("photos", orderEditDetails.photos.filter((file: any) => file !== name))
-    setOrderEditDetails(uploadedFiles.filter((file: any) => file !== name))
+    setField("photos", orderEditDetails.photos.filter((file: any) => file !== name));
+    //setOrderEditDetails(orderEditDetails.photos.filter((file: any) => file !== name));
   }
 
   const handleUpload = (event: any) => {
@@ -183,16 +180,27 @@ function HeaderOrder(props: any) {
   return (
     <Grid container className="pt-4 px-0" maxWidth={"100%"} position={"relative"}>
       {!editing ?
-        <Box
-          className="position-absolute"
-          sx={{
-            right: 0,
-            cursor: 'pointer'
-          }}
-        >
-          <EditIcon onClick={handleEdit} className="me-2" />
-          {order && order.user.id === UserStorage.getIdUserLocalStorage() && <DeleteIcon color='error' onClick={handleDeleteOrder} />}
-        </Box> :
+        order && order.user.id === UserStorage.getIdUserLocalStorage() ?
+          <Box
+            className="position-absolute"
+            sx={{
+              right: 0,
+              cursor: 'pointer'
+            }}
+          >
+            <EditIcon onClick={handleEdit} className="me-2" />
+            <DeleteIcon color='error' onClick={handleDeleteOrder} />
+          </Box> :
+          <Box
+            className="position-absolute"
+            sx={{
+              right: 0,
+              cursor: 'pointer'
+            }}
+          >
+            <button onClick={() => {setShow(true)}} className="primary-standart w-auto">enviar proposta</button>
+          </Box>
+        :
         <Box
           className="position-absolute"
           sx={{
@@ -208,7 +216,7 @@ function HeaderOrder(props: any) {
         <h1 className="title">Detalhes um Pedido</h1>
       </Grid>
       <Grid item md={5} xs={12} className="p-0 mb-5">
-        {order &&
+        {orderEditDetails.photos &&
           <Box className="d-flex flex-column" sx={{ maxWidth: "100%", height: '100%', minHeight: '300px', flexGrow: 1, position: 'relative' }}>
             {editing &&
               <Fab
@@ -235,7 +243,7 @@ function HeaderOrder(props: any) {
               position: 'absolute',
               width: '100%',
               height: 'calc(100% - 50px)',
-              display: order.photos.length > 0 ? 'none' : 'flex',
+              display: orderEditDetails.photos.length > 0 ? 'none' : 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
@@ -297,14 +305,14 @@ function HeaderOrder(props: any) {
               sx={{
                 height: 50,
               }}
-              steps={order.photos.length}
+              steps={orderEditDetails.photos.length}
               position="static"
               activeStep={activeStep}
               nextButton={
                 <Button
                   size="small"
                   onClick={handleNext}
-                  disabled={activeStep === order.photos.length - 1 || order.photos.length == 0}
+                  disabled={activeStep === orderEditDetails.photos.length - 1 || orderEditDetails.photos.length == 0}
                 >
                   Next
                   {theme.direction === 'rtl' ? (
@@ -556,6 +564,20 @@ function HeaderOrder(props: any) {
         <Grid item xs={12} className="p-0 mb-3">
           <InterestForm formData={orderEditDetails} setFormData={setOrderEditDetails} errors={orderEditErrorDetails} setErrors={setOrderEditDetails} />
         </Grid>}
+      <Modal
+        show={show}
+        onHide={handleCloseModal}
+        backdrop="static"
+        size="lg"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="f-inter f-22">Envie uma Proposta</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CardProposta handleCloseModal={handleCloseModal} />
+        </Modal.Body>
+      </Modal>
     </Grid>
   )
 }

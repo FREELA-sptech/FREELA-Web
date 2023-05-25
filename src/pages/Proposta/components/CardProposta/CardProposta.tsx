@@ -5,7 +5,7 @@ import "./style.scss"
 import { useEffect, useState } from "react";
 import { notBlank } from "../../../../shared/scripts/validators";
 import { MdAttachMoney, MdDescription } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -14,20 +14,25 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateField } from "@mui/x-date-pickers";
+import { OrdersAPI } from "../../../../api/ordersApi";
 
 function CardProposta(props: any) {
-  const { setShow } = props;
+  const { handleCloseModal } = props
   const navigate = useNavigate();
+  const params = useParams();
+  const { sendProposals } = OrdersAPI();
+
+  const { id } = params;
 
   const [formData, setFormData] = useState({
     description: '',
-    maxValue: '',
+    proposalValue: '',
     expirationTime: ''
   });
 
   const [errors, setErrors] = useState({
     description: '',
-    maxValue: '',
+    proposalValue: '',
     expirationTime: ''
   });
 
@@ -43,24 +48,24 @@ function CardProposta(props: any) {
   }
 
   const validateForm = () => {
-    const { maxValue, expirationTime, description, } = formData;
+    const { proposalValue, expirationTime, description, } = formData;
     const newErros = {
       description: '',
       maxValue: '',
       expirationTime: ''
     }
 
-    if (notBlank(description)) {
-      newErros.description = "O campo descrição não pode estar vazio";
-    } else if (description.length < 30) {
-      newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
-    }
-    if (notBlank(maxValue)) {
-      newErros.maxValue = "O campo Valor máximo não pode estar vazio";
-    }
-    if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O campo prazo não pode estar vazio";
-    }
+    // if (notBlank(description)) {
+    //   newErros.description = "O campo descrição não pode estar vazio";
+    // } else if (description.length < 30) {
+    //   newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
+    // }
+    // if (notBlank(maxValue)) {
+    //   newErros.maxValue = "O campo Valor máximo não pode estar vazio";
+    // }
+    // if (notBlank(expirationTime)) {
+    //   newErros.expirationTime = "O campo prazo não pode estar vazio";
+    // }
 
     return newErros;
   }
@@ -74,12 +79,12 @@ function CardProposta(props: any) {
         setErrors(errors);
       } else {
         setFormData(formData);
-        setShow(true);
-        const timeoutId = setTimeout(() => {
-          setShow(false);
-          navigate('/home');
-        }, 1500);
-        return () => clearTimeout(timeoutId);
+        sendProposals(id, formData)
+          .then((res) => {
+            handleCloseModal()
+            console.log(res)
+          })
+          .catch(() => { })
       }
     } catch (error) {
     }
@@ -91,7 +96,7 @@ function CardProposta(props: any) {
 
   return (
     <Grid container className="pt-0 px-0" maxWidth={"100%"}>
-      <Grid item xs={12} className="ps-4 mb-3">
+      <Grid item xs={12} className="px-3 mb-3">
         <Grid container item xs={12}>
           <Typography variant="body2" className="f-22 fw-bold mb-4">
             Orçamento:
@@ -103,27 +108,27 @@ function CardProposta(props: any) {
               Preço:
             </Typography>
             <TextField
-              error={!!errors.maxValue}
-              id="maxValue"
-              name="maxValue"
+              error={!!errors.proposalValue}
+              id="proposalValue"
+              name="proposalValue"
               fullWidth
               type="number"
               InputProps={{
                 startAdornment: <InputAdornment position="start">$</InputAdornment>
               }}
-              value={formData.maxValue}
+              value={formData.proposalValue}
               autoComplete="given-name"
               variant="standard"
               helperText={
-                errors.maxValue
+                errors.proposalValue
                   ? (
                     <Typography variant="body2" className="f-14">
-                      {errors.maxValue || " "}
+                      {errors.proposalValue || " "}
                     </Typography>
                   )
                   : " "
               }
-              onChange={(e) => setField("maxValue", e.target.value)}
+              onChange={(e) => setField("proposalValue", e.target.value)}
             />
           </Grid>
           <Grid item xs={6} className="p-0 ps-2 mb-3">

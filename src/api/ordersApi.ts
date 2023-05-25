@@ -43,6 +43,26 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function aceptProposals(orderId: number, proposalsId: number) {
+    const response = await api.post(`/orders/${orderId}/${proposalsId}`);
+    return response;
+  }
+
+  async function sendProposals(orderId: number, formData: any) {
+    const response = await api.post(`/proposals/${orderId}`, formData);
+    return response;
+  }
+
+  async function deleteProposals(proposalsId: any) {
+    const response = await api.delete(`/proposals/${proposalsId}`);
+    return response;
+  }
+
+  async function updateProposals(proposalsId: any, formData) {
+    const response = await api.put(`/proposals/update/${proposalsId}`, formData);
+    return response;
+  }
+
   return {
     getOrders,
     getOrdersByUser,
@@ -51,6 +71,10 @@ export function OrdersAPI() {
     getOrdersById,
     editOrder,
     deleteOrder,
-    updateOrderById
+    updateOrderById,
+    aceptProposals,
+    sendProposals,
+    deleteProposals,
+    updateProposals
   };
 }

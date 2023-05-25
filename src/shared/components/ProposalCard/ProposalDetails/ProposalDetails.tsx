@@ -5,9 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { notBlank } from "../../../scripts/validators";
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ClearIcon from '@mui/icons-material/Clear';
+import DoneIcon from '@mui/icons-material/Done';
+import { OrdersAPI } from "../../../../api/ordersApi";
+import { UserStorage } from "../../../../store/userStorage";
 
 export function ProposalDetails(props: any) {
   const [editing, setEditing] = useState(false)
+  const { aceptProposals, deleteProposals, updateProposals } = OrdersAPI();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     description: props.data.description,
@@ -22,24 +28,24 @@ export function ProposalDetails(props: any) {
   });
 
   const validateForm = () => {
-    const { maxValue, expirationTime, description, } = formData;
+    const { proposalValue, expirationTime, description, } = formData;
     const newErros = {
       description: '',
       maxValue: '',
       expirationTime: ''
     }
 
-    if (notBlank(description)) {
-      newErros.description = "O campo descrição não pode estar vazio";
-    } else if (description.length < 30) {
-      newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
-    }
-    if (notBlank(maxValue)) {
-      newErros.maxValue = "O campo Valor máximo não pode estar vazio";
-    }
-    if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O campo prazo não pode estar vazio";
-    }
+    // if (notBlank(description)) {
+    //   newErros.description = "O campo descrição não pode estar vazio";
+    // } else if (description.length < 30) {
+    //   newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
+    // }
+    // if (notBlank(maxValue)) {
+    //   newErros.maxValue = "O campo Valor máximo não pode estar vazio";
+    // }
+    // if (notBlank(expirationTime)) {
+    //   newErros.expirationTime = "O campo prazo não pode estar vazio";
+    // }
 
     return newErros;
   }
@@ -54,14 +60,30 @@ export function ProposalDetails(props: any) {
         setErrors(errors);
       } else {
         setFormData(formData);
-        const timeoutId = setTimeout(() => {
-          navigate('/home');
-        }, 1500);
+        updateProposals(props.data.id, formData)
+        .then(() => {
+
+        })
+        .catch(() => {
+
+        })
         return () => clearTimeout(timeoutId);
       }
     } catch (error) {
     }
   };
+
+  console.log(props)
+
+  const handleAcceptProposals = () => {
+    aceptProposals(props.data.destinedOrder, props.data.id)
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch(() => {
+
+      })
+  }
 
   const handleCancel = () => {
     navigate("/home")
@@ -73,6 +95,16 @@ export function ProposalDetails(props: any) {
 
   const handleEditCancel = () => {
     setEditing(false)
+  }
+
+  const handleDeleteProposals = () => {
+    deleteProposals(props.data.id)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch(() => {
+
+    })
   }
 
   return (
@@ -106,16 +138,29 @@ export function ProposalDetails(props: any) {
             </div>
           </Figure.Caption>
         </Figure>
-        {!editing &&
-          <EditIcon
-            onClick={handleEdit}
+        {props.data.originUser.id === UserStorage.getIdUserLocalStorage() &&
+          !editing ?
+          <Box
             className="position-absolute"
             sx={{
-              right: '0',
-              top: '5px',
-              cursor: 'pointer',
+              right: 0,
+              cursor: 'pointer'
             }}
-          />}
+          >
+            <EditIcon onClick={handleEdit} className="me-2" />
+            <DeleteIcon color='error' onClick={handleDeleteProposals} />
+          </Box> :
+          <Box
+            className="position-absolute"
+            sx={{
+              right: 0,
+              cursor: 'pointer'
+            }}
+          >
+            <ClearIcon onClick={handleEditCancel} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
+            <DoneIcon onClick={handleSubmit} sx={{ fontSize: '30px' }} color="success" />
+          </Box>
+        }
       </Grid>
       {!editing ?
         <Grid item container xs={12}>
@@ -164,10 +209,11 @@ export function ProposalDetails(props: any) {
               {props.data.description}
             </p>
           </Grid>
-          <Grid item xs={12} className="d-flex justify-content-between my-3 gap-2">
-            <button className="primary-outline w-auto" onClick={handleCancel}>Recusar</button>
-            <button className="primary-standart w-auto" onClick={handleSubmit}>Aceitar</button>
-          </Grid>
+          {props.data.originUser.id !== UserStorage.getIdUserLocalStorage() &&
+            <Grid item xs={12} className="d-flex justify-content-between my-3 gap-2">
+              <button className="primary-outline w-auto" onClick={handleCancel}>Recusar</button>
+              <button className="primary-standart w-auto" onClick={handleAcceptProposals}>Aceitar</button>
+            </Grid>}
         </Grid>
         : <ProposalUpdate
           formData={formData}
