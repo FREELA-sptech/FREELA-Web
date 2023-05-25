@@ -38,6 +38,11 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function updateOrderById(orderId: number, formData: any) {
+    const response = await api.put(`/orders/update/${orderId}`, formData);
+    return response;
+  }
+
   return {
     getOrders,
     getOrdersByUser,
@@ -45,6 +50,7 @@ export function OrdersAPI() {
     updatePicture,
     getOrdersById,
     editOrder,
-    deleteOrder
+    deleteOrder,
+    updateOrderById
   };
 }

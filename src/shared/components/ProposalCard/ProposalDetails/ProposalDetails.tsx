@@ -60,7 +60,6 @@ export function ProposalDetails(props: any) {
         return () => clearTimeout(timeoutId);
       }
     } catch (error) {
-      console.log(error);
     }
   };
 

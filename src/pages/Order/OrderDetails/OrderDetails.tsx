@@ -28,6 +28,11 @@ function OrderDetails() {
   const handleClose = () => setIsLoading(false);
   const handleCloseModal = () => setShow(false);
   const handleShow = () => setIsLoading(false);
+  const [value, setValue] = useState('1');
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   return (
     <section className="home-background">
@@ -46,12 +51,22 @@ function OrderDetails() {
           <Col lg={12}>
             <HeaderOrder setProposals={(data: any) => { setProposals(data) }} />
           </Col>
-          <Grid container lg={12} className="pb-4">
-            {proposals && proposals.map((localData: any) => (
-              <Grid item xs={12} md={6} lg={3} key={localData.id}>
-                <ProposalCard data={localData} />
-              </Grid>
-            ))}
+          <Grid container lg={12} className="pb-4" flexDirection="column">
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                  <Tab label={"Propostas Recebidas"} value="1" />
+                </TabList>
+              </Box>
+              <TabPanel value="1" className="px-0">
+                <Grid container spacing={4} xs={12}>
+                  {proposals && proposals.map((localData: any) => (
+                    <Grid item xs={12} md={6} lg={3} key={localData.id}>
+                      <ProposalCard data={localData} />
+                    </Grid>))}
+                </Grid>
+              </TabPanel>
+            </TabContext>
           </Grid>
         </Row>
       </Container>

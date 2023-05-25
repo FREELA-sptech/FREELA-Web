@@ -27,7 +27,6 @@ function Home() {
     } else {
       getFreelancersByInterests()
         .then((res: any) => {
-          console.log(res)
           setResponseData(res.data)
         })
     }

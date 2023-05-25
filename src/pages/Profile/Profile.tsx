@@ -29,7 +29,6 @@ function Profile() {
   const handleShow = () => setShow(true);
   const { getOrdersByUser } = OrdersAPI()
 
-
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -113,26 +112,6 @@ function Profile() {
                     )}
                   </Grid>
                 </TabPanel>
-                {/* <TabPanel value="2">
-                  <Grid container>
-                    <Grid
-                      item
-                      container
-                      xs={12}
-                      justifyContent="flex-end"
-                      alignItems="center"
-                      flexDirection="column"
-                      gap={2}
-                    >
-                      <Typography variant="body2" className="f-22">
-                        Você ainda não tem nenhum projeto no portfólio.
-                      </Typography>
-                      <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart'>
-                        Poste um Projeto
-                      </Link>
-                    </Grid>
-                  </Grid>
-                </TabPanel> */}
               </TabContext>
             </Box>
           </Col>

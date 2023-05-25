@@ -82,7 +82,6 @@ function CardProposta(props: any) {
         return () => clearTimeout(timeoutId);
       }
     } catch (error) {
-      console.log(error);
     }
   };
 

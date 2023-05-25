@@ -81,6 +81,7 @@ function CardLogin() {
         .then((res) => {
           const userData = res.data
 
+          UserStorage.setIdUserLocalStorage(userData.id)
           UserStorage.setIsFreelancerLocalStorage(userData.freelancer)
           UserStorage.setTokenUserLocalStorage(userData.token)
 

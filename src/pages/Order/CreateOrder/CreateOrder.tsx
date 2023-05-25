@@ -22,10 +22,8 @@ export function CreateOrder() {
   useEffect(()=>{
     userDetails()
     .then(res => {
-      console.log(res.data)
       setUserId(res.data.id)
     })
-    .catch(e=> console.log(e))
   },[userId])
   const [SnackbarComponent, showSnackbar] = useSnackbar()
   const [formData, setFormData] = useState({
@@ -74,8 +72,6 @@ export function CreateOrder() {
       newErros.maxValue = "O campo preço não pode estar vazio";
     }
 
-    console.log(newErros)
-
     return newErros;
   }
 
@@ -86,7 +82,6 @@ export function CreateOrder() {
 
     if (errorsValues) {
       const newFormData = new FormData()
-      console.log(formData.photo, " photos")
 
       formData.photo.forEach((file) => {
         newFormData.append("images", file);
@@ -99,7 +94,6 @@ export function CreateOrder() {
         subCategoryId: formData.subCategoryId,
         expirationTime: `${formData.expirationTime} dias`
       };
-      console.log(userId)
       createOrder(order)
         .then((res) => {
           updatePicture(newFormData, res.data.id)
