@@ -5,8 +5,9 @@ import "./style.scss";
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete'
 import { OrdersAPI } from "../../../../../api/ordersApi";
-import { Avatar, Backdrop, Box, Button, CircularProgress, Container, Grid, InputAdornment, MobileStepper, Skeleton, TextField, Typography, useTheme } from '@mui/material';
+import { Avatar, Backdrop, Box, Button, CircularProgress, Container, Fab, Grid, InputAdornment, MobileStepper, Skeleton, TextField, Typography, useTheme } from '@mui/material';
 import HtmlTooltip from "../../../../../shared/tools/MuiTooltipCustom";
 import useSnackbar from "../../../../../hooks/useSnackbar";
 import { InterestForm } from "../../../../../shared/components/InterestForm/InterestForm";
@@ -19,6 +20,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { Figure } from "react-bootstrap";
+import { UserStorage } from "../../../../../store/userStorage";
+import AddIcon from '@mui/icons-material/Add';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -29,7 +32,7 @@ function HeaderOrder(props: any) {
   const [activeStep, setActiveStep] = useState(0);
 
   const { id } = params;
-  const { editOrder, deleteOrder } = OrdersAPI();
+  const { editOrder, deleteOrder, updateOrderById } = OrdersAPI();
 
   const [orderEditDetails, setOrderEditDetails] = useState<any>({})
   const [orderEditErrorDetails, setOrderEditErrorDetails] = useState<any>({})
@@ -61,16 +64,15 @@ function HeaderOrder(props: any) {
     const initalEditingValues = {
       title: order.title,
       description: order.description,
-      subCategoryId: order.subCategoryId,
+      subCategoryId: order.subCategories,
       maxValue: order.maxValue,
       expirationTime: order.expirationTime,
-      photos: order.photo
+      photos: order.photos
     }
     setOrderEditDetails(initalEditingValues)
   }
 
   useEffect(() => {
-    console.log(id);
     const timer = setTimeout(() => {
       editOrder(id)
         .then((res) => {
@@ -79,10 +81,8 @@ function HeaderOrder(props: any) {
           updateOrderData(res.data);
         })
         .catch((error) => {
-          console.log(error)
         })
         .finally(() => {
-          console.log(order)
           setIsLoading(false)
         })
     }, 1200);
@@ -119,20 +119,33 @@ function HeaderOrder(props: any) {
         return value.id
       })
     }
+
+    updateOrderById(id, orderEditDetails)
+      .then((res) => {
+        setOrder(res.data);
+        props.setProposals(res.data.proposals)
+        updateOrderData(res.data);
+        setEditing(false)
+      })
+      .catch((error) => {
+      })
   }
+
   const handleDeleteOrder = () => {
     deleteOrder(id)
       .then((res) => {
-        console.log(res.data);
         navigate("/home")
       })
       .catch((e) => {
-        console.log(e)
       })
   }
+
   const handleDelete = (name: any) => {
-    setField("photo", orderEditDetails.photo.filter((file: any) => file.name !== name))
-    setOrderEditDetails(uploadedFiles.filter((file: any) => file.name !== name))
+    console.log(name)
+    console.log(orderEditDetails.photos.filter((file: any) => file !== name))
+
+    setField("photos", orderEditDetails.photos.filter((file: any) => file !== name))
+    setOrderEditDetails(uploadedFiles.filter((file: any) => file !== name))
   }
 
   const handleUpload = (event: any) => {
@@ -147,8 +160,8 @@ function HeaderOrder(props: any) {
         const readerUrl = new FileReader();
 
         reader.onloadend = () => {
-          !orderEditDetails.photo.includes(fileData) && newPhotos.push(fileData)
-          setField("photo", newPhotos);
+          !orderEditDetails.photos.includes(fileData) && newPhotos.push(fileData)
+          setField("photos", newPhotos);
         };
 
         readerUrl.onloadend = () => {
@@ -168,12 +181,152 @@ function HeaderOrder(props: any) {
   }
 
   return (
-    <Grid container className="pt-4 px-0" maxWidth={"100%"}>
+    <Grid container className="pt-4 px-0" maxWidth={"100%"} position={"relative"}>
+      {!editing ?
+        <Box
+          className="position-absolute"
+          sx={{
+            right: 0,
+            cursor: 'pointer'
+          }}
+        >
+          <EditIcon onClick={handleEdit} className="me-2" />
+          {order && order.user.id === UserStorage.getIdUserLocalStorage() && <DeleteIcon color='error' onClick={handleDeleteOrder} />}
+        </Box> :
+        <Box
+          className="position-absolute"
+          sx={{
+            right: 0,
+            cursor: 'pointer'
+          }}
+        >
+          <ClearIcon onClick={handleCloseEdit} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
+          <DoneIcon onClick={handleSendEdit} sx={{ fontSize: '30px' }} color="success" />
+        </Box>
+      }
       <Grid item xs={12} className="p-0 mb-5">
         <h1 className="title">Detalhes um Pedido</h1>
       </Grid>
       <Grid item md={5} xs={12} className="p-0 mb-5">
-        {order && <File files={order.photos} onDelete={handleDelete} onUpload={handleUpload} />}
+        {order &&
+          <Box className="d-flex flex-column" sx={{ maxWidth: "100%", height: '100%', minHeight: '300px', flexGrow: 1, position: 'relative' }}>
+            {editing &&
+              <Fab
+                component="label"
+                className="position-absolute"
+                size="small"
+                color="primary"
+                aria-label="add"
+                sx={{
+                  top: '10px',
+                  left: '10px',
+                  zIndex: 2
+                }}
+              >
+                <input
+                  type="file"
+                  multiple
+                  hidden
+                  onChange={handleUpload}
+                />
+                <AddIcon />
+              </Fab>}
+            <Box style={{
+              position: 'absolute',
+              width: '100%',
+              height: 'calc(100% - 50px)',
+              display: order.photos.length > 0 ? 'none' : 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              gap: 6
+            }}>
+              <img
+                style={{ height: 100, width: 100 }}
+                src="/assets/images/no-picture.png"
+                alt="Sem Foto" />
+              <Typography>
+                Nenhuma Foto Adicionada
+              </Typography>
+            </Box>
+            <AutoPlaySwipeableViews
+              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+              index={activeStep}
+              onChangeIndex={handleStepChange}
+              enableMouseEvents
+              style={{
+                height: 'auto',
+                flexGrow: 1,
+                position: 'relative'
+              }}
+            >
+              {orderEditDetails.photos.map((step: any, index: any) => (
+                <div key={step} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
+                  {Math.abs(activeStep - index) <= 2 ? (
+                    <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
+                      {editing &&
+                        <DeleteIcon
+                          color='error'
+                          className='position-absolute'
+                          sx={{
+                            right: 10,
+                            top: 10,
+                            height: 40,
+                            width: 40,
+                            cursor: 'pointer'
+                          }}
+                          onClick={() => { handleDelete(step) }}
+                        />}
+                      <Box
+                        component="img"
+                        sx={{
+                          maxHeight: "100%",
+                          display: 'block',
+                          maxWidth: "100%",
+                          overflow: 'hidden'
+                        }}
+                        src={`data:image/png;base64,${step}`}
+                        alt={step}
+                      />
+                    </Box>
+                  ) : null}
+                </div>
+              ))}
+            </AutoPlaySwipeableViews>
+            <MobileStepper
+              sx={{
+                height: 50,
+              }}
+              steps={order.photos.length}
+              position="static"
+              activeStep={activeStep}
+              nextButton={
+                <Button
+                  size="small"
+                  onClick={handleNext}
+                  disabled={activeStep === order.photos.length - 1 || order.photos.length == 0}
+                >
+                  Next
+                  {theme.direction === 'rtl' ? (
+                    <KeyboardArrowLeft />
+                  ) : (
+                    <KeyboardArrowRight />
+                  )}
+                </Button>
+              }
+              backButton={
+                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                  {theme.direction === 'rtl' ? (
+                    <KeyboardArrowRight />
+                  ) : (
+                    <KeyboardArrowLeft />
+                  )}
+                  Back
+                </Button>
+              }
+            />
+          </Box>
+        }
       </Grid>
       {editing ?
         <Grid item md={7} xs={12} className="ps-0 mb-3">
@@ -399,328 +552,11 @@ function HeaderOrder(props: any) {
           </Grid>
         </Grid>
       }
-      <Grid item xs={12} className="p-0 mb-3">
-        {editing && <InterestForm formData={orderEditDetails} setFormData={setOrderEditDetails} errors={orderEditErrorDetails} setErrors={setOrderEditDetails} />}
-      </Grid>
+      {editing &&
+        <Grid item xs={12} className="p-0 mb-3">
+          <InterestForm formData={orderEditDetails} setFormData={setOrderEditDetails} errors={orderEditErrorDetails} setErrors={setOrderEditDetails} />
+        </Grid>}
     </Grid>
-    // <Box className="pb-4 position-relative"
-      // sx={{
-      //   backgroundColor: 'white',
-      //   borderRadius: '16px 16px 0 0'
-      // }}
-    // >
-    //   <SnackbarComponent />
-    //   {!editing ? (
-    //     <Box className="d-flex flex-column px-5" sx={{ paddingTop: '100px' }}>
-    //       <EditIcon
-    //         onClick={handleEdit}
-    //         className="position-absolute"
-    //         sx={{
-    //           top: "5rem",
-    //           cursor: 'pointer',
-    //           right: '50px'
-    //         }}
-    //       />
-    //       {isLoading ? (
-    //         <>
-    //           <Skeleton width={"100%"} height={300} />
-    //           <Skeleton width={200} height={50} />
-    //           <Skeleton width={150} height={20} />
-    //           <Skeleton width={650} height={30} />
-    //           <h1 className="text-color f-18 f-inter fw-bold mt-2">Categorias</h1>
-    //           <Skeleton width={350} height={60} />
-    //         </>
-    //       ) : (
-    //         <>
-    //           <Box sx={{ height: '200px' }}>
-    //             {order.photos.length == 0 && (
-    //               <Box style={{
-    //                 width: '100%',
-    //                 height: 'calc(100% - 50px)',
-    //                 display: order.photos > 0 ? 'none' : 'flex',
-    //                 alignItems: 'center',
-    //                 justifyContent: 'center',
-    //                 flexDirection: 'column',
-    //                 gap: 6
-    //               }}>
-    //                 <img
-    //                   style={{ height: 100, width: 100 }}
-    //                   src="/assets/images/no-picture.png"
-    //                   alt="Sem Foto" />
-    //                 <Typography>
-    //                   Nenhuma Foto Adicionada
-    //                 </Typography>
-    //               </Box>
-    //             )}
-    //             <AutoPlaySwipeableViews
-    //               axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-    //               index={activeStep}
-    //               onChangeIndex={handleStepChange}
-    //               enableMouseEvents
-    //               style={{
-    //                 height: 'calc(100% - 30px)',
-    //                 flexGrow: 1,
-    //                 position: 'relative'
-    //               }}
-    //             >
-    //               {order.photos.map((step: any, index: any) => (
-    //                 <div key={step.name} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
-    //                   {Math.abs(activeStep - index) <= 2 ? (
-    //                     <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
-    //                       <Box
-    //                         component="img"
-    //                         sx={{
-    //                           maxHeight: "100%",
-    //                           display: 'block',
-    //                           maxWidth: "100%",
-    //                           overflow: 'hidden'
-    //                         }}
-    //                         src={`data:image/png;base64,${step}`}
-    //                         alt={step}
-    //                       />
-    //                     </Box>
-    //                   ) : null}
-    //                 </div>
-    //               ))}
-    //             </AutoPlaySwipeableViews>
-    //             <MobileStepper
-    //               sx={{
-    //                 height: 50,
-    //               }}
-    //               steps={order.photos.length}
-    //               position="static"
-    //               activeStep={activeStep}
-    //               nextButton={
-    //                 <Button
-    //                   size="small"
-    //                   onClick={handleNext}
-    //                   disabled={activeStep === order.photos.length - 1 || order.photos.length == 0}
-    //                 >
-    //                   Next
-    //                   {theme.direction === 'rtl' ? (
-    //                     <KeyboardArrowLeft />
-    //                   ) : (
-    //                     <KeyboardArrowRight />
-    //                   )}
-    //                 </Button>
-    //               }
-    //               backButton={
-    //                 <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-    //                   {theme.direction === 'rtl' ? (
-    //                     <KeyboardArrowRight />
-    //                   ) : (
-    //                     <KeyboardArrowLeft />
-    //                   )}
-    //                   Back
-    //                 </Button>
-    //               }
-    //             />
-    //           </Box>
-    //           <Box className="d-flex align-items-end gap-2">
-    //             <span className="f-30 f-inter dark-contrast-color fw-bold">{order.title}</span>
-    //           </Box>
-    //           <span className="py-3 f-poppings aditional-color f-16">
-    //             Criado por
-    //             <Box>
-    //               <Avatar
-    //                 sx={{
-    //                   width: 40,
-    //                   height: 40,
-    //                   bgcolor: "#6096BA",
-    //                 }}
-    //                 alt={order.user.name}
-    //                 src={`data:image/png;base64,${order.user.profilePhoto}`}
-    //               />
-    //               {order.user.name}
-    //             </Box>
-    //           </span>
-    //           <span className="py-3 f-poppings aditional-color f-16">
-    //             {order.description}
-    //           </span>
-    //           <h1 className="text-color f-18 f-inter fw-bold mt-3">
-    //             Categorias
-    //           </h1>
-    //           <Box className="w-auto d-flex gap-2">
-    //             {order.subCategories &&
-    //               order.subCategories.map((categories: any) => (
-    //                 <HtmlTooltip
-    //                   key={categories.name}
-    //                   title={
-    //                     <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
-    //                   }
-    //                   placement="top"
-    //                   PopperProps={{
-    //                     sx: {
-    //                       padding: 0
-    //                     },
-    //                     disablePortal: true,
-    //                   }}
-    //                 >
-    //                   <Box >
-    //                     <Avatar
-    //                       sx={{
-    //                         width: 40,
-    //                         height: 40,
-    //                         bgcolor: "#6096BA",
-    //                       }}
-    //                       alt={categories.name}
-    //                       src={`data:image/png;base64,`}
-    //                     />
-    //                   </Box>
-    //                 </HtmlTooltip>
-    //               ))
-    //             }
-    //           </Box>
-    //         </>
-    //       )}
-    //     </Box>
-    //   ) : (
-    //     <>
-    //       <Box
-    //         className="position-absolute"
-    //         sx={{
-    //           top: "5rem",
-    //           cursor: 'pointer',
-    //           right: '50px'
-    //         }}
-    //       >
-    //         <ClearIcon onClick={handleCloseEdit} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
-    //         <DoneIcon onClick={handleSendEdit} sx={{ fontSize: '30px' }} color="success" />
-    //       </Box>
-    //       <Grid
-    //         item
-    //         container
-    //         spacing={3} xs={12} lg={12}
-    //         className="px-5"
-    //         sx={{ paddingTop: '100px' }}
-    //         direction="row"
-    //         justifyContent="flex-start"
-    //         alignItems="flex-start">
-    //         <Grid
-    //           item
-    //           container
-    //           xs={12} md={6} lg={5}
-    //           direction="row"
-    //           justifyContent="flex-start"
-    //           alignItems="flex-start">
-    //           <Grid item xs={12} lg={12} className="p-0">
-    //             <File files={uploadedFiles} onDelete={handleDelete} onUpload={handleUpload} />
-    //           </Grid>
-    //         </Grid>
-    //         <Grid
-    //           item
-    //           container
-    //           xs={12} md={6} lg={5}
-    //           direction="row"
-    //           justifyContent="flex-start"
-    //           alignItems="flex-start">
-    //           <Grid item xs={12} lg={12} className="p-0">
-    //             <Typography variant="body2" className="f-12">
-    //               Titulo:
-    //             </Typography>
-    //             <TextField
-    //               error={Boolean(orderEditDetails.title)}
-    //               id="name"
-    //               name="name"
-    //               fullWidth
-    //               value={orderEditDetails.title}
-    //               autoComplete="given-name"
-    //               variant="standard"
-    //               helperText={
-    //                 orderEditErrorDetails.title
-    //                   ? (
-    //                     <Typography variant="body2" className="f-14">
-    //                       {orderEditErrorDetails.title || " "}
-    //                     </Typography>
-    //                   )
-    //                   : " "
-    //               }
-    //               onChange={(e) => setField("title", e.target.value)}
-    //             />
-    //           </Grid>
-    //           <Grid item xs={12} lg={12} className="p-0">
-    //             <Typography variant="body2" className="f-12">
-    //               Descrição:
-    //             </Typography>
-    //             <TextField
-    //               error={Boolean(orderEditDetails.description)}
-    //               id="name"
-    //               name="name"
-    //               fullWidth
-    //               value={orderEditDetails.description}
-    //               autoComplete="given-name"
-    //               variant="standard"
-    //               helperText={
-    //                 orderEditErrorDetails.description
-    //                   ? (
-    //                     <Typography variant="body2" className="f-14">
-    //                       {orderEditErrorDetails.description || " "}
-    //                     </Typography>
-    //                   )
-    //                   : " "
-    //               }
-    //               onChange={(e) => setField("description", e.target.value)}
-    //             />
-    //           </Grid>
-    //         </Grid>
-    //         <Grid item container xs={12} md={6} lg={5}>
-    //           <Grid item xs={12}>
-    //             <InterestForm formData={orderEditDetails} setFormData={setOrderEditDetails} errors={orderEditErrorDetails} setErrors={setOrderEditErrorDetails} />
-    //           </Grid>
-    //           <Grid item xs={12} lg={12} className="p-0">
-    //             <Typography variant="body2" className="f-12">
-    //               Prazo:
-    //             </Typography>
-    //             <TextField
-    //               error={Boolean(orderEditDetails.expirationTime)}
-    //               id="name"
-    //               name="name"
-    //               type="date"
-    //               fullWidth
-    //               value={orderEditDetails.expirationTime}
-    //               autoComplete="given-name"
-    //               variant="standard"
-    //               helperText={
-    //                 orderEditErrorDetails.expirationTime
-    //                   ? (
-    //                     <Typography variant="body2" className="f-14">
-    //                       {orderEditErrorDetails.expirationTime || " "}
-    //                     </Typography>
-    //                   )
-    //                   : " "
-    //               }
-    //               onChange={(e) => setField("expirationTime", e.target.value)}
-    //             />
-    //           </Grid>
-    //           <Grid item xs={12} lg={12} className="p-0">
-    //             <Typography variant="body2" className="f-12">
-    //               Valor:
-    //             </Typography>
-    //             <TextField
-    //               error={Boolean(orderEditDetails.maxValue)}
-    //               id="name"
-    //               name="name"
-    //               fullWidth
-    //               value={orderEditDetails.maxValue}
-    //               autoComplete="given-name"
-    //               variant="standard"
-    //               helperText={
-    //                 orderEditErrorDetails.maxValue
-    //                   ? (
-    //                     <Typography variant="body2" className="f-14">
-    //                       {orderEditErrorDetails.maxValue || " "}
-    //                     </Typography>
-    //                   )
-    //                   : " "
-    //               }
-    //               onChange={(e) => setField("maxValue", e.target.value)}
-    //             />
-    //           </Grid>
-    //         </Grid>
-    //       </Grid>
-    //     </>
-    //   )}
-    // </Box>
   )
 }
 
