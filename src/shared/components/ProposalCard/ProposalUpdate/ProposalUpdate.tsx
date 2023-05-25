@@ -29,27 +29,27 @@ export function ProposalUpdate(props: any) {
               Orçamento:
             </Typography>
             <TextField
-              error={!!props.errors.maxValue}
-              id="maxValue"
-              name="maxValue"
+              error={!!props.errors.proposalValue}
+              id="proposalValue"
+              name="proposalValue"
               fullWidth
               type="number"
               InputProps={{
                 startAdornment: <InputAdornment position="start">$</InputAdornment>
               }}
-              value={props.formData.maxValue}
+              value={props.formData.proposalValue}
               autoComplete="given-name"
               variant="standard"
               helperText={
-                props.errors.maxValue
+                props.errors.proposalValue
                   ? (
                     <Typography variant="body2" className="f-14">
-                      {props.errors.maxValue || " "}
+                      {props.errors.proposalValue || " "}
                     </Typography>
                   )
                   : " "
               }
-              onChange={(e) => setField("maxValue", e.target.value)}
+              onChange={(e) => setField("proposalValue  ", e.target.value)}
             />
           </Grid>
           <Grid item xs={6} className="p-0 ps-2 mb-3">

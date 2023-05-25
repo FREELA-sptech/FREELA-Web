@@ -69,13 +69,10 @@ export function InfoOrder(props: any) {
 
   return (
     <Grid container className="pt-4 px-0" maxWidth={"100%"}>
-      <Grid item xs={12} className="p-0 mb-3">
-        <InterestForm formData={props.formData} setFormData={props.setFormData} errors={props.errors} setErrors={props.setErrors} />
-      </Grid>
       <Grid item md={5} xs={12} className="p-0 mb-5">
-          <File files={props.uploadedFiles} onDelete={handleDelete} onUpload={handleUpload} />
+        <File files={props.uploadedFiles} onDelete={handleDelete} onUpload={handleUpload} />
       </Grid>
-      <Grid item md={7} className="ps-4 mb-3">
+      <Grid item md={7} xs={12} className="ps-0 mb-3">
         <Grid item xs={12} className="p-0 mb-3">
           <Typography variant="body2" className="f-12">
             Titulo:
@@ -163,7 +160,7 @@ export function InfoOrder(props: any) {
                 fullWidth
                 variant="standard"
                 value={props.formData.expirationTime}
-                onChange={() => {}}
+                onChange={() => { }}
                 className="p-0"
                 slotProps={{
                   textField: {
@@ -179,6 +176,9 @@ export function InfoOrder(props: any) {
             </LocalizationProvider>
           </Grid>
         </Grid>
+      </Grid>
+      <Grid item xs={12} className="p-0 mb-3">
+        <InterestForm formData={props.formData} setFormData={props.setFormData} errors={props.errors} setErrors={props.setErrors} />
       </Grid>
     </Grid>
   )

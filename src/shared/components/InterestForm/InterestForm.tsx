@@ -126,7 +126,7 @@ export function InterestForm(props: any) {
             </li>
           )}
         />
-        <Box sx={{ maxHeight: '200px', overflowY: 'scroll' }}>
+        <Box sx={{ maxHeight: '200px', overflowY: 'scroll', minHeight: '150px' }}>
           <Box sx={{ padding: '15px', display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {selectedItems.map((item: any) => (
               <Chip
@@ -153,3 +153,4 @@ export function InterestForm(props: any) {
     </Box>
   )
 }
+;

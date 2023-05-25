@@ -4,16 +4,17 @@ import ButtonBase from "../ButtonBase/ButtonBase";
 import { ProposalDetails } from "./ProposalDetails/ProposalDetails";
 import { useState } from "react";
 import { MdOutlineEdit } from "react-icons/md";
+import { Avatar } from '@mui/material'
 import { ProposalUpdate } from "./ProposalUpdate/ProposalUpdate";
 
 
-function ProposalCard() {
+function ProposalCard(props: any) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [currentComponent, setCurrentComponent] = useState(0);
 
-  const proposalComponents = [<ProposalDetails />, <ProposalUpdate />]
+  const proposalComponents = [<ProposalDetails data={props.data} />, <ProposalUpdate data={props.data} />]
   const handleSelectComponent = () => {
     if (currentComponent == 1) return setCurrentComponent(currentComponent - 1);
     setCurrentComponent(currentComponent + 1);
@@ -25,41 +26,31 @@ function ProposalCard() {
         <Card.Body className="mb-0">
           <Card.Title className="title">
             <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
-              <Row style={{
-                borderRadius: '99%',
-                padding: '3px',
-                margin: 0,
-                width: '50px',
-                height: '43px',
-                backgroundColor: 'var(--contrast-background-color)',
-                overflow: 'hidden'
-              }}>
-                <Figure.Image
-                  width='100%'
-                  height='100%'
-                  style={{ padding: 0 }}
-                  alt="dollar"
-                  src="https://www.ogol.com.br/img/jogadores/58/976658_med__20230131161334_cassio.png"
-                  className="m-0"
-                />
-              </Row>
+              <Avatar
+                sx={{
+                  width: "50px",
+                  height: "50px",
+                  bgcolor: "#274C77",
+                }}
+                alt={props.data.originUser.name}
+                src={`data:image/png;base64,${props.data.originUser.profilePhoto}`}
+              />
               <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column">
-                  <span className="text-color fw-bold f-16 f-inter">Cassio Ramos</span>
-                  <span className="f-12 f-roboto fw-semibold">Design</span>
+                  <span className="text-color fw-bold f-18 f-inter">{props.data.originUser.name}</span>
+                  <Figure className="d-flex align-items-center m-0">
+                    <Figure.Image
+                      width='13px'
+                      height='13px'
+                      alt="dollar"
+                      src="/assets/icons/star.svg"
+                      className="m-0"
+                    />
+                    <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
+                      {props.data.originUser.rate}
+                    </Figure.Caption>
+                  </Figure>
                 </div>
-                <Figure className="d-flex align-items-center m-0">
-                  <Figure.Image
-                    width='15px'
-                    height='15px'
-                    alt="dollar"
-                    src="/assets/icons/star.svg"
-                    className="m-0"
-                  />
-                  <Figure.Caption className="f-14 f-inter">
-                    4.9
-                  </Figure.Caption>
-                </Figure>
               </Figure.Caption>
             </Figure>
           </Card.Title>
@@ -73,7 +64,13 @@ function ProposalCard() {
                 className="m-0"
               />
               <Figure.Caption className="d-flex flex-column f-12 f-poppings">
-                Orçamento: <span className="f-roboto f-18 text-color fw-bold">R$: 200,00</span>
+                Orçamento:
+                <span className="f-roboto f-18 text-color fw-bold">{
+                  props.data.proposalValue.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  })}
+                </span>
               </Figure.Caption>
             </Figure>
             <Figure className="d-flex align-items-center gap-2 w-auto m-0">
@@ -85,7 +82,10 @@ function ProposalCard() {
                 className="m-0"
               />
               <Figure.Caption className="d-flex flex-column f-12 f-poppings">
-                Prazo: <span className="f-roboto f-18 text-color fw-bold">7 dias</span>
+                Prazo:
+                <span className="f-roboto f-18 text-color fw-bold">
+                  {props.data.expirationTime}
+                </span>
               </Figure.Caption>
             </Figure>
           </Row>

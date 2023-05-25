@@ -35,7 +35,7 @@ export function File({ files, onDelete, onUpload }: any) {
   };
 
   return (
-    <Box className="d-flex flex-column" sx={{ maxWidth: "100%", height: '100%', flexGrow: 1, position: 'relative' }}>
+    <Box className="d-flex flex-column" sx={{ maxWidth: "100%", height: '100%', minHeight: '300px', flexGrow: 1, position: 'relative' }}>
       <Fab
         component="label"
         className="position-absolute"
