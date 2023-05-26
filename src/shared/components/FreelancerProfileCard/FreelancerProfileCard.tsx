@@ -5,9 +5,11 @@ import Chip from '@mui/material/Chip';
 import { Avatar, Box } from "@mui/material";
 import { deepOrange } from '@mui/material/colors';
 import HtmlTooltip from "../../tools/MuiTooltipCustom";
+import { useNavigate } from "react-router-dom";
 
 
 function FreelancerProfileCard(props: any) {
+  const navigate = useNavigate()
   const {
     name,
     description,
@@ -89,7 +91,7 @@ function FreelancerProfileCard(props: any) {
           </Box>
         </Box>
       </Card.Body>
-      <ButtonBase onClick={() => { }} className="b-radius-button z-index-2 w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
+      <ButtonBase onClick={() => navigate("/perfil")} className="b-radius-button z-index-2 w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
     </Card>
   );
 }

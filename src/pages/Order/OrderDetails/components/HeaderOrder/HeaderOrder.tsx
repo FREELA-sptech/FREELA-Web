@@ -449,11 +449,16 @@ function HeaderOrder(props: any) {
             <span className="f-30 f-inter dark-contrast-color fw-bold">{order.title}</span>
           </Grid>
           <Grid item xs={12} className="p-0 mb-3">
+            <span className="py-3 f-poppings aditional-color f-16">
+              "{order.description}"
+            </span>
+          </Grid>
+          <Grid item xs={12} className="p-0 mb-3">
             <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
               <Avatar
                 sx={{
-                  width: "50px",
-                  height: "50px",
+                  width: "32px",
+                  height: "32px",
                   bgcolor: "#274C77",
                 }}
                 alt={order.user.name}
@@ -477,11 +482,6 @@ function HeaderOrder(props: any) {
                 </div>
               </Figure.Caption>
             </Figure>
-          </Grid>
-          <Grid item xs={12} className="p-0 mb-3">
-            <span className="py-3 f-poppings aditional-color f-16">
-              "{order.description}"
-            </span>
           </Grid>
           <Grid container item xs={12} className="p-0 mb-3">
             <Grid item xs={6} className="p-0 pe-2 mb-3">
