@@ -4,7 +4,7 @@ import { Alert, Autocomplete, Avatar, Box, Chip, CircularProgress, Dialog, Grid,
 import { deepOrange } from '@mui/material/colors';
 import StarIcon from '@mui/icons-material/Star';
 import EditIcon from '@mui/icons-material/Edit';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserAPI } from "../../../../api/userApi";
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
@@ -13,9 +13,9 @@ import AddIcon from '@mui/icons-material/Add';
 import HtmlTooltip from "../../../../shared/tools/MuiTooltipCustom";
 import Snackbar from '@mui/material/Snackbar';
 import { ExternalAPI } from "../../../../api/externalApi";
-import useSnackbar from "../../../../hooks/useSnackbar";
 import { InterestForm } from "../../../../shared/components/InterestForm/InterestForm";
 import { UserStorage } from "../../../../store/userStorage";
+import SnackbarContext from "../../../../hooks/useSnackbar";
 
 
 
@@ -29,7 +29,7 @@ function CardProfile() {
   const [disableInputs, setDisableInputs] = useState(false)
   const [ufsData, setUfsData] = useState<any>([])
   const [citysData, setCitysData] = useState<any>([])
-  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { showSnackbar } = useContext(SnackbarContext);
   const { userDetails, uploadPicture, updateUser } = UserAPI();
   const isFreelancer = UserStorage.getIsFreelancerLocalStorage();
 
@@ -169,7 +169,6 @@ function CardProfile() {
         borderRadius: '16px 16px 0 0'
       }}
     >
-      <SnackbarComponent />
       <Box className="position-relative d-flex flex-row gap-4"
         sx={{
           height: '200px',

@@ -1,4 +1,4 @@
-import { Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Grid, InputAdornment, TextField, Typography } from "@mui/material";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -6,22 +6,91 @@ import { DateField } from "@mui/x-date-pickers";
 import { Container, Figure, Form, InputGroup, Row } from "react-bootstrap";
 import { MdAttachMoney } from "react-icons/md";
 import { notBlank } from "../../../scripts/validators";
+import { UserStorage } from "../../../../store/userStorage";
+import ClearIcon from '@mui/icons-material/Clear';
+import DoneIcon from '@mui/icons-material/Done';
+import dayjs from 'dayjs';
 
-export function ProposalUpdate(props: any) {
+export type Props = {
+  originUser: any
+  setFormData: (data: any) => void
+  setErrors: (data: any) => void
+  formData: any
+  errors: any
+  data: any
+  handleHiddenEditProposals: () => void
+  handleUpdateProposals: () => void
+}
+
+export function ProposalUpdate({
+  originUser,
+  setFormData,
+  setErrors,
+  formData,
+  errors,
+  data,
+  handleHiddenEditProposals,
+  handleUpdateProposals
+}: Props) {
+
   const setField = (field: any, value: any) => {
-    props.setFormData({
-      ...props.formData, [field]: value
+    setFormData({
+      ...formData, [field]: value
     })
 
-    if (!!props.errors[field]) {
-      props.setErrors({
-        ...props.errors, [field]: null
+    if (!!errors[field]) {
+      setErrors({
+        ...errors, [field]: null
       })
     }
   }
 
+  console.log(formData.expirationTime)
+
   return (
     <Grid container className="pt-0 px-0" maxWidth={"100%"}>
+      <Grid item container xs={12} className="position-relative">
+        <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
+          <Avatar
+            sx={{
+              width: "50px",
+              height: "50px",
+              bgcolor: "#274C77",
+            }}
+            alt={originUser.name}
+            src={`data:image/png;base64,${originUser.profilePhoto}`}
+          />
+          <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
+            <div className="d-flex flex-column">
+              <span className="text-color fw-bold f-18 f-inter">{originUser.name}</span>
+              <Figure className="d-flex align-items-center m-0">
+                <Figure.Image
+                  width='13px'
+                  height='13px'
+                  alt="dollar"
+                  src="/assets/icons/star.svg"
+                  className="m-0"
+                />
+                <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
+                  {originUser.rate}
+                </Figure.Caption>
+              </Figure>
+            </div>
+          </Figure.Caption>
+        </Figure>
+        {originUser.id === UserStorage.getIdUserLocalStorage() && (
+          <Box
+            className="position-absolute"
+            sx={{
+              right: 0,
+              cursor: 'pointer'
+            }}
+          >
+            <ClearIcon onClick={handleHiddenEditProposals} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
+            <DoneIcon onClick={handleUpdateProposals} sx={{ fontSize: '30px' }} color="success" />
+          </Box>
+        )}
+      </Grid>
       <Grid item xs={12} className="ps-0 mb-3">
         <Grid container item xs={5} className="p-0 mb-3">
           <Grid item xs={6} className="p-0 pe-2 mb-3">
@@ -29,7 +98,7 @@ export function ProposalUpdate(props: any) {
               Orçamento:
             </Typography>
             <TextField
-              error={!!props.errors.proposalValue}
+              error={!!errors.proposalValue}
               id="proposalValue"
               name="proposalValue"
               fullWidth
@@ -37,14 +106,14 @@ export function ProposalUpdate(props: any) {
               InputProps={{
                 startAdornment: <InputAdornment position="start">$</InputAdornment>
               }}
-              value={props.formData.proposalValue}
+              value={formData.proposalValue}
               autoComplete="given-name"
               variant="standard"
               helperText={
-                props.errors.proposalValue
+                errors.proposalValue
                   ? (
                     <Typography variant="body2" className="f-14">
-                      {props.errors.proposalValue || " "}
+                      {errors.proposalValue || " "}
                     </Typography>
                   )
                   : " "
@@ -60,19 +129,21 @@ export function ProposalUpdate(props: any) {
               <DateField
                 fullWidth
                 variant="standard"
-                value={props.formData.expirationTime}
-                onChange={() => { }}
+                value={dayjs(formData.expirationTime)}
+                onChange={(e) => {
+                  setField('expirationTime', e.$d)
+                }}
                 className="p-0"
                 slotProps={{
                   textField: {
-                    helperText: props.errors.expirationTime ? (
+                    helperText: errors.expirationTime ? (
                       <Typography variant="body2" className="f-14">
-                        {props.errors.expirationTime}
+                        {errors.expirationTime}
                       </Typography>
                     ) : null
                   }
                 }}
-                format="MM-DD-YYYY"
+                format="DD/MM/YYYY"
               />
             </LocalizationProvider>
           </Grid>
@@ -82,17 +153,17 @@ export function ProposalUpdate(props: any) {
             Descrição:
           </Typography>
           <TextField
-            error={!!props.errors.description}
+            error={!!errors.description}
             id="description"
             name="description"
             fullWidth
-            value={props.formData.description}
+            value={formData.description}
             variant="outlined"
             helperText={
-              props.errors.description
+              errors.description
                 ? (
                   <Typography variant="body2" className="f-14">
-                    {props.errors.description || " "}
+                    {errors.description || " "}
                   </Typography>
                 )
                 : " "

@@ -1,38 +1,69 @@
-import React, { useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { Snackbar, Alert } from '@mui/material';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-interface SnackbarProps {
-  isError: boolean;
-  message: string;
-}
-
-const useSnackbar = () => {
-  const [open, setOpen] = useState(false);
-  const [alertData, setAlertData] = useState<SnackbarProps>({
+const SnackbarContext = createContext({
+  showSnackbar: () => {},
+  snackbarData: {
+    open: false,
     isError: false,
-    message: ''
+    message: '',
+  },
+});
+
+export const SnackbarProvider = ({ children }) => {
+  const [snackbarData, setSnackbarData] = useState({
+    open: false,
+    isError: false,
+    message: '',
   });
 
-  const showSnackbar = (isError: boolean, message: string) => {
-    setAlertData({ isError, message });
-    setOpen(true);
+  const showSnackbar = (isError, message) => {
+    setSnackbarData({
+      open: true,
+      isError,
+      message,
+    });
   };
 
   const handleCloseSnackbar = () => {
-    setOpen(false);
+    setSnackbarData((prevData) => ({
+      ...prevData,
+      open: false,
+    }));
   };
 
-  const SnackbarComponent: React.FC = () => {
-    return (
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity={alertData.isError ? "error" : "success"} sx={{ width: '100%' }}>
-          {alertData.message}
-        </Alert>
-      </Snackbar>
-    );
-  };
+  const SnackbarComponent = () => (
+    <Snackbar
+      open={snackbarData.open}
+      autoHideDuration={600}
+    >
+      <Alert
+        severity={snackbarData.isError ? 'error' : 'success'}
+        sx={{ width: '100%' }}
+        action={
+          <IconButton
+            size="small"
+            aria-label="fechar"
+            color="inherit"
+            onClick={handleCloseSnackbar}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      >
+        {snackbarData.message}
+      </Alert>
+    </Snackbar>
+  );
 
-  return [SnackbarComponent, showSnackbar] as const;
+  return (
+    <SnackbarContext.Provider value={{ showSnackbar, snackbarData }}>
+      {children}
+      <SnackbarComponent />
+    </SnackbarContext.Provider>
+  );
 };
 
-export default useSnackbar;
+export default SnackbarContext;

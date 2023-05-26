@@ -1,31 +1,31 @@
 import { Breadcrumb, Card, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
 import { MdArrowBack, MdOutlineHome } from "react-icons/md";
 import { InterestForm } from "../../../shared/components/InterestForm/InterestForm";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { InfoOrder } from "./components/InfoOrder/InfoOrder";
 import { useForm } from "../../../hooks/useForm";
 import { notBlank } from "../../../shared/scripts/validators";
 import { Stepper, Step, StepLabel, Breadcrumbs, Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { OrdersAPI } from "../../../api/ordersApi";
-import useSnackbar from "../../../hooks/useSnackbar";
 import { UserAPI } from "../../../api/userApi";
+import SnackbarContext from "../../../hooks/useSnackbar";
 
 const steps = ['Informe os dados do pedido', 'asdasd', 'Create an ad', 'asdasd'];
 
 export function CreateOrder() {
   const navigate = useNavigate();
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const { createOrder, updatePicture } = OrdersAPI()
+  const { createOrder, updatePicture, deleteOrder } = OrdersAPI()
   const { userDetails } = UserAPI();
-  const [userId,setUserId] = useState(null);
-  useEffect(()=>{
+  const [userId, setUserId] = useState(null);
+  useEffect(() => {
     userDetails()
-    .then(res => {
-      setUserId(res.data.id)
-    })
-  },[userId])
-  const [SnackbarComponent, showSnackbar] = useSnackbar()
+      .then(res => {
+        setUserId(res.data.id)
+      })
+  }, [userId])
+  const { showSnackbar } = useContext(SnackbarContext);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -92,18 +92,23 @@ export function CreateOrder() {
         description: formData.description,
         maxValue: formData.maxValue,
         subCategoryId: formData.subCategoryId,
-        expirationTime: `${formData.expirationTime} dias`
+        expirationTime: `${formData.expirationTime}`
       };
+
       createOrder(order)
         .then((res) => {
-          updatePicture(newFormData, res.data.id)
-            .then(() => {
-              showSnackbar(false, "Ordem Criada com sucesso!")
-              navigate("/perfil")
-            })
-            .catch(() => {
-              showSnackbar(true, "Problemas para salvar imagens!")
-            })
+          console.log(newFormData.get("images"))
+          if (newFormData.get("images")) {
+            updatePicture(newFormData, res.data.id)
+              .then(() => {
+                showSnackbar(false, "Ordem Criada com sucesso!")
+                navigate("/perfil")
+              })
+              .catch(() => {
+                showSnackbar(true, "Problemas para salvar imagens!")
+                deleteOrder(res.data.id)
+              })
+          }
         })
         .catch((error) => {
           showSnackbar(true, "Problemas para criar ordem!")
@@ -119,7 +124,6 @@ export function CreateOrder() {
 
   return (
     <section className="home-background">
-      <SnackbarComponent />
       <Container>
         <Breadcrumbs maxItems={2} aria-label="breadcrumb">
           <Link underline="hover" color="inherit" href="/home">

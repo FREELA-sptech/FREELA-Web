@@ -11,12 +11,13 @@ import { emailValidation, notBlank, passwordValidation } from "../../shared/scri
 import UserType from "./components/UserType/UserType";
 import { useNavigate } from "react-router-dom";
 import { UserAPI } from "../../api/userApi";
-import useSnackbar from "../../hooks/useSnackbar";
+import React, { useContext } from 'react';
+import SnackbarContext from "../../hooks/useSnackbar";
 
 
 function Cadastro() {
   const navigate = useNavigate();
-  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { showSnackbar } = useContext(SnackbarContext);
   const { register } = UserAPI();
 
   const [formData, setFormData] = useState({
@@ -152,9 +153,10 @@ function Cadastro() {
     }
   }
 
+  //
+
   return (
     <Container fluid className="cadastro-background">
-      <SnackbarComponent />
       <Container>
         <Row className="content d-flex align-items-stretch justify-content-center">
           <Col className="image-section d-none d-lg-flex flex-column align-items-center justify-content-center gap-3" md={12} lg={6}>

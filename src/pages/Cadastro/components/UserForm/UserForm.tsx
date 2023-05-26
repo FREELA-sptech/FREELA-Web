@@ -1,22 +1,22 @@
 import { Col, Form, InputGroup } from "react-bootstrap";
 import { MdAlternateEmail } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible, AiOutlineUser } from "react-icons/ai"
 import { BsFillPersonVcardFill, BsFillPersonFill } from "react-icons/bs"
 import { Alert, Autocomplete, Avatar, Box, CircularProgress, Dialog, Grid, Input, InputAdornment, Skeleton, TextField, Typography } from "@mui/material";
 import { ExternalAPI } from "../../../../api/externalApi";
-import useSnackbar from "../../../../hooks/useSnackbar";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
+import SnackbarContext from "../../../../hooks/useSnackbar";
 
 export function UserForm(props: any) {
   const [disableInputs, setDisableInputs] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [ufsData, setUfsData] = useState<any>([])
   const [citysData, setCitysData] = useState<any>([])
-  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const setField = (field: any, value: any) => {
     props.setFormData({
@@ -69,7 +69,6 @@ export function UserForm(props: any) {
 
   return (
     <Grid item container xs={12} lg={12} className="pt-4">
-      <SnackbarComponent />
       <Grid item lg={12} xs={12} className="p-0 mb-3">
         <Typography variant="body2" className="f-16">
           Nome:
