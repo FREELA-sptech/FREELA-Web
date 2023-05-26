@@ -178,7 +178,7 @@ function HeaderOrder(props: any) {
   }
 
   return (
-    <Grid container className="pt-4 px-0" maxWidth={"100%"} position={"relative"}>
+    <Grid container className="pt-4 px-0 d-flex gap-3" maxWidth={"100%"} position={"relative"}>
       {!editing ?
         order && order.user.id === UserStorage.getIdUserLocalStorage() ?
           <Box
@@ -337,7 +337,7 @@ function HeaderOrder(props: any) {
         }
       </Grid>
       {editing ?
-        <Grid item md={7} xs={12} className="ps-0 mb-3">
+        <Grid item lg={5}md={7} xs={12} className="ps-0 mb-3">
           <Grid item xs={12} className="p-0 mb-3">
             <Typography variant="body2" className="f-12">
               Titulo:
@@ -444,7 +444,7 @@ function HeaderOrder(props: any) {
         </Grid>
         :
         order &&
-        <Grid item md={7} xs={12} className="ps-0 mb-3">
+        <Grid item lg={5} md={7} xs={12} className="ps-0 mb-3">
           <Grid item xs={12} className="p-0 mb-2">
             <span className="f-30 f-inter dark-contrast-color fw-bold">{order.title}</span>
           </Grid>
