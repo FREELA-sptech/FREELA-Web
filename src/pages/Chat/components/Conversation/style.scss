@@ -1,0 +1,16 @@
+.conversation {
+    border-radius: 20px 0 0 20px;
+    background-color: #f3f3f3;
+    padding: 1rem 1rem;
+    width: 100%;
+    gap: 0.8rem;
+
+    .info-order-main {
+        .title-conversation {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+    }
+}

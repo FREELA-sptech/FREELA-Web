@@ -1,5 +1,6 @@
 import { Avatar, Grid } from "@mui/material";
 import "./style.scss";
+import Conversation from "../Conversation/Conversation";
 
 export default function ListConversation() {
     return (
@@ -9,8 +10,11 @@ export default function ListConversation() {
                     Conversas
                 </h2>
             </Grid>
-            <Grid item className="list-conversation-content d-flex flex-column align-items-center justify-content-center">
-                Nenhuma Proposta Aceita
+            <Grid item className="list-conversation-content d-flex flex-column align-items-center" style={{gap:"0.5rem"}}>
+                <Conversation/>
+                <Conversation/>
+                <Conversation/>
+                <Conversation/>
             </Grid>
         </Grid>
     )

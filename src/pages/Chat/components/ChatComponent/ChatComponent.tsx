@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid, TextField } from "@mui/material";
+import { Avatar, AvatarGroup, Box, Button, Grid, TextField } from "@mui/material";
 import "./style.scss";
 import MessageBox from "../MessageBox/MessageBox";
 import { MdSend } from "react-icons/md";
@@ -14,15 +14,15 @@ export default function ChatComponent() {
                             height: "40px",
                             bgcolor: "#274C77",
                         }}
-                        alt={"Usuario"}
+                        alt={"Criação de Site Dahora e Legal"}
                         src={`data:image/png;base64`}
                     />
                     <Box className="d-flex align-items-start justify-content-center flex-column">
                         <h2 className="f-20 f-inter dark-contrast-color fw-bold" style={{ padding: 0, margin: 0 }}>
-                            Usuario
+                            Criação de Site Dahora e Legal
                         </h2>
                         <p className="fw-bold f-roboto aditional-color f-14" style={{ padding: 0, margin: 0 }}>
-                            Freelancer
+                            Cliente, Freelancer
                         </p>
                     </Box>
                 </Box>
@@ -33,21 +33,21 @@ export default function ChatComponent() {
                 <MessageBox message={"Blz, vm ver isso ai"} sender={true} />
                 <MessageBox message={"( ͡° ͜ʖ ͡°)"} sender={true} />
             </Grid>
-            <Grid item className="chat-component-footer w-100 d-flex" style={{padding:"1rem",gap:"0.8rem"}}>
+            <Grid item className="chat-component-footer w-100 d-flex" style={{ padding: "1rem", gap: "0.8rem" }}>
                 <TextField
                     id="description"
                     name="description"
                     fullWidth
                     label="Mensagem"
-                    onChange={() => {}}
+                    onChange={() => { }}
                 />
-                <Button 
-                style={{
-                    padding:"0.8rem",
-                    background:"#274C77"
-                }}
+                <Button
+                    style={{
+                        padding: "0.8rem",
+                        background: "#274C77"
+                    }}
                 >
-                    <MdSend color="#fff"/>
+                    <MdSend color="#fff" />
                 </Button>
             </Grid>
         </Grid>
