@@ -35,6 +35,7 @@ export function UserAPI() {
 
   async function getProposalsByUser(){
     const response = await api.get(`/proposals/user`);
+
     return response;
   }
 

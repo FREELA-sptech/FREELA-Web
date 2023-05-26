@@ -35,12 +35,12 @@ function Home() {
   return (
     <section className="home-background">
       <Container>
-        <Row className="pt-3 pb-3 d-flex justify-content-end">
-          <h1 className="title-underline d-flex flex-column justify-content-end w-auto text-uppercase f-roboto dark-contrast-color fw-bold f-30 dark-contrast-color">
-            {UserStorage.getIsFreelancerLocalStorage() ? 'projetos disponíveis' : 'profissionais disponíveis'}
-          </h1>
-        </Row>
         <Row className="d-flex">
+          <Row className="pt-3 pb-3 d-flex">
+            <h1 className="d-flex flex-column w-auto text-uppercase f-roboto dark-contrast-color fw-bold f-30">
+              {UserStorage.getIsFreelancerLocalStorage() ? 'projetos disponíveis' : 'profissionais disponíveis'}
+            </h1>
+          </Row>
           <Modal className="d-block d-lg-none w-100 h-100" show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Filtrar</Modal.Title>
@@ -49,12 +49,12 @@ function Home() {
               <FiltersCard />
             </Modal.Body>
           </Modal>
-          <Col lg={3} className="d-none d-lg-block">
+          <Col lg={3} className="d-flex d-lg-none">
             <FiltersCard />
           </Col>
-          <Col lg={9} className="px-3 d-flex flex-column gap-2">
+          <Col lg={12}>
             <Row className="px-lg-3 px-0 d-flex gap-2">
-              <Figure onClick={handleOpen} className="home-icon-background d-flex d-lg-none justify-content-center align-items-center">
+              <Figure onClick={handleOpen} className="home-icon-background d-flex justify-content-center align-items-center">
                 <Figure.Image
                   width='40px'
                   height='40px'
@@ -80,6 +80,8 @@ function Home() {
                 />
               </InputGroup>
             </Row>
+          </Col>
+          <Col lg={12} className="px-3 d-flex flex-column gap-2">
             <Row className="d-flex">
               {responseData.map((data: any) => {
                 return UserStorage.getIsFreelancerLocalStorage() ? (
