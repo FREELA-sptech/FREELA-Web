@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import "./style.scss";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -15,24 +15,128 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ServicesAvailableCard from "../../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
-import { Col, Row,Container } from "react-bootstrap";
-import HeaderOrder from "./components/HeaderOrder/HeaderOrder";
+import { Col, Row, Container, Modal } from "react-bootstrap";
 import ProposalCard from "../../../shared/components/ProposalCard/ProposalCard";
+import OrderDetailsCard from "./components/OrderDetailsCard/OrderDetailsCard";
+import CardProposta from "../../Proposta/components/CardProposta/CardProposta";
+import OrderEditCard from "./components/OrderEditCard/OrderEditCard";
+import SnackbarContext from "../../../hooks/useSnackbar";
 
 function OrderDetails() {
   const params = useParams();
   const { id } = params;
-  const [isLoading, setIsLoading] = useState(false);
-  const [show, setShow] = useState(false);
-  const [proposals, setProposals] = useState<any>();
-  const handleClose = () => setIsLoading(false);
-  const handleCloseModal = () => setShow(false);
-  const handleShow = () => setIsLoading(false);
+  const [data, setData] = useState<any>()
+  const [editingOrder, setEditingOrder] = useState(false)
   const [value, setValue] = useState('1');
+  const { detailsOrder, deleteOrder, updateOrderById, updatePictures } = OrdersAPI();
+  const [showSendProposalsModal, setShowSendProposalsModal] = useState(false)
+  const { showSnackbar } = useContext(SnackbarContext);
+  const [proposals, setProposals] = useState()
+  const [isLoading, setIsLoading] = useState(false)
+  const [formData, setFormData] = useState<any>({});
+  const [errors, setErrors] = useState({
+    description: '',
+    proposalValue: '',
+    expirationTime: ''
+  });
+
+  const handleShowEditOrder = () => setEditingOrder(true)
+  const handleHiddenEditOrder = () => setEditingOrder(false)
+  const handleShowSendProposalsModal = () => setShowSendProposalsModal(true)
+  const handleHiddenSendProposalsModal = () => setShowSendProposalsModal(false)
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const convertTime = (date: string) => {
+    const newTime = new Date(date);
+    const yyyy = newTime.getFullYear();
+    let mm: any = newTime.getMonth() + 1;
+    let dd: any = newTime.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+
+    return formattedToday
+  }
+
+  const updateValues = (newValues: any) => {
+    setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime) })
+    const date = new Date(newValues.expirationTime);
+    setFormData({
+      description: newValues.description,
+      title: newValues.title,
+      maxValue: newValues.maxValue,
+      subCategoriesIds: newValues.subCategories,
+      expirationTime: newValues.expirationTime,
+      photos: newValues.photos,
+      newPhotos: [],
+      deletedPhotos: []
+    })
+    setProposals(newValues.proposals)
+  }
+
+  const handleGetOrderDetails = () => {
+    detailsOrder(id)
+      .then((res) => {
+        updateValues(res.data)
+      })
+      .catch((error) => {
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }
+
+  const handleDeleteOrder = () => {
+    deleteOrder(id)
+      .then((res) => {
+      })
+      .catch((e) => {
+      })
+  }
+
+  const handleUpdateOrder = () => {
+    const isArrayOfNumbers = formData.subCategoriesIds.every(
+      (element: any) => typeof element === "number"
+    );
+
+    if (!isArrayOfNumbers) {
+      formData.subCategoriesIds = formData.subCategoriesIds.map((value: any) => {
+        return value.id
+      })
+    }
+
+    const newFormData = new FormData()
+
+    formData.newPhotos.forEach((file) => {
+      newFormData.append("newPhotos", file);
+    });
+
+    formData.deletedPhotos.forEach((file) => {
+      newFormData.append("deletedPhotos", file);
+    });
+
+    updateOrderById(id, formData)
+      .then(() => {
+        updatePictures(newFormData, id)
+          .then((res) => {
+            updateValues(res.data)
+            handleHiddenEditOrder()
+            showSnackbar(false, "Ordem editada com sucesso!")
+          })
+      })
+      .catch((error) => {
+        showSnackbar(true, "Problemas para editar ordem!")
+      })
+  }
+
+  useEffect(() => {
+    handleGetOrderDetails()
+  }, [id])
 
   return (
     <section className="home-background">
@@ -49,7 +153,25 @@ function OrderDetails() {
             borderRadius: '16px 16px'
           }}>
           <Col lg={12}>
-            <HeaderOrder setProposals={(data: any) => { setProposals(data) }} />
+            {!editingOrder ? (
+              data &&
+              <OrderDetailsCard
+                user={data.user}
+                handleShowEditOrder={handleShowEditOrder}
+                handleDeleteOrder={handleDeleteOrder}
+                handleShowSendProposalsModal={handleShowSendProposalsModal}
+                data={data} />
+            ) : (
+              data &&
+              <OrderEditCard
+                handleHiddenEditOrder={handleHiddenEditOrder}
+                handleUpdateOrder={handleUpdateOrder}
+                setFormData={setFormData}
+                setErrors={setErrors}
+                formData={formData}
+                errors={errors}
+              />
+            )}
           </Col>
           <Grid container lg={12} className="pb-4" flexDirection="column">
             <TabContext value={value}>
@@ -69,6 +191,20 @@ function OrderDetails() {
             </TabContext>
           </Grid>
         </Row>
+        <Modal
+          show={showSendProposalsModal}
+          onHide={handleHiddenSendProposalsModal}
+          backdrop="static"
+          size="lg"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title className="f-inter f-22">Envie uma Proposta</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <CardProposta handleCloseModal={handleHiddenSendProposalsModal} />
+          </Modal.Body>
+        </Modal>
       </Container>
     </section>
   )
