@@ -6,8 +6,9 @@ import { Autocomplete, Box, Checkbox, TextField, Typography } from "@mui/materia
 import Chip from '@mui/material/Chip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled, lighten, darken } from '@mui/system';
-import useSnackbar from "../../../hooks/useSnackbar";
+import React, { useContext } from 'react';
 import { CategoriesAPI } from "../../../api/categoriesApi";
+import SnackbarContext from "../../../hooks/useSnackbar";
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -27,7 +28,7 @@ const GroupItems = styled('ul')({
 export function InterestForm(props: any) {
   const [selectedItems, setSelectedItems] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([])
-  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { showSnackbar } = useContext(SnackbarContext);
   const { getSubCategories } = CategoriesAPI();
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -69,7 +70,6 @@ export function InterestForm(props: any) {
 
   return (
     <Box>
-      <SnackbarComponent />
       <Box sx={{ gap: 0 }}>
         <Typography variant="body2" className="f-12">
           Busque as Categorias:

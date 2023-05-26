@@ -31,9 +31,11 @@ function ServicesAvailableCard(data: any) {
     step < localData.photos.length && setActiveStep(step);
   };
 
+  console.log(localData.photos)
+
   return (
     <Card className="services-available-background b-radius position-relative overflow-hidden">
-      <Box sx={{ height: '200px' }}>
+      <Box sx={{ height: '230px' }}>
         {localData.photos.length == 0 && (
           <Box style={{
             width: '100%',
@@ -53,37 +55,38 @@ function ServicesAvailableCard(data: any) {
             </Typography>
           </Box>
         )}
-        <AutoPlaySwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={activeStep}
-          onChangeIndex={handleStepChange}
-          enableMouseEvents
-          style={{
-            height: 'calc(100% - 30px)',
-            flexGrow: 1,
-            position: 'relative'
-          }}
-        >
-          {localData.photos.map((step: any, index: any) => (
-            <div key={step.name} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
-              {Math.abs(activeStep - index) <= 2 ? (
-                <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
-                  <Box
-                    component="img"
-                    sx={{
-                      maxHeight: "100%",
-                      display: 'block',
-                      maxWidth: "100%",
-                      overflow: 'hidden'
-                    }}
-                    src={`data:image/png;base64,${step}`}
-                    alt={step}
-                  />
-                </Box>
-              ) : null}
-            </div>
-          ))}
-        </AutoPlaySwipeableViews>
+        {localData.photos.length > 0 &&
+          <AutoPlaySwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            enableMouseEvents
+            style={{
+              height: 'calc(100% - 30px)',
+              flexGrow: 1,
+              position: 'relative'
+            }}
+          >
+            {localData.photos.map((step: any, index: any) => (
+              <div key={step.name} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
+                {Math.abs(activeStep - index) <= 2 ? (
+                  <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
+                    <Box
+                      component="img"
+                      sx={{
+                        maxHeight: "100%",
+                        display: 'block',
+                        maxWidth: "100%",
+                        overflow: 'hidden'
+                      }}
+                      src={`data:image/png;base64,${step}`}
+                      alt={step}
+                    />
+                  </Box>
+                ) : null}
+              </div>
+            ))}
+          </AutoPlaySwipeableViews>}
         <MobileStepper
           sx={{
             height: 50,

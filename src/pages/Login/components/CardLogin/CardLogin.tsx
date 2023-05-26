@@ -13,13 +13,13 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
-import useSnackbar from "../../../../hooks/useSnackbar";
+import SnackbarContext from "../../../../hooks/useSnackbar";
 
 function CardLogin() {
   const [errors, setErrors] = useState<any>({});
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { showSnackbar } = useContext(SnackbarContext);
   const { login } = UserAPI();
 
   const [formData, setFormData] = useState({
@@ -108,7 +108,6 @@ function CardLogin() {
         <h1 className="f-32 dark-contrast-color text-center">Entrar</h1>
         <h1 className="text-muted f-roboto aditional-color f-16 text-center">Digite suas credenciais e faça login</h1>
         <Form onSubmit={handleSubmit} className="form d-flex w-100 flex-column justify-content-center gap-0">
-          <SnackbarComponent />
           <Grid item lg={12} xs={12} className="p-0 mb-3">
             <Typography variant="body2" className="f-16">
               Email:

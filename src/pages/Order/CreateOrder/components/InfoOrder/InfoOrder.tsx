@@ -8,6 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { File } from "../../../../../shared/components/File/File";
 import { DateField } from '@mui/x-date-pickers/DateField';
+import dayjs from 'dayjs';
 
 
 export function InfoOrder(props: any) {
@@ -69,111 +70,115 @@ export function InfoOrder(props: any) {
 
   return (
     <Grid container className="pt-4 px-0" maxWidth={"100%"}>
-      <Grid item md={5} xs={12} className="p-0 mb-5">
-        <File files={props.uploadedFiles} onDelete={handleDelete} onUpload={handleUpload} />
-      </Grid>
-      <Grid item md={7} xs={12} className="ps-0 mb-3">
-        <Grid item xs={12} className="p-0 mb-3">
-          <Typography variant="body2" className="f-12">
-            Titulo:
-          </Typography>
-          <TextField
-            error={!!props.errors.title}
-            id="title"
-            name="title"
-            fullWidth
-            value={props.formData.title}
-            autoComplete="given-name"
-            variant="standard"
-            helperText={
-              props.errors.title
-                ? (
-                  <Typography variant="body2" className="f-14">
-                    {props.errors.title || " "}
-                  </Typography>
-                )
-                : " "
-            }
-            onChange={(e) => setField("title", e.target.value)}
-          />
+      <Grid item container xs={12} spacing={4}>
+        <Grid item md={5} xs={12} className="mb-5">
+          <File files={props.uploadedFiles} onDelete={handleDelete} onUpload={handleUpload} />
         </Grid>
-        <Grid item xs={12} className="p-0 mb-3">
-          <Typography variant="body2" className="f-12">
-            Descrição:
-          </Typography>
-          <TextField
-            error={!!props.errors.description}
-            id="description"
-            name="description"
-            fullWidth
-            value={props.formData.description}
-            variant="outlined"
-            helperText={
-              props.errors.description
-                ? (
-                  <Typography variant="body2" className="f-14">
-                    {props.errors.description || " "}
-                  </Typography>
-                )
-                : " "
-            }
-            onChange={(e) => setField("description", e.target.value)}
-            multiline
-            rows={4}
-          />
-        </Grid>
-        <Grid container item xs={12} className="p-0 mb-3">
-          <Grid item xs={6} className="p-0 pe-2 mb-3">
+        <Grid item md={7} xs={12}>
+          <Grid item xs={12} className="p-0 mb-3">
             <Typography variant="body2" className="f-12">
-              Preço:
+              Titulo:
             </Typography>
             <TextField
-              error={!!props.errors.maxValue}
-              id="maxValue"
-              name="maxValue"
+              error={!!props.errors.title}
+              id="title"
+              name="title"
               fullWidth
-              type="number"
-              InputProps={{
-                startAdornment: <InputAdornment position="start">$</InputAdornment>
-              }}
-              value={props.formData.maxValue}
+              value={props.formData.title}
               autoComplete="given-name"
               variant="standard"
               helperText={
-                props.errors.maxValue
+                props.errors.title
                   ? (
                     <Typography variant="body2" className="f-14">
-                      {props.errors.maxValue || " "}
+                      {props.errors.title || " "}
                     </Typography>
                   )
                   : " "
               }
-              onChange={(e) => setField("maxValue", e.target.value)}
+              onChange={(e) => setField("title", e.target.value)}
             />
           </Grid>
-          <Grid item xs={6} className="p-0 ps-2 mb-3">
+          <Grid item xs={12} className="p-0 mb-3">
             <Typography variant="body2" className="f-12">
-              Prazo Dias:
+              Descrição:
             </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateField
+            <TextField
+              error={!!props.errors.description}
+              id="description"
+              name="description"
+              fullWidth
+              value={props.formData.description}
+              variant="outlined"
+              helperText={
+                props.errors.description
+                  ? (
+                    <Typography variant="body2" className="f-14">
+                      {props.errors.description || " "}
+                    </Typography>
+                  )
+                  : " "
+              }
+              onChange={(e) => setField("description", e.target.value)}
+              multiline
+              rows={4}
+            />
+          </Grid>
+          <Grid container item xs={12} className="p-0 mb-3">
+            <Grid item xs={6} className="p-0 pe-2 mb-3">
+              <Typography variant="body2" className="f-12">
+                Preço:
+              </Typography>
+              <TextField
+                error={!!props.errors.maxValue}
+                id="maxValue"
+                name="maxValue"
                 fullWidth
-                variant="standard"
-                value={props.formData.expirationTime}
-                onChange={() => { }}
-                className="p-0"
-                slotProps={{
-                  textField: {
-                    helperText: props.errors.expirationTime ? (
-                      <Typography variant="body2" className="f-14">
-                        {props.errors.expirationTime}
-                      </Typography>
-                    ) : null
-                  }
+                type="number"
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>
                 }}
-                format="DD"
+                value={props.formData.maxValue}
+                autoComplete="given-name"
+                variant="standard"
+                helperText={
+                  props.errors.maxValue
+                    ? (
+                      <Typography variant="body2" className="f-14">
+                        {props.errors.maxValue || " "}
+                      </Typography>
+                    )
+                    : " "
+                }
+                onChange={(e) => setField("maxValue", e.target.value)}
               />
-            </LocalizationProvider>
+            </Grid>
+            <Grid item xs={6} className="p-0 ps-2 mb-3">
+              <Typography variant="body2" className="f-12">
+                Prazo Dias:
+              </Typography>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateField
+                  fullWidth
+                  variant="standard"
+                  value={dayjs(props.formData.expirationTime)}
+                  onChange={(e) => {
+                    setField('expirationTime', e.$d)
+                  }}
+                  className="p-0"
+                  slotProps={{
+                    textField: {
+                      helperText: props.errors.expirationTime ? (
+                        <Typography variant="body2" className="f-14">
+                          {props.errors.expirationTime}
+                        </Typography>
+                      ) : null
+                    }
+                  }}
+                  format="DD/MM/YYYY"
+                />
+              </LocalizationProvider>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

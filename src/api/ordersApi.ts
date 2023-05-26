@@ -23,7 +23,12 @@ export function OrdersAPI() {
     return response;
   }
 
-  async function editOrder(orderId: number) {
+  async function updatePictures(formData: any, orderId: number) {
+    const response = await api.post(`/orders/update-pictures/${orderId}`, formData);
+    return response;
+  }
+
+  async function detailsOrder(orderId: number) {
     const response = await api.get(`/orders/edit/${orderId}`);
     return response;
   }
@@ -69,12 +74,13 @@ export function OrdersAPI() {
     createOrder,
     updatePicture,
     getOrdersById,
-    editOrder,
+    detailsOrder,
     deleteOrder,
     updateOrderById,
     aceptProposals,
     sendProposals,
     deleteProposals,
-    updateProposals
+    updateProposals,
+    updatePictures
   };
 }
