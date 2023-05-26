@@ -12,6 +12,7 @@ import Proposta from './pages/Proposta/Proposta'
 import AuthProvider from './core/Auth/AuthContext'
 import RedirectProvider from './core/Auth/RedirectContext'
 import { UserStorage } from './store/userStorage'
+import Chat from './pages/Chat/Chat'
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/order-details/:id" element={<AuthProvider element={<OrderDetails />} />} />
         <Route path="/create-order" element={<AuthProvider element={<CreateOrder />} />} />
         <Route path="/proposta" element={<AuthProvider element={<Proposta />} />} />
+        <Route path="/chat" element={<AuthProvider element={<Chat />} />} />
       </Routes>
     </BrowserRouter>
   )
