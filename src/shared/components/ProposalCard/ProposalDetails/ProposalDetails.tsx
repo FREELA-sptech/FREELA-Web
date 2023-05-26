@@ -2,7 +2,7 @@ import { Container, Figure, Row } from "react-bootstrap";
 import { ProposalUpdate } from "../ProposalUpdate/ProposalUpdate";
 import { Avatar, Box, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { notBlank } from "../../../scripts/validators";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -10,11 +10,13 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import { OrdersAPI } from "../../../../api/ordersApi";
 import { UserStorage } from "../../../../store/userStorage";
+import SnackbarContext from "../../../../hooks/useSnackbar";
 
 export function ProposalDetails(props: any) {
   const [editing, setEditing] = useState(false)
   const { aceptProposals, deleteProposals, updateProposals } = OrdersAPI();
   const navigate = useNavigate();
+  const { showSnackbar } = useContext(SnackbarContext);
   const [formData, setFormData] = useState({
     description: props.data.description,
     proposalValue: props.data.proposalValue,
@@ -51,25 +53,22 @@ export function ProposalDetails(props: any) {
   }
 
   const handleSubmit = () => {
-    try {
-      const errors = validateForm();
-      const valores = Object.values(errors);
-      const errorsValues = valores.every(valor => valor === "");
+    const errors = validateForm();
+    const valores = Object.values(errors);
+    const errorsValues = valores.every(valor => valor === "");
 
-      if (!errorsValues) {
-        setErrors(errors);
-      } else {
-        setFormData(formData);
-        updateProposals(props.data.id, formData)
+    if (!errorsValues) {
+      setErrors(errors);
+    } else {
+      setFormData(formData);
+      updateProposals(props.data.id, formData)
         .then(() => {
-
+          showSnackbar(false, "Proposta atualizada com sucesso")
         })
         .catch(() => {
-
+          showSnackbar(true, "Problemas para atualizar a proposta, tente novamente!")
         })
-        return () => clearTimeout(timeoutId);
-      }
-    } catch (error) {
+      return () => clearTimeout(timeoutId);
     }
   };
 
@@ -99,12 +98,12 @@ export function ProposalDetails(props: any) {
 
   const handleDeleteProposals = () => {
     deleteProposals(props.data.id)
-    .then((res) => {
-      console.log(res)
-    })
-    .catch(() => {
+      .then((res) => {
+        showSnackbar(false,)
+      })
+      .catch(() => {
 
-    })
+      })
   }
 
   return (
@@ -138,29 +137,29 @@ export function ProposalDetails(props: any) {
             </div>
           </Figure.Caption>
         </Figure>
-        {props.data.originUser.id === UserStorage.getIdUserLocalStorage() &&
+        {props.data.originUser.id === UserStorage.getIdUserLocalStorage() && (
           !editing ?
-          <Box
-            className="position-absolute"
-            sx={{
-              right: 0,
-              cursor: 'pointer'
-            }}
-          >
-            <EditIcon onClick={handleEdit} className="me-2" />
-            <DeleteIcon color='error' onClick={handleDeleteProposals} />
-          </Box> :
-          <Box
-            className="position-absolute"
-            sx={{
-              right: 0,
-              cursor: 'pointer'
-            }}
-          >
-            <ClearIcon onClick={handleEditCancel} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
-            <DoneIcon onClick={handleSubmit} sx={{ fontSize: '30px' }} color="success" />
-          </Box>
-        }
+            <Box
+              className="position-absolute"
+              sx={{
+                right: 0,
+                cursor: 'pointer'
+              }}
+            >
+              <EditIcon onClick={handleEdit} className="me-2" />
+              <DeleteIcon color='error' onClick={handleDeleteProposals} />
+            </Box> :
+            <Box
+              className="position-absolute"
+              sx={{
+                right: 0,
+                cursor: 'pointer'
+              }}
+            >
+              <ClearIcon onClick={handleEditCancel} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
+              <DoneIcon onClick={handleSubmit} sx={{ fontSize: '30px' }} color="success" />
+            </Box>
+        )}
       </Grid>
       {!editing ?
         <Grid item container xs={12}>
