@@ -11,6 +11,7 @@ import { CreateOrder } from './pages/Order/CreateOrder/CreateOrder'
 import Proposta from './pages/Proposta/Proposta'
 import AuthProvider from './core/Auth/AuthContext'
 import RedirectProvider from './core/Auth/RedirectContext'
+import Backoffice from './pages/Backoffice/Backoffice'
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
         <Route path="/order-details/:id" element={<AuthProvider element={<OrderDetails/>} />} />
         <Route path="/create-order" element={<AuthProvider element={<CreateOrder/>} />} />
         <Route path="/proposta" element={<AuthProvider element={<Proposta/>} />} />
+        <Route path="/backoffice" element={<Backoffice/>} />
       </Routes>
     </BrowserRouter>
   )
