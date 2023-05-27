@@ -146,7 +146,7 @@ function OrderDetails() {
     <section className="home-background">
       <Container>
         <Breadcrumbs maxItems={2} aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/home">
+          <Link to={"/home"} color="inherit">
             Home
           </Link>
           <Typography color="text.primary">Detalhes do Pedido</Typography>
