@@ -8,6 +8,7 @@ import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { OrdersAPI } from "../../api/ordersApi";
 import { UserAPI } from "../../api/userApi";
+import { CircularProgress } from "@mui/material";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
@@ -18,17 +19,22 @@ function Home() {
 
   const handleClose = () => setShowModal(false)
   const handleOpen = () => setShowModal(true)
+  const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (UserStorage.getIsFreelancerLocalStorage()) {
       getOrders()
         .then((res: any) => {
           setResponseData(res.data)
+        }).finally(() => {
+          setIsLoading(false)
         })
     } else {
       getFreelancersByInterests()
         .then((res: any) => {
           setResponseData(res.data)
+        }).finally(() => {
+          setIsLoading(false)
         })
     }
   }, [])
@@ -52,7 +58,7 @@ function Home() {
           </Modal>
           <Col lg={12}>
             <Row className="px-lg-3 px-0 d-flex gap-2">
-              <Figure style={{cursor:"pointer"}} onClick={handleOpen} className="home-icon-background d-flex justify-content-center align-items-center">
+              <Figure style={{ cursor: "pointer" }} onClick={handleOpen} className="home-icon-background d-flex justify-content-center align-items-center">
                 <Figure.Image
                   width='40px'
                   height='40px'
@@ -81,17 +87,20 @@ function Home() {
           </Col>
           <Col lg={12} className="px-3 d-flex flex-column gap-2">
             <Row className="d-flex">
-              {responseData.map((data: any) => {
-                return UserStorage.getIsFreelancerLocalStorage() ? (
-                  <Col xs={12} md={6} lg={4} className="p-3">
-                    <ServicesAvailableCard data={data} />
-                  </Col>
-                ) : (
-                  <Col xs={12} md={6} lg={4} className="p-3">
-                    <FreelancerProfileCard props={data} />
-                  </Col>
-                )
-              })}
+              {
+                loading ? (<CircularProgress style={{margin:"auto"}}/>) :
+                  responseData.map((data: any) => {
+                    return UserStorage.getIsFreelancerLocalStorage() ? (
+                      <Col xs={12} md={6} lg={4} className="p-3">
+                        <ServicesAvailableCard data={data} />
+                      </Col>
+                    ) : (
+                      <Col xs={12} md={6} lg={4} className="p-3">
+                        <FreelancerProfileCard props={data} />
+                      </Col>
+                    )
+                  })
+              }
             </Row>
           </Col>
         </Row>

@@ -57,6 +57,7 @@ function ServicesAvailableCard(data: any) {
         )}
         {localData.photos.length > 0 &&
           <AutoPlaySwipeableViews
+            className="custom-swipeable-views"
             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
             index={activeStep}
             onChangeIndex={handleStepChange}
@@ -71,14 +72,46 @@ function ServicesAvailableCard(data: any) {
               <div key={step.name} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
                 {Math.abs(activeStep - index) <= 2 ? (
                   <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
+                    <MobileStepper
+                      sx={{
+                        height: 50,
+                      }}
+                      steps={localData.photos.length}
+                      position="static"
+                      activeStep={activeStep}
+                      nextButton={
+                        <Button
+                          size="small"
+                          onClick={handleNext}
+                          disabled={activeStep === localData.photos.length - 1 || localData.photos.length == 0}
+                        >
+                          Next
+                          {theme.direction === 'rtl' ? (
+                            <KeyboardArrowLeft />
+                          ) : (
+                            <KeyboardArrowRight />
+                          )}
+                        </Button>
+                      }
+                      backButton={
+                        <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                          {theme.direction === 'rtl' ? (
+                            <KeyboardArrowRight />
+                          ) : (
+                            <KeyboardArrowLeft />
+                          )}
+                          Back
+                        </Button>
+                      }
+                    />
                     <Box
                       component="img"
                       sx={{
                         maxHeight: "100%",
                         display: 'block',
                         maxWidth: "100%",
-                        width:"100%",
-                        objectFit:"cover",
+                        width: "100%",
+                        objectFit: "cover",
                         overflow: 'hidden'
                       }}
                       src={`data:image/png;base64,${step}`}
@@ -89,38 +122,7 @@ function ServicesAvailableCard(data: any) {
               </div>
             ))}
           </AutoPlaySwipeableViews>}
-        <MobileStepper
-          sx={{
-            height: 50,
-          }}
-          steps={localData.photos.length}
-          position="static"
-          activeStep={activeStep}
-          nextButton={
-            <Button
-              size="small"
-              onClick={handleNext}
-              disabled={activeStep === localData.photos.length - 1 || localData.photos.length == 0}
-            >
-              Next
-              {theme.direction === 'rtl' ? (
-                <KeyboardArrowLeft />
-              ) : (
-                <KeyboardArrowRight />
-              )}
-            </Button>
-          }
-          backButton={
-            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-              {theme.direction === 'rtl' ? (
-                <KeyboardArrowRight />
-              ) : (
-                <KeyboardArrowLeft />
-              )}
-              Back
-            </Button>
-          }
-        />
+
       </Box>
       <Card.Body className="mb-0">
         <Card.Title className="text-color f-20 fw-semibold"
