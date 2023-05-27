@@ -25,6 +25,7 @@ import SnackbarContext from "../../../hooks/useSnackbar";
 function OrderDetails() {
   const params = useParams();
   const { id } = params;
+  const navigate = useNavigate();
   const [data, setData] = useState<any>()
   const [editingOrder, setEditingOrder] = useState(false)
   const [value, setValue] = useState('1');
@@ -94,8 +95,11 @@ function OrderDetails() {
   const handleDeleteOrder = () => {
     deleteOrder(id)
       .then((res) => {
+        showSnackbar(false, "Ordem deletada com sucesso!")
+        navigate("/perfil")
       })
       .catch((e) => {
+        showSnackbar(true, "Problemas para deletar ordem, Tente Novamente!")
       })
   }
 
