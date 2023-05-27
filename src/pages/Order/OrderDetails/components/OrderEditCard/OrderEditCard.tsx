@@ -56,7 +56,7 @@ function OrderEditCard({
   };
 
   const handleStepChange = (step: number) => {
-    step < (formData.photos.length + formData.newPhotos.length) && setActiveStep(step);
+    step < formData.photos.length && setActiveStep(step);
   };
 
   const setField = (field: any, value: any) => {
@@ -72,25 +72,56 @@ function OrderEditCard({
   }
 
   const handleDeletePictures = (name: any) => {
-    setField("photos", formData.photos.filter((file: any) => file !== name));
-    setField("deletedPhotos", [...formData.deletedPhotos, name]);
-    setField("newPhotos", formData.newPhotos.filter((file: any) => file.name !== name));
-  }
+    const currentFiles: any[] = [];
+
+    formData.photos.forEach((file: any) => {
+      if (file.name) {
+        if (file.name !== name) {
+          currentFiles.push(file);
+        }
+      } else {
+        if (file !== name) {
+          currentFiles.push(file);
+        }
+      }
+    });
+
+    setFormData({
+      ...formData,
+      photos: currentFiles,
+      deletedPhotos: [...formData.deletedPhotos, name],
+      newPhotos: formData.newPhotos.filter((file: any) => file.name !== name)
+    })
+  };
+
 
   const handleUploadPictures = (event: any) => {
     const files = Array.from(event.target.files);
     const newPhotos: any[] = formData.newPhotos || []
+    const formDataPhotos: any[] = formData.photos || []
 
     files.forEach((fileData: any) => {
       if (fileData) {
         const reader = new FileReader();
+        const readerUrl = new FileReader();
 
         reader.onloadend = () => {
           !formData.newPhotos.includes(fileData) && newPhotos.push(fileData)
           setField("newPhotos", newPhotos);
         };
 
+        readerUrl.onloadend = () => {
+          const fileObject = {
+            name: fileData.name,
+            data: readerUrl.result,
+          };
+
+          !formData.photos.includes(fileObject) && formDataPhotos.push(fileObject)
+          setField("photos", formDataPhotos);
+        }
+
         reader.readAsArrayBuffer(fileData);
+        readerUrl.readAsDataURL(fileData);
       }
     });
   }
@@ -164,7 +195,7 @@ function OrderEditCard({
                 }}
               >
                 {formData.photos.map((step: any, index: any) => (
-                  <div key={step} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
+                  <div key={step.name || step} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
                     {Math.abs(activeStep - index) <= 2 ? (
                       <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
                         <DeleteIcon
@@ -177,7 +208,7 @@ function OrderEditCard({
                             width: 40,
                             cursor: 'pointer'
                           }}
-                          onClick={() => { handleDeletePictures(step) }}
+                          onClick={() => { handleDeletePictures(step.name || step) }}
                         />
                         <Box
                           component="img"
@@ -187,52 +218,20 @@ function OrderEditCard({
                             maxWidth: "100%",
                             overflow: 'hidden'
                           }}
-                          src={`data:image/png;base64,${step}`}
-                          alt={step}
+                          src={step.data || `data:image/png;base64,${step}`}
+                          alt={step.name || step}
                         />
                       </Box>
                     ) : null}
                   </div>
                 )
                 )}
-
-                {formData.newPhotos.map((step: any, index: any) => (
-                  <div key={step.name} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
-                    {Math.abs(activeStep - index) <= 2 ? (
-                      <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
-                        <DeleteIcon
-                          color='error'
-                          className='position-absolute'
-                          sx={{
-                            right: 10,
-                            top: 10,
-                            height: 40,
-                            width: 40,
-                            cursor: 'pointer'
-                          }}
-                          onClick={() => { handleDeletePictures(step.name) }}
-                        />
-                        <Box
-                          component="img"
-                          sx={{
-                            maxHeight: "100%",
-                            display: 'block',
-                            maxWidth: "100%",
-                            overflow: 'hidden'
-                          }}
-                          src={step.data}
-                          alt={step.name}
-                        />
-                      </Box>
-                    ) : null}
-                  </div>
-                ))}
               </AutoPlaySwipeableViews>
               <MobileStepper
                 sx={{
                   height: 50,
                 }}
-                steps={formData.photos.length + formData.newPhotos.length}
+                steps={formData.photos.length}
                 position="static"
                 activeStep={activeStep}
                 nextButton={

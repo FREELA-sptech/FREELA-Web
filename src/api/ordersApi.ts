@@ -24,7 +24,7 @@ export function OrdersAPI() {
   }
 
   async function updatePictures(formData: any, orderId: number) {
-    const response = await api.post(`/orders/update-pictures/${orderId}`, formData);
+    const response = await api.put(`/orders/update-pictures/${orderId}`, formData);
     return response;
   }
 
