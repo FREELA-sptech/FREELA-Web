@@ -14,6 +14,7 @@ function Home() {
   const [responseData, setResponseData] = useState([])
   const { getOrders } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
+  const items = [];
 
   const handleClose = () => setShowModal(false)
   const handleOpen = () => setShowModal(true)
@@ -41,7 +42,7 @@ function Home() {
               {UserStorage.getIsFreelancerLocalStorage() ? 'projetos disponíveis' : 'profissionais disponíveis'}
             </h1>
           </Row>
-          <Modal className="d-block d-lg-none w-100 h-100" show={showModal} onHide={handleClose}>
+          <Modal className="d-block w-100 h-100" show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Filtrar</Modal.Title>
             </Modal.Header>
@@ -49,12 +50,9 @@ function Home() {
               <FiltersCard />
             </Modal.Body>
           </Modal>
-          <Col lg={3} className="d-flex d-lg-none">
-            <FiltersCard />
-          </Col>
           <Col lg={12}>
             <Row className="px-lg-3 px-0 d-flex gap-2">
-              <Figure onClick={handleOpen} className="home-icon-background d-flex justify-content-center align-items-center">
+              <Figure style={{cursor:"pointer"}} onClick={handleOpen} className="home-icon-background d-flex justify-content-center align-items-center">
                 <Figure.Image
                   width='40px'
                   height='40px'
@@ -85,11 +83,11 @@ function Home() {
             <Row className="d-flex">
               {responseData.map((data: any) => {
                 return UserStorage.getIsFreelancerLocalStorage() ? (
-                  <Col xs={12} md={6} lg={3} className="p-3">
+                  <Col xs={12} md={6} lg={4} className="p-3">
                     <ServicesAvailableCard data={data} />
                   </Col>
                 ) : (
-                  <Col xs={12} md={6} lg={3} className="p-3">
+                  <Col xs={12} md={6} lg={4} className="p-3">
                     <FreelancerProfileCard props={data} />
                   </Col>
                 )

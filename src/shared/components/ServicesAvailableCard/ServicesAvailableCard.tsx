@@ -154,7 +154,7 @@ function ServicesAvailableCard(data: any) {
             Categorias:
           </Typography>
           <Box className="d-flex">
-            <AvatarGroup max={5}>
+            <AvatarGroup max={5} className="d-flex w-100">
               {localData.subCategories.map((subCategory: any) => {
                 return (
                   <HtmlTooltip
