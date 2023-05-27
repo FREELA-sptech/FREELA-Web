@@ -85,11 +85,11 @@ function Home() {
             <Row className="d-flex">
               {responseData.map((data: any) => {
                 return UserStorage.getIsFreelancerLocalStorage() ? (
-                  <Col xs={12} md={6} lg={4} className="p-3">
+                  <Col xs={12} md={6} lg={3} className="p-3">
                     <ServicesAvailableCard data={data} />
                   </Col>
                 ) : (
-                  <Col xs={12} md={6} lg={4} className="p-3">
+                  <Col xs={12} md={6} lg={3} className="p-3">
                     <FreelancerProfileCard props={data} />
                   </Col>
                 )

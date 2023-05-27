@@ -1,0 +1,12 @@
+.list-conversation{
+    border-right:1.5px solid #dcdcdc;
+    &-header{
+        padding:0rem 0.8rem;
+        height: 10%;
+        border-bottom:1.5px solid #dcdcdc;
+    }
+    &-content{
+        width: 100%;
+        height: 80%;
+    }
+}
