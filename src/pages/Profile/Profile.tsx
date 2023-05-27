@@ -26,6 +26,8 @@ function Profile() {
   const isFreelancer = UserStorage.getIsFreelancerLocalStorage()
   const [value, setValue] = useState('1');
   const [data, setData] = useState([])
+  const [dataAccepted, setDataAccepted] = useState<any>([])
+  const [dataRefused, setDataRefused] = useState<any>([])
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -46,8 +48,23 @@ function Profile() {
   const getProposals = () => {
     getProposalsByUser()
       .then((res) => {
+        const acceptedList: any[] = []
+        const refusedList: any = []
+
         setData(res.data)
-        console.log(res)
+
+        res.data.map((localData: any) => {
+          localData.isAccepted && acceptedList.push(localData)
+        })
+        setDataAccepted(acceptedList)
+
+        res.data.map((localData: any) => {
+          localData.isRefused && refusedList.push(localData)
+        })
+        setDataAccepted(refusedList)
+      })
+      .catch((error) => {
+        console.log(error)
       })
   }
 
@@ -77,8 +94,9 @@ function Profile() {
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleChange} aria-label="lab API tabs example">
-                    <Tab label={isFreelancer ? "Propostas Enviadas" : "Pedidos Criados"} value="1" />
-                    {/* {isFreelancer && (<Tab label="Meu Portifólio" value="2" />)} */}
+                    <Tab label={isFreelancer ? "Propostas Pendentes" : "Pedidos Criados"} value="1" />
+                    {isFreelancer && (<Tab label="Propostas Aceitas" value="2" />)}
+                    {isFreelancer && (<Tab label="Propostas Recusadas" value="3" />)}
                   </TabList>
                 </Box>
                 <TabPanel value="1" className="px-0">
@@ -120,11 +138,68 @@ function Profile() {
                           <ServicesAvailableCard data={localData} />
                         </Grid>
                       ))
-                    ) : (data.map((localData: any) => (
-                      <Grid item xs={12} md={6} lg={4}>
-                        <ProposalCard data={localData} />
+                    ) : (data.map((localData: any) => {
+                      if (!localData.isAccepted && !localData.isRefused) {
+                        return (
+                          <Grid item xs={12} md={6} lg={4}>
+                            <ProposalCard data={localData} />
+                          </Grid>
+                        )
+                      }
+                    })
+                    )}
+                  </Grid>
+                </TabPanel>
+                <TabPanel value="2" className="px-0">
+                  <Grid container spacing={4}>
+                    {dataAccepted.length <= 0 ? (
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Typography variant="body2" className="f-22">
+                          Você ainda não tem nenhuma proposta aceita
+                        </Typography>
+                        <Link to={'/home'} className='primary-standart'>
+                          Faça Proposta!
+                        </Link>
                       </Grid>
-                    ))
+                    ) : isFreelancer && (
+                      dataAccepted.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ProposalCard data={localData} />
+                        </Grid>
+                      ))
+                    )}
+                  </Grid>
+                </TabPanel>
+                <TabPanel value="3" className="px-0">
+                  <Grid container spacing={4}>
+                    {dataRefused.length <= 0 ? (
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Typography variant="body2" className="f-22">
+                          Nenhuma proposta recusada, continue assim! :)
+                        </Typography>
+                      </Grid>
+                    ) : isFreelancer && (
+                      dataRefused.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ProposalCard data={localData} />
+                        </Grid>
+                      ))
                     )}
                   </Grid>
                 </TabPanel>

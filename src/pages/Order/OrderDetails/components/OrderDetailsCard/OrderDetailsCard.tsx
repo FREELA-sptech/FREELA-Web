@@ -28,9 +28,9 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 export type Props = {
   user: any
-  handleShowEditOrder: () => void
-  handleDeleteOrder: () => void
-  handleShowSendProposalsModal: () => void
+  handleShowEditOrder?: () => void
+  handleDeleteOrder?: () => void
+  handleShowSendProposalsModal?: () => void
   data: any
 }
 
@@ -58,119 +58,122 @@ function OrderDetailsCard({
 
   return (
     <Grid container className="pt-4 px-0 d-flex gap-3" maxWidth={"100%"} position={"relative"}>
-      {user.id === UserStorage.getIdUserLocalStorage() ? (
-        <Box
-          className="position-absolute"
-          sx={{
-            right: 0,
-            cursor: 'pointer'
-          }}
-        >
-          <EditIcon onClick={handleShowEditOrder} className="me-2" />
-          <DeleteIcon color='error' onClick={handleDeleteOrder} />
-        </Box>
-      ) : (
-        <Box
-          className="position-absolute"
-          sx={{
-            right: 0,
-            cursor: 'pointer'
-          }}
-        >
-          <button onClick={handleShowSendProposalsModal} className="primary-standart w-auto">enviar proposta</button>
-        </Box>
-      )}
-      <Grid item xs={12} className="p-0 mb-5">
-        <h1 className="title">Detalhes do Pedido</h1>
-      </Grid>
+      {user.id === UserStorage.getIdUserLocalStorage() ?
+        handleShowEditOrder && (
+          <Box
+            className="position-absolute"
+            sx={{
+              right: 0,
+              cursor: 'pointer'
+            }}
+          >
+            <EditIcon onClick={handleShowEditOrder} className="me-2" />
+            <DeleteIcon color='error' onClick={handleDeleteOrder} />
+          </Box>
+        ) : handleShowEditOrder && (
+          <Box
+            className="position-absolute"
+            sx={{
+              right: 0,
+              cursor: 'pointer'
+            }}
+          >
+            <button onClick={handleShowSendProposalsModal} className="primary-standart w-auto">enviar proposta</button>
+          </Box>
+        )}
+      {handleShowEditOrder &&
+        <Grid item xs={12} className="p-0 mb-5">
+          <h1 className="title">Detalhes do Pedido</h1>
+        </Grid>}
       <Grid item container xs={12} spacing={4}>
-        <Grid item md={5} xs={12} className="mb-2">
-          {data.photos &&
-            <Box className="d-flex flex-column" sx={{ maxWidth: "100%", height: '100%', minHeight: '300px', flexGrow: 1, position: 'relative' }}>
-              <Box style={{
-                position: 'absolute',
-                width: '100%',
-                height: 'calc(100% - 50px)',
-                display: data.photos.length > 0 ? 'none' : 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                gap: 6
-              }}>
-                <img
-                  style={{ height: 100, width: 100 }}
-                  src="/assets/images/no-picture.png"
-                  alt="Sem Foto" />
-                <Typography>
-                  Nenhuma Foto Adicionada
-                </Typography>
+        {handleShowEditOrder &&
+          <Grid item md={5} xs={12} className="mb-2">
+            {data.photos &&
+              <Box className="d-flex flex-column" sx={{ maxWidth: "100%", height: '100%', minHeight: '300px', flexGrow: 1, position: 'relative' }}>
+                <Box style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: 'calc(100% - 50px)',
+                  display: data.photos.length > 0 ? 'none' : 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  gap: 6
+                }}>
+                  <img
+                    style={{ height: 100, width: 100 }}
+                    src="/assets/images/no-picture.png"
+                    alt="Sem Foto" />
+                  <Typography>
+                    Nenhuma Foto Adicionada
+                  </Typography>
+                </Box>
+                <AutoPlaySwipeableViews
+                  axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                  index={activeStep}
+                  onChangeIndex={handleStepChange}
+                  enableMouseEvents
+                  style={{
+                    height: 'auto',
+                    flexGrow: 1,
+                    position: 'relative'
+                  }}
+                >
+                  {data.photos.map((step: any, index: any) => (
+                    <div key={step} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
+                      {Math.abs(activeStep - index) <= 2 ? (
+                        <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
+                          <Box
+                            component="img"
+                            sx={{
+                              maxHeight: "100%",
+                              display: 'block',
+                              maxWidth: "100%",
+                              overflow: 'hidden'
+                            }}
+                            src={`data:image/png;base64,${step}`}
+                            alt={step}
+                          />
+                        </Box>
+                      ) : null}
+                    </div>
+                  ))}
+                </AutoPlaySwipeableViews>
+                <MobileStepper
+                  sx={{
+                    height: 50,
+                  }}
+                  steps={data.photos.length}
+                  position="static"
+                  activeStep={activeStep}
+                  nextButton={
+                    <Button
+                      size="small"
+                      onClick={handleNext}
+                      disabled={activeStep === data.photos.length - 1 || data.photos.length == 0}
+                    >
+                      Next
+                      {theme.direction === 'rtl' ? (
+                        <KeyboardArrowLeft />
+                      ) : (
+                        <KeyboardArrowRight />
+                      )}
+                    </Button>
+                  }
+                  backButton={
+                    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                      {theme.direction === 'rtl' ? (
+                        <KeyboardArrowRight />
+                      ) : (
+                        <KeyboardArrowLeft />
+                      )}
+                      Back
+                    </Button>
+                  }
+                />
               </Box>
-              <AutoPlaySwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={activeStep}
-                onChangeIndex={handleStepChange}
-                enableMouseEvents
-                style={{
-                  height: 'auto',
-                  flexGrow: 1,
-                  position: 'relative'
-                }}
-              >
-                {data.photos.map((step: any, index: any) => (
-                  <div key={step} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
-                    {Math.abs(activeStep - index) <= 2 ? (
-                      <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
-                        <Box
-                          component="img"
-                          sx={{
-                            maxHeight: "100%",
-                            display: 'block',
-                            maxWidth: "100%",
-                            overflow: 'hidden'
-                          }}
-                          src={`data:image/png;base64,${step}`}
-                          alt={step}
-                        />
-                      </Box>
-                    ) : null}
-                  </div>
-                ))}
-              </AutoPlaySwipeableViews>
-              <MobileStepper
-                sx={{
-                  height: 50,
-                }}
-                steps={data.photos.length}
-                position="static"
-                activeStep={activeStep}
-                nextButton={
-                  <Button
-                    size="small"
-                    onClick={handleNext}
-                    disabled={activeStep === data.photos.length - 1 || data.photos.length == 0}
-                  >
-                    Next
-                    {theme.direction === 'rtl' ? (
-                      <KeyboardArrowLeft />
-                    ) : (
-                      <KeyboardArrowRight />
-                    )}
-                  </Button>
-                }
-                backButton={
-                  <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                    {theme.direction === 'rtl' ? (
-                      <KeyboardArrowRight />
-                    ) : (
-                      <KeyboardArrowLeft />
-                    )}
-                    Back
-                  </Button>
-                }
-              />
-            </Box>
-          }
-        </Grid>
+            }
+          </Grid>}
         <Grid item md={7} xs={12}>
           <Grid item xs={12} className="p-0 mb-2">
             <span className="f-30 f-inter dark-contrast-color fw-bold">{data.title}</span>

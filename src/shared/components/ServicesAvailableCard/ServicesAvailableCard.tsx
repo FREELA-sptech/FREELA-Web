@@ -187,7 +187,7 @@ function ServicesAvailableCard(data: any) {
           </Box>
         </Row>
       </Card.Body>
-      {/* <ButtonBase  className="b-radius-button w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase> */}
+      <ButtonBase  className="b-radius-button w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} onClick={() => {}} ></ButtonBase>
     </Card >
   );
 }

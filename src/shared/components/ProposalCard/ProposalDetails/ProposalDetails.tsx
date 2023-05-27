@@ -72,7 +72,7 @@ export function ProposalDetails({
         )}
       </Grid>
       <Grid item container xs={12}>
-        <Grid item container xs={5} className="d-flex justify-content-start my-3">
+        <Grid item container lg={5} md={12} className="d-flex justify-content-start my-3">
           <Grid item xs={6}>
             <Figure className="d-flex align-items-center gap-2 w-auto m-0">
               <Figure.Image

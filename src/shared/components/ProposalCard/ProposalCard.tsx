@@ -4,18 +4,21 @@ import ButtonBase from "../ButtonBase/ButtonBase";
 import { ProposalDetails } from "./ProposalDetails/ProposalDetails";
 import { useContext, useEffect, useState } from "react";
 import { MdOutlineEdit } from "react-icons/md";
-import { Avatar } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Typography } from '@mui/material'
 import { ProposalUpdate } from "./ProposalUpdate/ProposalUpdate";
 import { OrdersAPI } from "../../../api/ordersApi";
 import SnackbarContext from "../../../hooks/useSnackbar";
 import { notBlank } from "../../scripts/validators";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import OrderDetailsCard from "../../../pages/Order/OrderDetails/components/OrderDetailsCard/OrderDetailsCard";
 
 
 function ProposalCard(props: any) {
   const [data, setData] = useState<any>();
+  const [orderData, setOrderData] = useState<any>()
   const [showDetails, setShowDetails] = useState(false);
   const [editingProposal, setEditingProposal] = useState(false);
-  const { aceptProposals, deleteProposals, updateProposals } = OrdersAPI();
+  const { aceptProposals, deleteProposals, updateProposals, getOrdersById } = OrdersAPI();
   const { showSnackbar } = useContext(SnackbarContext);
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState({
@@ -39,12 +42,20 @@ function ProposalCard(props: any) {
   }
 
   const updateValues = (newValues: any) => {
-    setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime)})
+    setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime) })
     const date = new Date(newValues.expirationTime);
     setFormData({
       description: newValues.description,
       proposalValue: newValues.proposalValue,
       expirationTime: date
+    })
+    getOrderDetails()
+  }
+
+  const getOrderDetails = () => {
+    getOrdersById(props.data.destinedOrder)
+    .then((res) => {
+      setOrderData(res.data)
     })
   }
 
@@ -218,14 +229,36 @@ function ProposalCard(props: any) {
         </Modal.Header>
         <Modal.Body>
           {!editingProposal ? (
-            <ProposalDetails
-              originUser={data.originUser}
-              handleAcceptProposals={handleAcceptProposals}
-              handleRefuseProposals={handleRefuseProposals}
-              handleDeleteProposals={handleDeleteProposals}
-              handleShowEditProposals={handleShowEditProposals}
-              data={data}
-            />
+            <>
+              <ProposalDetails
+                originUser={data.originUser}
+                handleAcceptProposals={handleAcceptProposals}
+                handleRefuseProposals={handleRefuseProposals}
+                handleDeleteProposals={handleDeleteProposals}
+                handleShowEditProposals={handleShowEditProposals}
+                data={data}
+              />
+              <Accordion disableGutters
+                sx={{
+                  border: 'none',
+                  borderRadius: '16px !important',
+                  boxShadow: 'none',
+                  marginTop: '13px',
+                  backgroundColor: 'var(--contrast-background-color)'
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Detalhes do Pedido</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {orderData && <OrderDetailsCard data={orderData} user={orderData.user} />}
+                </AccordionDetails>
+              </Accordion>
+            </>
           ) : (
             <ProposalUpdate
               data={data}
