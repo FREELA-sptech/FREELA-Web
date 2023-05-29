@@ -13,7 +13,7 @@ import { CircularProgress } from "@mui/material";
 function Home() {
   const [showModal, setShowModal] = useState(false)
   const [responseData, setResponseData] = useState([])
-  const { getOrders, findByTitle } = OrdersAPI()
+  const { getOrders, findByTitle, getAllOrders } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
   const [message, setMessage] = useState("");
   const items = [];
@@ -47,7 +47,6 @@ function Home() {
           console.log(res.data.status)
           if (res.status == 204) setMessage("Nenhum pedido com esse nome")
           if (res.data) return setResponseData(res.data)
-
         })
         .catch((e) => {
           console.log("erro")
@@ -67,7 +66,7 @@ function Home() {
     }
   }
 
-  const handleSelectOrderByInterest = (type: string) => {
+  const handleSelectDataByInterest = (type: string) => {
     if (type == "interest") {
       return getOrders()
         .then((response: any) => {
@@ -75,8 +74,13 @@ function Home() {
         }).finally(() => {
           setIsLoading(false)
         })
-    }else{
-      return console.log("listar todos")
+    } else {
+      return getAllOrders()
+        .then((res:any) => {
+          setResponseData(res.data);
+        }).finally(() => {
+          setIsLoading(false)
+        })
     }
   }
 
@@ -94,7 +98,7 @@ function Home() {
               <Modal.Title>Listar Pedidos por:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <FiltersCard />
+              <FiltersCard handleSelectDataByInterest={handleSelectDataByInterest} />
             </Modal.Body>
           </Modal>
           <Col lg={12}>

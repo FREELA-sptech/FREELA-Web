@@ -8,6 +8,12 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function getAllOrders() {
+    const response = await api.get("/orders/get-all-orders");
+    return response;
+  }
+
+
   async function getOrdersByUser() {
     const response = await api.get("/orders/by-user");
     return response;
@@ -75,6 +81,7 @@ export function OrdersAPI() {
 
   return {
     getOrders,
+    getAllOrders,
     getOrdersByUser,
     createOrder,
     updatePicture,
