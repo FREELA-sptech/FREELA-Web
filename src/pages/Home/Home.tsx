@@ -15,6 +15,7 @@ function Home() {
   const [responseData, setResponseData] = useState([])
   const { getOrders, findByTitle } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
+  const [message, setMessage] = useState("");
   const items = [];
 
   const handleClose = () => setShowModal(false)
@@ -39,32 +40,31 @@ function Home() {
     }
   }, [])
 
-  const handleFilterByTitle = (title: string) => {
-    findByTitle(title)
-      .then((res) => {
-        console.log(res.data)
-        if (res.data) return setResponseData(res.data)
-        else {
+  const handleFilterByText = (text: string) => {
+    if (UserStorage.getIsFreelancerLocalStorage()) {
+      findByTitle(text)
+        .then((res) => {
+          console.log(res.data.status)
+          if (res.status == 204) setMessage("Nenhum pedido com esse nome")
+          if (res.data) return setResponseData(res.data)
+
+        })
+        .catch((e) => {
+          console.log("erro")
+          setMessage("")
           getOrders()
             .then((response: any) => {
               setResponseData(response.data)
             }).finally(() => {
               setIsLoading(false)
             })
-        }
-      })
-      .catch((e) => {
-        console.log("erro")
-        getOrders()
-          .then((response: any) => {
-            setResponseData(response.data)
-          }).finally(() => {
-            setIsLoading(false)
-          })
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } else {
+
+    }
   }
 
   return (
@@ -105,7 +105,7 @@ function Home() {
                 />
                 <Form.Control
                   style={{ boxShadow: 'none' }}
-                  onChange={(e) => handleFilterByTitle(e.target.value)}
+                  onChange={(e) => handleFilterByText(e.target.value)}
                   className="primary-input"
                   placeholder="Busque aqui"
                   aria-label="Busque aqui"
@@ -118,17 +118,19 @@ function Home() {
             <Row className="d-flex">
               {
                 loading ? (<CircularProgress style={{ margin: "auto" }} />) :
-                  responseData.map((data: any) => {
-                    return UserStorage.getIsFreelancerLocalStorage() ? (
-                      <Col xs={12} md={6} lg={4} className="p-3">
-                        <ServicesAvailableCard data={data} />
-                      </Col>
-                    ) : (
-                      <Col xs={12} md={6} lg={4} className="p-3">
-                        <FreelancerProfileCard props={data} />
-                      </Col>
-                    )
-                  })
+                  message != "" ?
+                  <h3>{message}</h3> :
+                    responseData.map((data: any) => {
+                      return UserStorage.getIsFreelancerLocalStorage() ? (
+                        <Col xs={12} md={6} lg={4} className="p-3">
+                          <ServicesAvailableCard data={data} />
+                        </Col>
+                      ) : (
+                        <Col xs={12} md={6} lg={4} className="p-3">
+                          <FreelancerProfileCard props={data} />
+                        </Col>
+                      )
+                    })
               }
             </Row>
           </Col>
