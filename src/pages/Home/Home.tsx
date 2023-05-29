@@ -15,6 +15,7 @@ function Home() {
   const [responseData, setResponseData] = useState([])
   const { getOrders, findByTitle, getAllOrders } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
+  const [filter, setFilter] = useState("interest");
   const [message, setMessage] = useState("");
   const items = [];
 
@@ -42,7 +43,7 @@ function Home() {
 
   const handleFilterByText = (text: string) => {
     if (UserStorage.getIsFreelancerLocalStorage()) {
-      findByTitle(text)
+      findByTitle(text, filter)
         .then((res) => {
           console.log(res.data.status)
           if (res.status == 204) setMessage("Nenhum pedido com esse nome")
@@ -51,12 +52,20 @@ function Home() {
         .catch((e) => {
           console.log("erro")
           setMessage("")
-          getOrders()
+          if (filter == "interest") return getOrders()
             .then((response: any) => {
               setResponseData(response.data)
             }).finally(() => {
               setIsLoading(false)
             })
+          else {
+            return getAllOrders()
+              .then((res: any) => {
+                setResponseData(res.data);
+              }).finally(() => {
+                setIsLoading(false)
+              })
+          }
         })
         .finally(() => {
           setIsLoading(false)
@@ -67,6 +76,7 @@ function Home() {
   }
 
   const handleSelectDataByInterest = (type: string) => {
+    setFilter(type)
     if (type == "interest") {
       return getOrders()
         .then((response: any) => {
@@ -76,7 +86,7 @@ function Home() {
         })
     } else {
       return getAllOrders()
-        .then((res:any) => {
+        .then((res: any) => {
           setResponseData(res.data);
         }).finally(() => {
           setIsLoading(false)

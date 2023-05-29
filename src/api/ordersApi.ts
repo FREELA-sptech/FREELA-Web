@@ -74,8 +74,8 @@ export function OrdersAPI() {
     return response;
   }
 
-  async function findByTitle(title : string) {
-    const response = await api.get(`/orders/filter-by-title/${title}`);
+  async function findByTitle(title : string,filter: string) {
+    const response = await api.get(`/orders/by-title/${filter}/${title}`);
     return response;
   }
 
