@@ -67,6 +67,19 @@ function Home() {
     }
   }
 
+  const handleSelectOrderByInterest = (type: string) => {
+    if (type == "interest") {
+      return getOrders()
+        .then((response: any) => {
+          setResponseData(response.data)
+        }).finally(() => {
+          setIsLoading(false)
+        })
+    }else{
+      return console.log("listar todos")
+    }
+  }
+
   return (
     <section className="home-background">
       <Container>
@@ -78,7 +91,7 @@ function Home() {
           </Row>
           <Modal className="d-block w-100 h-100" show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>
-              <Modal.Title>Filtrar</Modal.Title>
+              <Modal.Title>Listar Pedidos por:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <FiltersCard />
@@ -119,7 +132,7 @@ function Home() {
               {
                 loading ? (<CircularProgress style={{ margin: "auto" }} />) :
                   message != "" ?
-                  <h3>{message}</h3> :
+                    <h3>{message}</h3> :
                     responseData.map((data: any) => {
                       return UserStorage.getIsFreelancerLocalStorage() ? (
                         <Col xs={12} md={6} lg={4} className="p-3">

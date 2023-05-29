@@ -53,7 +53,7 @@ function Header(props: any) {
                   FREELA
                 </Link>
                 <Link to='/home' className='tertiary-text' onClick={handleClose}>
-                  {isFreelancer ? "Encontre projetos" : "Encontre Profissionais"}
+                  {isAuthenticated ? isFreelancer ? "Encontre projetos" : "Encontre Profissionais" : ""}
                 </Link>
               </Box>
               <Box className="d-flex flex-column flex-xl-row">
