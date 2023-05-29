@@ -68,6 +68,11 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function findByTitle(title : string) {
+    const response = await api.get(`/orders/filter-by-title/${title}`);
+    return response;
+  }
+
   return {
     getOrders,
     getOrdersByUser,
@@ -81,6 +86,7 @@ export function OrdersAPI() {
     sendProposals,
     deleteProposals,
     updateProposals,
-    updatePictures
+    updatePictures,
+    findByTitle
   };
 }

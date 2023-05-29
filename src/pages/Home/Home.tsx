@@ -13,7 +13,7 @@ import { CircularProgress } from "@mui/material";
 function Home() {
   const [showModal, setShowModal] = useState(false)
   const [responseData, setResponseData] = useState([])
-  const { getOrders } = OrdersAPI()
+  const { getOrders, findByTitle } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
   const items = [];
 
@@ -38,6 +38,34 @@ function Home() {
         })
     }
   }, [])
+
+  const handleFilterByTitle = (title: string) => {
+    findByTitle(title)
+      .then((res) => {
+        console.log(res.data)
+        if (res.data) return setResponseData(res.data)
+        else {
+          getOrders()
+            .then((response: any) => {
+              setResponseData(response.data)
+            }).finally(() => {
+              setIsLoading(false)
+            })
+        }
+      })
+      .catch((e) => {
+        console.log("erro")
+        getOrders()
+          .then((response: any) => {
+            setResponseData(response.data)
+          }).finally(() => {
+            setIsLoading(false)
+          })
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }
 
   return (
     <section className="home-background">
@@ -77,6 +105,7 @@ function Home() {
                 />
                 <Form.Control
                   style={{ boxShadow: 'none' }}
+                  onChange={(e) => handleFilterByTitle(e.target.value)}
                   className="primary-input"
                   placeholder="Busque aqui"
                   aria-label="Busque aqui"
@@ -88,7 +117,7 @@ function Home() {
           <Col lg={12} className="px-3 d-flex flex-column gap-2">
             <Row className="d-flex">
               {
-                loading ? (<CircularProgress style={{margin:"auto"}}/>) :
+                loading ? (<CircularProgress style={{ margin: "auto" }} />) :
                   responseData.map((data: any) => {
                     return UserStorage.getIsFreelancerLocalStorage() ? (
                       <Col xs={12} md={6} lg={4} className="p-3">
