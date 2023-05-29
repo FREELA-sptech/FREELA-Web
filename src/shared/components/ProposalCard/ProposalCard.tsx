@@ -11,6 +11,8 @@ import SnackbarContext from "../../../hooks/useSnackbar";
 import { notBlank } from "../../scripts/validators";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import OrderDetailsCard from "../../../pages/Order/OrderDetails/components/OrderDetailsCard/OrderDetailsCard";
+import { ChatApi } from "../../../api/chatApi";
+import { useNavigate } from "react-router-dom";
 
 
 function ProposalCard(props: any) {
@@ -19,7 +21,9 @@ function ProposalCard(props: any) {
   const [showDetails, setShowDetails] = useState(false);
   const [editingProposal, setEditingProposal] = useState(false);
   const { aceptProposals, deleteProposals, updateProposals, getOrdersById } = OrdersAPI();
+  const { createChat } = ChatApi();
   const { showSnackbar } = useContext(SnackbarContext);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState({
     description: '',
@@ -54,9 +58,9 @@ function ProposalCard(props: any) {
 
   const getOrderDetails = () => {
     getOrdersById(props.data.destinedOrder)
-    .then((res) => {
-      setOrderData(res.data)
-    })
+      .then((res) => {
+        setOrderData(res.data)
+      })
   }
 
   useEffect(() => {
@@ -98,10 +102,26 @@ function ProposalCard(props: any) {
   const handleAcceptProposals = () => {
     aceptProposals(props.data.destinedOrder, props.data.id)
       .then((res) => {
-        console.log(res.data)
+        const time = new Date()
+
+        const request = {
+          freelancerId: data.originUser.id,
+          userId: orderData.user.id,
+          orderId: orderData.id,
+          lastUpdate: time
+        }
+
+        createChat(request)
+          .then(() => {
+            showSnackbar(false, "Proposta aceita com sucesso, combine com o freelancer!")
+            navigate("/chat")
+          })
+          .catch(() => {
+            showSnackbar(true, "Problemas para aceitar a proposta, Tente Novamente!")
+          })
       })
       .catch(() => {
-
+        showSnackbar(true, "Problemas para aceitar a proposta, Tente Novamente!")
       })
   }
 

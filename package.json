@@ -43,6 +43,6 @@
     "@types/websocket": "^1.0.5",
     "@vitejs/plugin-react": "^3.1.0",
     "typescript": "^4.9.3",
-    "vite": "^4.2.0"
+    "vite": "^4.3.9"
   }
 }

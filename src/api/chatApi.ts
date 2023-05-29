@@ -9,7 +9,7 @@ export function ChatApi() {
   }
 
   async function createChat(formData: any) {
-    const response = await api.post("/chats", {});
+    const response = await api.post("/chats", formData);
     return response;
   }
 

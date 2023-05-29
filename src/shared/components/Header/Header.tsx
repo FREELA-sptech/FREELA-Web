@@ -55,6 +55,9 @@ function Header(props: any) {
                 <Link to='/home' className='tertiary-text' onClick={handleClose}>
                   {isAuthenticated ? isFreelancer ? "Encontre projetos" : "Encontre Profissionais" : ""}
                 </Link>
+                <Link to='/chat' className='tertiary-text' onClick={handleClose}>
+                  conversas
+                </Link>
               </Box>
               <Box className="d-flex flex-column flex-xl-row">
                 {!isAuthenticated ?

@@ -26,6 +26,7 @@ export default function ChatComponent({
         chatData.clientUser.id
 
     handleSendMessage(message, chatData.id, to)
+    setMessage('')
   }
 
   console.log(messagesData)
@@ -75,26 +76,24 @@ export default function ChatComponent({
             sender={UserStorage.getIdUserLocalStorage() == messageLocal.from.id} />
         ))}
       </Grid>
-      <Grid item className="chat-component-footer w-100 d-flex" style={{ padding: "1rem", gap: "0.8rem" }}>
+      <Grid item className="chat-component-footer w-100 d-flex" style={{ padding: "1rem", gap: "1rem" }}>
         <TextField
           id="description"
           name="description"
           fullWidth
           label="Mensagem"
           value={message}
+          size="small"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSubmit()
+            }
+          }}
           onChange={(e) => {
             setMessage(e.target.value)
           }}
         />
-        <Button
-          style={{
-            padding: "0.8rem",
-            background: "#274C77"
-          }}
-          onClick={handleSubmit}
-        >
-          <MdSend color="#fff" />
-        </Button>
+        <MdSend style={{ fontSize: '25px', height: '100%', cursor: 'pointer' }} color="#274C77" onClick={handleSubmit} />
       </Grid>
     </Grid>
   ) : null

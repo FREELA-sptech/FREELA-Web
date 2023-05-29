@@ -31,7 +31,19 @@ function ServicesAvailableCard(data: any) {
     step < localData.photos.length && setActiveStep(step);
   };
 
-  console.log(localData.photos)
+  const convertTime = (date: string) => {
+    const newTime = new Date(date);
+    const yyyy = newTime.getFullYear();
+    let mm: any = newTime.getMonth() + 1;
+    let dd: any = newTime.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+
+    return formattedToday
+  }
 
   return (
     <Card style={{ cursor: "pointer" }} title="Ver detalhes do pedido" onClick={() => navigate(`/order-details/${localData.id}`)} className="services-available-background b-radius position-relative overflow-hidden">
@@ -63,7 +75,7 @@ function ServicesAvailableCard(data: any) {
             onChangeIndex={handleStepChange}
             enableMouseEvents
             style={{
-              height: 'calc(100% - 30px)',
+              height: '100%',
               flexGrow: 1,
               position: 'relative'
             }}
@@ -72,45 +84,11 @@ function ServicesAvailableCard(data: any) {
               <div key={step.name} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
                 {Math.abs(activeStep - index) <= 2 ? (
                   <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
-                    <MobileStepper
-                      sx={{
-                        height: 50,
-                      }}
-                      steps={localData.photos.length}
-                      position="static"
-                      activeStep={activeStep}
-                      nextButton={
-                        <Button
-                          size="small"
-                          onClick={handleNext}
-                          disabled={activeStep === localData.photos.length - 1 || localData.photos.length == 0}
-                        >
-                          Next
-                          {theme.direction === 'rtl' ? (
-                            <KeyboardArrowLeft />
-                          ) : (
-                            <KeyboardArrowRight />
-                          )}
-                        </Button>
-                      }
-                      backButton={
-                        <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                          {theme.direction === 'rtl' ? (
-                            <KeyboardArrowRight />
-                          ) : (
-                            <KeyboardArrowLeft />
-                          )}
-                          Back
-                        </Button>
-                      }
-                    />
                     <Box
                       component="img"
                       sx={{
                         maxHeight: "100%",
                         display: 'block',
-                        maxWidth: "100%",
-                        width: "100%",
                         objectFit: "cover",
                         overflow: 'hidden'
                       }}
@@ -122,10 +100,9 @@ function ServicesAvailableCard(data: any) {
               </div>
             ))}
           </AutoPlaySwipeableViews>}
-
       </Box>
       <Card.Body className="mb-0">
-        <Card.Title className="text-color f-20 fw-semibold"
+        <Card.Title className="dark-contrast-color f-22 fw-semibold pb-1"
           style={{
             whiteSpace: "nowrap",
             overflow: "hidden",
@@ -147,7 +124,7 @@ function ServicesAvailableCard(data: any) {
           </Figure>
           <Figure className="d-flex align-items-center gap-2 w-auto m-0">
             <Figure.Caption className="d-flex flex-column f-12 f-poppings">
-              Prazo: <span className="f-roboto f-18 text-color fw-bold">{localData.expirationTime}</span>
+              Prazo: <span className="f-roboto f-18 text-color fw-bold">{convertTime(localData.expirationTime)}</span>
             </Figure.Caption>
           </Figure>
         </Row>
@@ -174,8 +151,6 @@ function ServicesAvailableCard(data: any) {
                   >
                     <Avatar
                       sx={{
-                        width: 32,
-                        height: 32,
                         bgcolor: "#274C77",
                         border: '4px solid white'
                       }}
@@ -189,7 +164,7 @@ function ServicesAvailableCard(data: any) {
           </Box>
         </Row>
       </Card.Body>
-      <ButtonBase  className="b-radius-button w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} onClick={() => {}} ></ButtonBase>
+      <ButtonBase className="b-radius-button w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} onClick={() => { }} ></ButtonBase>
     </Card >
   );
 }

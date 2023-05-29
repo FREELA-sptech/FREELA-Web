@@ -33,6 +33,8 @@ function OrderDetails() {
   const [showSendProposalsModal, setShowSendProposalsModal] = useState(false)
   const { showSnackbar } = useContext(SnackbarContext);
   const [proposals, setProposals] = useState()
+  const [dataAccepted, setDataAccepted] = useState<any>([])
+  const [dataRefused, setDataRefused] = useState<any>([])
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState({
@@ -78,6 +80,19 @@ function OrderDetails() {
       deletedPhotos: []
     })
     setProposals(newValues.proposals)
+
+    const acceptedList: any[] = []
+    const refusedList: any = []
+
+    newValues.proposals.map((localData: any) => {
+      localData.isAccepted && acceptedList.push(localData)
+    })
+    setDataAccepted(acceptedList)
+
+    newValues.proposals.map((localData: any) => {
+      localData.isRefused && refusedList.push(localData)
+    })
+    setDataRefused(refusedList)
   }
 
   const handleGetOrderDetails = () => {
@@ -85,7 +100,8 @@ function OrderDetails() {
       .then((res) => {
         updateValues(res.data)
       })
-      .catch((error) => {
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer os detalhes da ordem!")
       })
       .finally(() => {
         setIsLoading(false)
@@ -130,11 +146,11 @@ function OrderDetails() {
           .then((res) => {
             updateValues(res.data)
             handleHiddenEditOrder()
-            showSnackbar(false, "Ordem editada com sucesso!")
+            showSnackbar(false, "Pedido editado com sucesso!")
           })
       })
       .catch((error) => {
-        showSnackbar(true, "Problemas para editar ordem!")
+        showSnackbar(true, "Problemas para editar o pedido!")
       })
   }
 
@@ -145,12 +161,6 @@ function OrderDetails() {
   return (
     <section className="home-background">
       <Container>
-        <Breadcrumbs maxItems={2} aria-label="breadcrumb">
-          <Link to={"/home"} color="inherit">
-            Home
-          </Link>
-          <Typography color="text.primary">Detalhes do Pedido</Typography>
-        </Breadcrumbs>
         <Row className="d-flex px-3"
           style={{
             backgroundColor: 'white',
@@ -182,14 +192,82 @@ function OrderDetails() {
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                   <Tab label={"Propostas Recebidas"} value="1" />
+                  <Tab label="Proposta Aceita" value="2" />
+                  <Tab label="Propostas Recusadas" value="3" />
                 </TabList>
               </Box>
               <TabPanel value="1" className="px-0">
                 <Grid container spacing={4} xs={12}>
-                  {proposals && proposals.map((localData: any) => (
-                    <Grid item xs={12} md={6} lg={3} key={localData.id}>
-                      <ProposalCard data={localData} />
-                    </Grid>))}
+                  {proposals && proposals.length > 0 ?
+                    proposals.map((localData: any) => (
+                      <Grid item xs={12} md={6} lg={3} key={localData.id}>
+                        <ProposalCard data={localData} />
+                      </Grid>)
+                    ) : (
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Typography variant="body2" className="f-22 pt-4">
+                          Você ainda não possui nenhuma proposta
+                        </Typography>
+                      </Grid>
+                    )}
+                </Grid>
+              </TabPanel>
+              <TabPanel value="2" className="px-0">
+                <Grid container spacing={4}>
+                  {dataAccepted.length <= 0 ? (
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      justifyContent="flex-end"
+                      alignItems="center"
+                      flexDirection="column"
+                      gap={2}
+                    >
+                      <Typography variant="body2" className="f-22">
+                        Você ainda não aceitou nenhuma proposta!
+                      </Typography>
+                    </Grid>
+                  ) : (
+                    dataAccepted.map((localData: any) => (
+                      <Grid item xs={12} md={6} lg={4}>
+                        <ProposalCard data={localData} />
+                      </Grid>
+                    ))
+                  )}
+                </Grid>
+              </TabPanel>
+              <TabPanel value="3" className="px-0">
+                <Grid container spacing={4}>
+                  {dataRefused.length <= 0 ? (
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      justifyContent="flex-end"
+                      alignItems="center"
+                      flexDirection="column"
+                      gap={2}
+                    >
+                      <Typography variant="body2" className="f-22">
+                        Nenhuma proposta recusada, continue assim! :)
+                      </Typography>
+                    </Grid>
+                  ) : (
+                    dataRefused.map((localData: any) => (
+                      <Grid item xs={12} md={6} lg={4}>
+                        <ProposalCard data={localData} />
+                      </Grid>
+                    ))
+                  )}
                 </Grid>
               </TabPanel>
             </TabContext>

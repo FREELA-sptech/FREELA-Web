@@ -7,7 +7,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete'
 import { OrdersAPI } from "../../../../../api/ordersApi";
-import { Avatar, Backdrop, Box, Button, CircularProgress, Container, Fab, Grid, InputAdornment, MobileStepper, Skeleton, TextField, Typography, useTheme } from '@mui/material';
+import { Avatar, AvatarGroup, Backdrop, Box, Button, CircularProgress, Container, Fab, Grid, InputAdornment, MobileStepper, Skeleton, TextField, Typography, useTheme } from '@mui/material';
 import HtmlTooltip from "../../../../../shared/tools/MuiTooltipCustom";
 import { InterestForm } from "../../../../../shared/components/InterestForm/InterestForm";
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -56,10 +56,26 @@ function OrderDetailsCard({
     step < data.photos.length && setActiveStep(step);
   };
 
+  const convertTime = (date: string) => {
+    const newTime = new Date(date);
+    const yyyy = newTime.getFullYear();
+    let mm: any = newTime.getMonth() + 1;
+    let dd: any = newTime.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+
+    return formattedToday
+  }
+
+  console.log(data)
+
   return (
     <Grid container className="pt-4 px-0 d-flex gap-3" maxWidth={"100%"} position={"relative"}>
       {user.id === UserStorage.getIdUserLocalStorage() ?
-        handleShowEditOrder && (
+        handleShowEditOrder && data && (
           <Box
             className="position-absolute"
             sx={{
@@ -246,51 +262,50 @@ function OrderDetailsCard({
                 <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                   Prazo:
                   <span className="f-roboto f-18 text-color fw-bold">
-                    {data.expirationTime}
+                    {convertTime(data.expirationTime)}
                   </span>
                 </Figure.Caption>
               </Figure>
             </Grid>
           </Grid>
           <Grid container item xs={12} className="p-0 mb-3">
-            <Grid item xs={12} className="p-0 pe-2 mb-3">
+            <Grid item xs={12} className="p-0 pe-2 mb-1">
               <h1 className="text-color f-18 f-inter fw-bold mt-2">Categorias</h1>
             </Grid>
             <Grid item xs={12} className="p-0 mb-3">
               <Box className="w-auto d-flex gap-2 ps-0">
-                {data.subCategories.map((categories: any) => (
-                  <HtmlTooltip
-                    key={categories.name}
-                    title={
-                      <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
-                    }
-                    placement="top"
-                    PopperProps={{
-                      sx: {
-                        padding: 0
-                      },
-                      disablePortal: true,
-                    }}
-                  >
-                    <Box >
+                <AvatarGroup max={500} className="flex-wrap">
+                  {data.subCategories.map((categories: any) => (
+                    <HtmlTooltip
+                      key={categories.name}
+                      title={
+                        <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
+                      }
+                      placement="top"
+                      PopperProps={{
+                        sx: {
+                          padding: 0
+                        },
+                        disablePortal: true,
+                      }}
+                    >
                       <Avatar
                         sx={{
-                          width: 40,
-                          height: 40,
-                          bgcolor: "#6096BA",
+                          bgcolor: "#274C77",
+                          border: '4px solid white'
                         }}
                         alt={categories.name}
-                        src={`data:image/png;base64,`}
+                        src={`data:image/png;base64,asdasd`}
                       />
-                    </Box>
-                  </HtmlTooltip>
-                ))}
+                    </HtmlTooltip>
+                  ))}
+                </ AvatarGroup>
               </Box>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </Grid >
   )
 }
 

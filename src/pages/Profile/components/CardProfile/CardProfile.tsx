@@ -1,6 +1,6 @@
 import { Figure } from "react-bootstrap";
 import "./style.scss"
-import { Alert, Autocomplete, Avatar, Box, Chip, CircularProgress, Dialog, Grid, Input, Skeleton, TextField, Typography } from "@mui/material";
+import { Alert, Autocomplete, Avatar, AvatarGroup, Box, Chip, CircularProgress, Dialog, Grid, Input, Skeleton, TextField, Typography } from "@mui/material";
 import { deepOrange } from '@mui/material/colors';
 import StarIcon from '@mui/icons-material/Star';
 import EditIcon from '@mui/icons-material/Edit';
@@ -274,7 +274,7 @@ function CardProfile() {
                   <StarIcon color="primary" sx={{ fontSize: '12px' }} />
                 </Box>
               </Box>
-              <span className="text-color fw-normal f-poppings aditional-color  ">{userDetailsData.city}, {userDetailsData.uf}</span>
+              <span className="text-color fw-normal f-poppings aditional-color">{userDetailsData.city}, {userDetailsData.uf}</span>
               {isFreelancer ? (
                 <span className="py-3 f-poppings aditional-color f-16">
                   "{userDetailsData.description}"
@@ -283,36 +283,35 @@ function CardProfile() {
               <h1 className="text-color f-18 f-inter fw-bold mt-3">
                 {isFreelancer ? "Minhas Especialidades" : "Meus Interesses"}
               </h1>
-              <Box className="w-auto d-flex gap-2">
-                {userDetailsData &&
-                  userDetailsData.subCategories.map((categories: any) => (
-                    <HtmlTooltip
-                      key={categories.name}
-                      title={
-                        <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
-                      }
-                      placement="top"
-                      PopperProps={{
-                        sx: {
-                          padding: 0
-                        },
-                        disablePortal: true,
-                      }}
-                    >
-                      <Box >
+              <Box className="w-auto d-flex flex-wrap gap-2">
+                <AvatarGroup max={500} className="d-flex">
+                  {userDetailsData &&
+                    userDetailsData.subCategories.map((categories: any) => (
+                      <HtmlTooltip
+                        key={categories.name}
+                        title={
+                          <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
+                        }
+                        placement="top"
+                        PopperProps={{
+                          sx: {
+                            padding: 0
+                          },
+                          disablePortal: true,
+                        }}
+                      >
                         <Avatar
                           sx={{
-                            width: 40,
-                            height: 40,
-                            bgcolor: "#6096BA",
+                            bgcolor: "#274C77",
+                            border: '4px solid white'
                           }}
                           alt={categories.name}
-                          src={`data:image/png;base64,`}
+                          src={`data:image/png;base64,asdasd`}
                         />
-                      </Box>
-                    </HtmlTooltip>
-                  ))
-                }
+                      </HtmlTooltip>
+                    ))
+                  }
+                </AvatarGroup>
               </Box>
             </>
           )}

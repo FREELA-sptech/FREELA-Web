@@ -1,6 +1,6 @@
 import { Accordion, Card, Col, Container, Figure, Form, Modal, Row, useAccordionButton } from "react-bootstrap";
 import './style.scss'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ServicesAvailableCard from "../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
 import FreelancerProfileCard from "../../shared/components/FreelancerProfileCard/FreelancerProfileCard";
 import CardProfile from "./components/CardProfile/CardProfile";
@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { UserAPI } from "../../api/userApi";
 import { OrdersAPI } from "../../api/ordersApi";
 import CardProposta from "../Proposta/components/CardProposta/CardProposta";
+import SnackbarContext from "../../hooks/useSnackbar";
 
 
 function Profile() {
@@ -28,6 +29,7 @@ function Profile() {
   const [data, setData] = useState([])
   const [dataAccepted, setDataAccepted] = useState<any>([])
   const [dataRefused, setDataRefused] = useState<any>([])
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -42,6 +44,9 @@ function Profile() {
     getOrdersByUser()
       .then((res) => {
         setData(res.data)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as ordens!")
       })
   }
 
@@ -61,10 +66,10 @@ function Profile() {
         res.data.map((localData: any) => {
           localData.isRefused && refusedList.push(localData)
         })
-        setDataAccepted(refusedList)
+        setDataRefused(refusedList)
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as propostas!")
       })
   }
 
