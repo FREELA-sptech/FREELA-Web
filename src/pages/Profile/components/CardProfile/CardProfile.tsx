@@ -1,10 +1,10 @@
 import { Figure } from "react-bootstrap";
 import "./style.scss"
-import { Alert, Autocomplete, Avatar, Box, Chip, CircularProgress, Dialog, Grid, Input, Skeleton, TextField, Typography } from "@mui/material";
+import { Alert, Autocomplete, Avatar, AvatarGroup, Box, Chip, CircularProgress, Dialog, Grid, Input, Skeleton, TextField, Typography } from "@mui/material";
 import { deepOrange } from '@mui/material/colors';
 import StarIcon from '@mui/icons-material/Star';
 import EditIcon from '@mui/icons-material/Edit';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserAPI } from "../../../../api/userApi";
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
@@ -13,13 +13,13 @@ import AddIcon from '@mui/icons-material/Add';
 import HtmlTooltip from "../../../../shared/tools/MuiTooltipCustom";
 import Snackbar from '@mui/material/Snackbar';
 import { ExternalAPI } from "../../../../api/externalApi";
-import useSnackbar from "../../../../hooks/useSnackbar";
 import { InterestForm } from "../../../../shared/components/InterestForm/InterestForm";
 import { UserStorage } from "../../../../store/userStorage";
+import SnackbarContext from "../../../../hooks/useSnackbar";
 
 
 
-function CardProfile() {
+function CardProfile(props: any) {
   const [userDetailsData, setUserDetailsData] = useState<any>({})
   const [userEditDetails, setUserEditDetails] = useState<any>({})
   const [userEditErrorDetails, setUserEditErrorDetails] = useState<any>({})
@@ -29,19 +29,32 @@ function CardProfile() {
   const [disableInputs, setDisableInputs] = useState(false)
   const [ufsData, setUfsData] = useState<any>([])
   const [citysData, setCitysData] = useState<any>([])
-  const [SnackbarComponent, showSnackbar] = useSnackbar();
-  const { userDetails, uploadPicture, updateUser } = UserAPI();
-  const isFreelancer = UserStorage.getIsFreelancerLocalStorage();
+  const { showSnackbar } = useContext(SnackbarContext);
+  const { userDetails, uploadPicture, updateUser, userDetailsById } = UserAPI();
+  const { setIsFreelancer, isFreelancer, userId } = props;
 
   useEffect(() => {
-    userDetails()
-      .then((res) => {
-        updateUserData(res.data)
-        setLoading(false)
-      })
-      .catch((error) => {
-        showSnackbar(true, error.response.data);
-      })
+    if (userId) {
+      userDetailsById(userId)
+        .then((res) => {
+          updateUserData(res.data)
+          setIsFreelancer(res.data.closedOrders != undefined)
+          setLoading(false)
+        })
+        .catch((error) => {
+          showSnackbar(true, error.response.data);
+        })
+    } else {
+      setIsFreelancer(UserStorage.getIsFreelancerLocalStorage())
+      userDetails()
+        .then((res) => {
+          updateUserData(res.data)
+          setLoading(false)
+        })
+        .catch((error) => {
+          showSnackbar(true, error.response.data);
+        })
+    }
   }, [])
 
   const setField = (field: any, value: any) => {
@@ -62,7 +75,7 @@ function CardProfile() {
       city: user.city,
       uf: user.uf,
       description: user.description,
-      subCategoryId: user.subcategories
+      subCategoryId: user.subCategories
     }
 
     setUserEditDetails(initalEditingValues)
@@ -112,7 +125,6 @@ function CardProfile() {
       reader.onloadend = () => {
         const formData = new FormData();
         formData.append('image', file);
-
         uploadPicture(formData)
           .then((res) => {
             userDetailsData.profilePhoto = res.data.profilePhoto
@@ -170,8 +182,11 @@ function CardProfile() {
         borderRadius: '16px 16px 0 0'
       }}
     >
-      <SnackbarComponent />
-      <Box className="position-relative d-flex flex-row gap-4" sx={{ height: '200px', backgroundColor: 'blue' }}>
+      <Box className="position-relative d-flex flex-row gap-4"
+        sx={{
+          height: '200px',
+          background: 'var(--ligth-contrast-color)'
+        }}>
         {loading ? (
           <Box
             className="position-absolute"
@@ -241,7 +256,7 @@ function CardProfile() {
             <ClearIcon onClick={handleCloseEdit} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
             <DoneIcon onClick={handleSendEdit} sx={{ fontSize: '30px' }} color="success" />
           </Box>
-        ) : (
+        ) : !userId && (
           <EditIcon
             onClick={handleEdit}
             className="position-absolute"
@@ -272,7 +287,7 @@ function CardProfile() {
                   <StarIcon color="primary" sx={{ fontSize: '12px' }} />
                 </Box>
               </Box>
-              <span className="text-color fw-normal f-poppings aditional-color  ">{userDetailsData.city}, {userDetailsData.uf}</span>
+              <span className="text-color fw-normal f-poppings aditional-color">{userDetailsData.city}, {userDetailsData.uf}</span>
               {isFreelancer ? (
                 <span className="py-3 f-poppings aditional-color f-16">
                   "{userDetailsData.description}"
@@ -281,36 +296,35 @@ function CardProfile() {
               <h1 className="text-color f-18 f-inter fw-bold mt-3">
                 {isFreelancer ? "Minhas Especialidades" : "Meus Interesses"}
               </h1>
-              <Box className="w-auto d-flex gap-2">
-                {userDetailsData &&
-                  userDetailsData.subcategories.map((categories: any) => (
-                    <HtmlTooltip
-                      key={categories.name}
-                      title={
-                        <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
-                      }
-                      placement="top"
-                      PopperProps={{
-                        sx: {
-                          padding: 0
-                        },
-                        disablePortal: true,
-                      }}
-                    >
-                      <Box >
+              <Box className="w-auto d-flex flex-wrap gap-2">
+                <AvatarGroup max={500} className="d-flex">
+                  {userDetailsData &&
+                    userDetailsData.subCategories.map((categories: any) => (
+                      <HtmlTooltip
+                        key={categories.name}
+                        title={
+                          <h1 key={categories.name} style={{ borderRadius: '10px' }} className="px-3 m-0 tooltip fw-bold">{categories.name}</h1>
+                        }
+                        placement="top"
+                        PopperProps={{
+                          sx: {
+                            padding: 0
+                          },
+                          disablePortal: true,
+                        }}
+                      >
                         <Avatar
                           sx={{
-                            width: 40,
-                            height: 40,
-                            bgcolor: "#6096BA",
+                            bgcolor: "#274C77",
+                            border: '4px solid white'
                           }}
                           alt={categories.name}
-                          src={`data:image/png;base64,${userDetailsData.profilePhoto}`}
+                          src={`data:image/png;base64,asdasd`}
                         />
-                      </Box>
-                    </HtmlTooltip>
-                  ))
-                }
+                      </HtmlTooltip>
+                    ))
+                  }
+                </AvatarGroup>
               </Box>
             </>
           )}

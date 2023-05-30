@@ -2,6 +2,7 @@ import './style.scss'
 
 import AppRoutes from "./AppRoutes"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { SnackbarProvider } from './hooks/useSnackbar';
 
 const theme = createTheme({
   palette: {
@@ -15,9 +16,11 @@ const theme = createTheme({
 });
 
 const App = () => (
-  <ThemeProvider theme={theme}>
-    <AppRoutes />
-  </ThemeProvider>
-)
+  <SnackbarProvider>
+    <ThemeProvider theme={theme}>
+      <AppRoutes />
+    </ThemeProvider>
+  </SnackbarProvider>
+);
 
 export default App

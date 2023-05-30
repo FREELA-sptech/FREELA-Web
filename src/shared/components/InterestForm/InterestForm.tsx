@@ -6,8 +6,9 @@ import { Autocomplete, Box, Checkbox, TextField, Typography } from "@mui/materia
 import Chip from '@mui/material/Chip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled, lighten, darken } from '@mui/system';
-import useSnackbar from "../../../hooks/useSnackbar";
+import React, { useContext } from 'react';
 import { CategoriesAPI } from "../../../api/categoriesApi";
+import SnackbarContext from "../../../hooks/useSnackbar";
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -27,7 +28,7 @@ const GroupItems = styled('ul')({
 export function InterestForm(props: any) {
   const [selectedItems, setSelectedItems] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([])
-  const [SnackbarComponent, showSnackbar] = useSnackbar();
+  const { showSnackbar } = useContext(SnackbarContext);
   const { getSubCategories } = CategoriesAPI();
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -54,17 +55,11 @@ export function InterestForm(props: any) {
       .then((res) => {
         setSubCategories(res.data)
         let filteredData = []
-
-
         if (typeof props.formData.subCategoryId[0] === "number") {
           filteredData = res.data.filter((item: any) => props.formData.subCategoryId.includes(item.id))
         } else {
           filteredData = res.data.filter((item: any) => props.formData.subCategoryId.some((obj: any) => obj.id === item.id))
         }
-
-        console.log(props.formData.subCategoryId)
-        console.log(res.data)
-        console.log(filteredData)
 
         setSelectedItems(filteredData)
       })
@@ -73,12 +68,8 @@ export function InterestForm(props: any) {
       })
   }, [])
 
-  console.log(selectedItems)
-
-
   return (
     <Box>
-      <SnackbarComponent />
       <Box sx={{ gap: 0 }}>
         <Typography variant="body2" className="f-12">
           Busque as Categorias:
@@ -135,7 +126,7 @@ export function InterestForm(props: any) {
             </li>
           )}
         />
-        <Box sx={{ maxHeight: '200px', overflow: 'scroll' }}>
+        <Box sx={{ maxHeight: '200px', overflowY: 'scroll', minHeight: '150px' }}>
           <Box sx={{ padding: '15px', display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {selectedItems.map((item: any) => (
               <Chip
@@ -162,3 +153,4 @@ export function InterestForm(props: any) {
     </Box>
   )
 }
+;

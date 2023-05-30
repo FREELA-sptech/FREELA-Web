@@ -5,22 +5,38 @@ import "./style.scss"
 import { useEffect, useState } from "react";
 import { notBlank } from "../../../../shared/scripts/validators";
 import { MdAttachMoney, MdDescription } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Grid } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import { Box, Button, Fab, Input, InputAdornment, InputLabel, MobileStepper, useTheme } from "@mui/material";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateField } from "@mui/x-date-pickers";
+import { OrdersAPI } from "../../../../api/ordersApi";
+import dayjs from "dayjs";
 
 function CardProposta(props: any) {
-
-  const { setShow } = props;
+  const { handleCloseModal } = props
   const navigate = useNavigate();
+  const params = useParams();
+  const { sendProposals } = OrdersAPI();
+
+  const { id } = params;
+
   const [formData, setFormData] = useState({
     description: '',
-    maxValue: '',
-    deadline: ''
+    proposalValue: '',
+    expirationTime: ''
   });
+
   const [errors, setErrors] = useState({
     description: '',
-    maxValue: '',
-    deadline: ''
+    proposalValue: '',
+    expirationTime: ''
   });
+
   const setField = (field: any, value: any) => {
     setFormData({
       ...formData, [field]: value
@@ -33,11 +49,11 @@ function CardProposta(props: any) {
   }
 
   const validateForm = () => {
-    const { maxValue, deadline, description, } = formData;
+    const { description, expirationTime, proposalValue } = formData;
     const newErros = {
       description: '',
-      maxValue: '',
-      deadline: ''
+      proposalValue: '',
+      expirationTime: '',
     }
 
     if (notBlank(description)) {
@@ -45,18 +61,25 @@ function CardProposta(props: any) {
     } else if (description.length < 30) {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
-    if (notBlank(maxValue)) {
-      newErros.maxValue = "O campo Valor máximo não pode estar vazio";
+
+    if (notBlank(proposalValue)) {
+      newErros.proposalValue = "O campo valor máximo não pode estar vazio";
+    } else if (Number(proposalValue) <= 0) {
+      newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
     }
-    if (notBlank(deadline)) {
-      newErros.deadline = "O campo prazo não pode estar vazio";
+
+    if (notBlank(expirationTime)) {
+      newErros.expirationTime = "O prazo não pode estar vazio";
+    } else if (Number(expirationTime) <= 0) {
+      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
+      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
     }
 
     return newErros;
   }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     try {
       const errors = validateForm();
       const valores = Object.values(errors);
@@ -65,90 +88,114 @@ function CardProposta(props: any) {
         setErrors(errors);
       } else {
         setFormData(formData);
-        setShow(true);
-        const timeoutId = setTimeout(() => {
-          setShow(false);
-          navigate('/home');
-        }, 1500);
-        return () => clearTimeout(timeoutId);
+        sendProposals(id, formData)
+          .then((res) => {
+            handleCloseModal()
+            console.log(res)
+          })
+          .catch(() => { })
       }
     } catch (error) {
-      console.log(error);
     }
   };
+
+  const handleCancel = () => {
+    navigate("/home")
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="d-flex flex-column align-self-start">
-        <div>
-          <h4>Orçamento</h4>
-        </div>
-        <div className="d-flex justify-content-start gap-lg-3 flex-wrap">
-          <Form.Group>
-            <Form.Label>
-              Valor que você deseja receber
-            </Form.Label>
-            <InputGroup hasValidation>
-              <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
-              <Form.Control
-                onChange={(e) => setField("maxValue", e.target.value)}
-                name="maxValue"
-                size="lg"
-                value={formData.maxValue}
-                type="number"
-                isInvalid={!!errors.maxValue}
+    <Grid container className="pt-0 px-0" maxWidth={"100%"}>
+      <Grid item xs={12} className="px-3 mb-3">
+        <Grid container item xs={12}>
+          <Typography variant="body2" className="f-22 fw-bold mb-4">
+            Orçamento:
+          </Typography>
+        </Grid>
+        <Grid container item xs={5} className="p-0 mb-3">
+          <Grid item xs={6} className="p-0 pe-2 mb-3">
+            <Typography variant="body2" className="f-12">
+              Preço:
+            </Typography>
+            <TextField
+              error={!!errors.proposalValue}
+              id="proposalValue"
+              name="proposalValue"
+              fullWidth
+              type="number"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
+              value={formData.proposalValue}
+              autoComplete="given-name"
+              variant="standard"
+              helperText={
+                errors.proposalValue
+                  ? (
+                    <Typography variant="body2" className="f-14">
+                      {errors.proposalValue || " "}
+                    </Typography>
+                  )
+                  : " "
+              }
+              onChange={(e) => setField("proposalValue", e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={6} className="p-0 ps-2 mb-3">
+            <Typography variant="body2" className="f-12">
+              Prazo:
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                fullWidth
+                variant="standard"
+                value={formData.expirationTime}
+                onChange={(e) => setField('expirationTime', e.$d)}
+                className="p-0"
+                slotProps={{
+                  textField: {
+                    helperText: errors.expirationTime ? (
+                      <Typography variant="body2" className="f-14">
+                        {errors.expirationTime}
+                      </Typography>
+                    ) : null
+                  }
+                }}
+                format="DD-MM-YYYY"
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.maxValue}
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>
-              Prazo
-            </Form.Label>
-            <Form.Control
-              onChange={(e) => setField("deadline", e.target.value)}
-              name="deadline"
-              value={formData.deadline}
-              size="lg"
-              type="date"
-              isInvalid={!!errors.deadline}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.deadline}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </div>
-        <div className="info-line">
-          <h4>Detalhes</h4>
-          <Form.Group>
-            <Form.Label>
-              Descrição
-            </Form.Label>
-            <Form.Control
-              onChange={(e) => setField("description", e.target.value)}
-              as="textarea"
-              name="description"
-              value={formData.description}
-              size="lg"
-              type="description"
-              isInvalid={!!errors.description}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.description}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <div className="p-2">
-            <button type="submit" className="primary-standart">
-              Confirmar
-            </button>
-            <button onClick={() => navigate('/home')} type="button" className="primary-text">
-              Cancelar
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
+            </LocalizationProvider>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className="p-0 mb-3">
+          <Typography variant="body2" className="f-12">
+            Descrição:
+          </Typography>
+          <TextField
+            error={!!errors.description}
+            id="description"
+            name="description"
+            fullWidth
+            value={formData.description}
+            variant="outlined"
+            helperText={
+              errors.description
+                ? (
+                  <Typography variant="body2" className="f-14">
+                    {errors.description || " "}
+                  </Typography>
+                )
+                : " "
+            }
+            onChange={(e) => setField("description", e.target.value)}
+            multiline
+            rows={4}
+          />
+        </Grid>
+        <Grid container item justifyContent="space-between" xs={12}>
+          <button className="primary-outline w-auto" onClick={handleCancel}>{"Cancelar"}</button>
+          <button className="primary-standart w-auto" onClick={handleSubmit}>{"Finalizar"}</button>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
 

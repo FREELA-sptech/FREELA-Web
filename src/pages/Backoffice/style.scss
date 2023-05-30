@@ -1,0 +1,45 @@
+
+.backoffice-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 40vw;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.316);
+    border-radius: 20px;
+    margin-top: 20vh;
+    
+    
+    
+    .h1-backoffice {
+      font-size: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--dark-contrast-color);
+      
+    }
+    
+    .input-backoffice{
+        width: 40vh;
+        border: dashed var(--dark-contrast-color);
+        border-radius: 10px;
+        height: 6vw;
+        position: relative;
+        
+    }
+
+   .primary-standart {
+    margin-top: 20px;
+    width: 20vh;
+   }
+
+   .icon {
+   margin-left: 140px;
+   position: relative;
+   position: absolute;
+   color: var(--dark-contrast-color);
+  }
+  
+ 
+} 

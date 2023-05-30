@@ -8,63 +8,79 @@ import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { OrdersAPI } from "../../api/ordersApi";
 import { UserAPI } from "../../api/userApi";
+import { Box, CircularProgress, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('');
   const [responseData, setResponseData] = useState([])
-  const { getOrders } = OrdersAPI()
+  const [freelancerData, setFreelancerData] = useState([])
+  const { getOrders, findByTitle, getAllOrders } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
+  const [filter, setFilter] = useState("all");
+  const [message, setMessage] = useState("");
+  const items = [];
 
   const handleClose = () => setShowModal(false)
   const handleOpen = () => setShowModal(true)
+  const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (UserStorage.getIsFreelancerLocalStorage()) {
-      getOrders()
+      getOrders("all")
         .then((res: any) => {
           setResponseData(res.data)
+        }).finally(() => {
+          setIsLoading(false)
         })
     } else {
       getFreelancersByInterests()
         .then((res: any) => {
-          console.log(res)
-          setResponseData(res.data)
+          setFreelancerData(res.data)
+          console.log(res.data);
+        }).finally(() => {
+          setIsLoading(false)
         })
     }
   }, [])
 
+  const handleFilterByText = (text: string) => {
+    setSearchTerm(text)
+  }
+
+  const filteredItems = responseData && responseData.filter((item: any) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredFreelancer = freelancerData && freelancerData.filter((item: any) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
+  const handleSelectDataByInterest = (type: string) => {
+    setFilter(type)
+    getOrders(type)
+      .then((res: any) => {
+        setResponseData(res.data)
+      }).finally(() => {
+        setIsLoading(false)
+      })
+  }
+
+
   return (
     <section className="home-background">
       <Container>
-        <Row className="pt-3 pb-3 d-flex justify-content-end">
-          <h1 className="title-underline d-flex flex-column justify-content-end w-auto text-uppercase f-roboto dark-contrast-color fw-bold f-30 dark-contrast-color">
-            {UserStorage.getIsFreelancerLocalStorage() ? 'projetos disponíveis' : 'profissionais disponíveis'}
-          </h1>
-        </Row>
         <Row className="d-flex">
-          <Modal className="d-block d-lg-none w-100 h-100" show={showModal} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Filtrar</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <FiltersCard />
-            </Modal.Body>
-          </Modal>
-          <Col lg={3} className="d-none d-lg-block">
-            <FiltersCard />
-          </Col>
-          <Col lg={9} className="px-3 d-flex flex-column gap-2">
+          <Row className="pt-3 pb-3 d-flex">
+            <h1 className="d-flex flex-column w-auto text-uppercase f-roboto dark-contrast-color fw-bold f-30">
+              {UserStorage.getIsFreelancerLocalStorage() ? 'projetos disponíveis' : 'profissionais disponíveis'}
+            </h1>
+          </Row>
+
+          <Col lg={12}>
             <Row className="px-lg-3 px-0 d-flex gap-2">
-              <Figure onClick={handleOpen} className="home-icon-background d-flex d-lg-none justify-content-center align-items-center">
-                <Figure.Image
-                  width='40px'
-                  height='40px'
-                  alt="icone filtro"
-                  src="assets/icons/filter.svg"
-                  className="m-0"
-                />
-              </Figure>
-              <InputGroup className="p-0 primary-input w-auto flex-grow-1">
+              <InputGroup className="p-0 primary-input w-auto flex-grow-1 mb-3">
                 <Figure.Image
                   width='15px'
                   height='15px'
@@ -74,6 +90,7 @@ function Home() {
                 />
                 <Form.Control
                   style={{ boxShadow: 'none' }}
+                  onChange={(e) => handleFilterByText(e.target.value)}
                   className="primary-input"
                   placeholder="Busque aqui"
                   aria-label="Busque aqui"
@@ -81,18 +98,48 @@ function Home() {
                 />
               </InputGroup>
             </Row>
+          </Col>
+          <Col lg={12} className="px-3 d-flex flex-column gap-2">
             <Row className="d-flex">
-              {responseData.map((data: any) => {
-                return UserStorage.getIsFreelancerLocalStorage() ? (
+              {UserStorage.getIsFreelancerLocalStorage() &&
+                <Col xs={12} className="w-100 justify-content-end d-flex flex-column py-2">
+                  <Box className="w-25">
+                    <InputLabel id="demo-simple-select-helper-label">Ordernar por:</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      value={filter}
+                      className="w-100"
+                      onChange={(e) => handleSelectDataByInterest(e.target.value)}
+                    >
+                      <MenuItem value={"all"}>Relevância</MenuItem>
+                      <MenuItem value={"mais-barato"}>Menor Preço</MenuItem>
+                      <MenuItem value={"mais-caro"}>Maior Preço</MenuItem>
+                    </Select>
+                  </Box>
+                </Col>}
+
+              {filteredFreelancer.length <= 0 && filteredItems.length <= 0 && (
+                <Col xs={12} className="d-flex justify-content-center pt-2">
+                  <Typography variant="body2" className="f-22">
+                    Nenhum resultado para a busca
+                  </Typography>
+                </Col>
+              )}
+
+              {!UserStorage.getIsFreelancerLocalStorage() &&
+                filteredFreelancer.map((data: any) => (
+                  <Col xs={12} md={6} lg={4} className="p-3">
+                    <FreelancerProfileCard data={data} />
+                  </Col>
+                ))}
+
+              {UserStorage.getIsFreelancerLocalStorage() &&
+                filteredItems.map((data: any) => (
                   <Col xs={12} md={6} lg={4} className="p-3">
                     <ServicesAvailableCard data={data} />
                   </Col>
-                ) : (
-                  <Col xs={12} md={6} lg={4} className="p-3">
-                    <FreelancerProfileCard props={data} />
-                  </Col>
-                )
-              })}
+                ))}
             </Row>
           </Col>
         </Row>

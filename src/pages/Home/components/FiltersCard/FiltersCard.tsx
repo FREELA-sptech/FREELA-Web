@@ -1,74 +1,24 @@
-import { Accordion, Figure, Form, ListGroup } from "react-bootstrap";
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 import './style.scss'
 
-function FiltersCard() {
+function FiltersCard(props: any) {
+  const {handleSelectDataByInterest} = props;
   return (
-    <Accordion className="d-flex flex-column gap-2" alwaysOpen>
-      <Accordion.Item eventKey="0" className="filters-card-background">
-        <Accordion.Header className="filters-card-header">
-          <Figure.Image
-            width='40px'
-            height='40px'
-            alt="icone filtro"
-            src="assets/icons/ordenation.svg"
-            className="m-0"
-          />
-          Ordenar
-        </Accordion.Header>
-        <Accordion.Body>
-          <ListGroup>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-          </ListGroup>
-        </Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="1" className="filters-card-background">
-        <Accordion.Header className="filters-card-header">
-          <Figure.Image
-            width='40px'
-            height='40px'
-            alt="icone filtro"
-            src="assets/icons/ordenation.svg"
-            className="m-0"
-          />
-          Ordenar
-        </Accordion.Header>
-        <Accordion.Body>
-          <ListGroup>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-            <ListGroup.Item className="d-flex justify-content-between border-0 px-0">
-              Mais Recente
-              <Form.Check className="checkbox" aria-label="option 1" />
-            </ListGroup.Item>
-          </ListGroup>
-        </Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
+    <>
+      <FormControl sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-helper-label">Ordernar:</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          label="Ordernar:"
+          onChange={(e) => handleSelectDataByInterest(e.target.value)}
+        >
+          <MenuItem value={"low-price"}>Menor Preço</MenuItem>
+          <MenuItem value={"high-price"}>Maior Preço</MenuItem>
+        </Select>
+        <FormHelperText></FormHelperText>
+      </FormControl>
+    </>
   );
 }
 

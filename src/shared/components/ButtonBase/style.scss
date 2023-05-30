@@ -40,7 +40,7 @@
 
 .primary-text {
   @include button-base;
-  background: transparent;
+  background: transparent !important;
   color: var(--dark-contrast-color);
   border: none;
 

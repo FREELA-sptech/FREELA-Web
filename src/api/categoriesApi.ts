@@ -13,8 +13,14 @@ export function CategoriesAPI() {
     return response;
   }
 
+  async function uploadTxt(formData: any) {
+    const response = await api.post("/sub-categories/txt", formData);
+    return response;
+  }
+
   return {
     getCategories,
     getSubCategories,
+    uploadTxt
   };
 }

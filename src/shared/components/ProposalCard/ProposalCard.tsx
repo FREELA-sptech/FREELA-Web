@@ -2,112 +2,306 @@ import { Button, Card, Figure, Modal, OverlayTrigger, Popover, Row, Tooltip } fr
 import "./style.scss"
 import ButtonBase from "../ButtonBase/ButtonBase";
 import { ProposalDetails } from "./ProposalDetails/ProposalDetails";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MdOutlineEdit } from "react-icons/md";
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Typography } from '@mui/material'
 import { ProposalUpdate } from "./ProposalUpdate/ProposalUpdate";
+import { OrdersAPI } from "../../../api/ordersApi";
+import SnackbarContext from "../../../hooks/useSnackbar";
+import { notBlank } from "../../scripts/validators";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import OrderDetailsCard from "../../../pages/Order/OrderDetails/components/OrderDetailsCard/OrderDetailsCard";
+import { ChatApi } from "../../../api/chatApi";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 
-function ProposalCard() {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const [currentComponent,setCurrentComponent] = useState(0);
+function ProposalCard(props: any) {
+  const [data, setData] = useState<any>();
+  const [orderData, setOrderData] = useState<any>()
+  const [showDetails, setShowDetails] = useState(false);
+  const [editingProposal, setEditingProposal] = useState(false);
+  const { aceptProposals, deleteProposals, updateProposals, getOrdersById } = OrdersAPI();
+  const { createChat } = ChatApi();
+  const { showSnackbar } = useContext(SnackbarContext);
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<any>({});
+  const [errors, setErrors] = useState({
+    description: '',
+    proposalValue: '',
+    expirationTime: ''
+  });
 
-  const proposalComponents = [<ProposalDetails />,<ProposalUpdate/>]
-  const handleSelectComponent = () =>{
-    if(currentComponent == 1) return setCurrentComponent(currentComponent-1);
-    setCurrentComponent(currentComponent+1);
+  const convertTime = (date: string) => {
+    const newTime = new Date(date);
+    const yyyy = newTime.getFullYear();
+    let mm: any = newTime.getMonth() + 1;
+    let dd: any = newTime.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+
+    return formattedToday
   }
 
-  return (
+  const updateValues = (newValues: any) => {
+    setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime) })
+    const date = new Date(newValues.expirationTime);
+    setFormData({
+      description: newValues.description,
+      proposalValue: newValues.proposalValue,
+      expirationTime: date
+    })
+    getOrderDetails()
+  }
+
+  const getOrderDetails = () => {
+    getOrdersById(props.data.destinedOrder)
+      .then((res) => {
+        setOrderData(res.data)
+      })
+  }
+
+  useEffect(() => {
+    updateValues(props.data)
+  }, [])
+
+  const validateForm = () => {
+    const { proposalValue, expirationTime, description } = formData;
+    const newErros = {
+      description: '',
+      proposalValue: '',
+      expirationTime: ''
+    }
+
+    if (notBlank(description)) {
+      newErros.description = "O campo descrição não pode estar vazio";
+    } else if (description.length < 30) {
+      newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
+    }
+
+    if(notBlank(proposalValue)){
+      newErros.proposalValue = "O campo valor máximo não pode estar vazio";
+    }else if(Number(proposalValue) <= 0){
+      newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
+    }
+
+    if (notBlank(expirationTime)) {
+      newErros.expirationTime = "O prazo não pode estar vazio";
+    }else if(Number(expirationTime) <= 0) {
+      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
+      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
+    }
+
+    return newErros;
+  }
+
+  const handleShowDetails = () => setShowDetails(true);
+  const handleCloseDetails = () => {
+    setShowDetails(false);
+  }
+  const handleShowEditProposals = () => setEditingProposal(true)
+  const handleHiddenEditProposals = () => setEditingProposal(false)
+
+  const handleAcceptProposals = () => {
+    aceptProposals(props.data.destinedOrder, props.data.id)
+      .then((res) => {
+        const time = new Date()
+
+        const request = {
+          freelancerId: data.originUser.id,
+          userId: orderData.user.id,
+          orderId: orderData.id,
+          lastUpdate: time
+        }
+
+        createChat(request)
+          .then(() => {
+            showSnackbar(false, "Proposta aceita com sucesso, combine com o freelancer!")
+            navigate("/chat")
+          })
+          .catch(() => {
+            showSnackbar(true, "Problemas para aceitar a proposta, Tente Novamente!")
+          })
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para aceitar a proposta, Tente Novamente!")
+      })
+  }
+
+  const handleDeleteProposals = () => {
+    deleteProposals(props.data.id)
+      .then((res) => {
+        showSnackbar(false, "Proposta deletada com sucesso!")
+        props.onClose()
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para deletar a proposta, Tente Novamente!")
+      })
+  }
+
+  const handleUpdateProposals = () => {
+    const errors = validateForm();
+    const valores = Object.values(errors);
+    const errorsValues = valores.every(valor => valor === "");
+
+    if (!errorsValues) {
+      setErrors(errors);
+    } else {
+      setFormData(formData);
+      updateProposals(props.data.id, formData)
+        .then((res: any) => {
+          showSnackbar(false, "Proposta atualizada com sucesso")
+          updateValues(res.data)
+          setEditingProposal(false)
+        })
+        .catch(() => {
+          showSnackbar(true, "Problemas para atualizar a proposta, tente novamente!")
+        })
+      return () => clearTimeout(timeoutId);
+    }
+  };
+
+  const handleRefuseProposals = () => {
+
+  }
+
+  return data ? (
     <>
-    <Card className="services-available-background b-radius position-relative overflow-hidden">
-      <Card.Body className="mb-4">
-        <Card.Title className="title">
-          <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
-            <Row style={{
-              borderRadius: '99%',
-              padding: '3px',
-              margin: 0,
-              width: '50px',
-              height: '43px',
-              backgroundColor: 'var(--contrast-background-color)',
-              overflow: 'hidden'
-            }}>
+      <Card className="services-available-background b-radius position-relative overflow-hidden">
+        <Card.Body className="mb-0">
+          <Card.Title className="title">
+            <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
+              <Avatar
+                sx={{
+                  width: "50px",
+                  height: "50px",
+                  bgcolor: "#274C77",
+                }}
+                alt={data.originUser.name}
+                src={`data:image/png;base64,${data.originUser.profilePhoto}`}
+              />
+              <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
+                <div className="d-flex flex-column">
+                  <span className="text-color fw-bold f-18 f-inter">{data.originUser.name}</span>
+                  <Figure className="d-flex align-items-center m-0">
+                    <Figure.Image
+                      width='13px'
+                      height='13px'
+                      alt="dollar"
+                      src="/assets/icons/star.svg"
+                      className="m-0"
+                    />
+                    <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
+                      {data.originUser.rate}
+                    </Figure.Caption>
+                  </Figure>
+                </div>
+              </Figure.Caption>
+            </Figure>
+          </Card.Title>
+          <Row className="d-flex justify-content-start my-3 gap-2">
+            <Figure className="d-flex align-items-center gap-2 w-auto m-0">
               <Figure.Image
-                width='100%'
-                height='100%'
-                style={{ padding: 0 }}
-                alt="dollar"
-                src="https://www.ogol.com.br/img/jogadores/58/976658_med__20230131161334_cassio.png"
+                width='30px'
+                height='30px'
+                alt="calendario"
+                src="/assets/icons/price.svg"
                 className="m-0"
               />
-            </Row>
-            <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
-              <div className="d-flex flex-column">
-                <span className="text-color fw-bold f-16 f-inter">Cassio Ramos</span>
-                <span className="f-12 f-roboto fw-semibold">Design</span>
-              </div>
-              <Figure className="d-flex align-items-center m-0">
-                <Figure.Image
-                  width='15px'
-                  height='15px'
-                  alt="dollar"
-                  src="/assets/icons/star.svg"
-                  className="m-0"
-                />
-                <Figure.Caption className="f-14 f-inter">
-                  4.9
-                </Figure.Caption>
-              </Figure>
-            </Figure.Caption>
-          </Figure>
-        </Card.Title>
-        <Row className="d-flex justify-content-start my-3 gap-2">
-          <Figure className="d-flex align-items-center gap-2 w-auto m-0">
-            <Figure.Image
-              width='30px'
-              height='30px'
-              alt="calendario"
-              src="/assets/icons/price.svg"
-              className="m-0"
-            />
-            <Figure.Caption className="d-flex flex-column f-12 f-poppings">
-              Orçamento: <span className="f-roboto f-18 text-color fw-bold">R$: 200,00</span>
-            </Figure.Caption>
-          </Figure>
-          <Figure className="d-flex align-items-center gap-2 w-auto m-0">
-            <Figure.Image
-              width='30px'
-              height='30px'
-              alt="calendario"
-              src="/assets/icons/calendar.svg"
-              className="m-0"
-            />
-            <Figure.Caption className="d-flex flex-column f-12 f-poppings">
-              Prazo: <span className="f-roboto f-18 text-color fw-bold">7 dias</span>
-            </Figure.Caption>
-          </Figure>
-        </Row>
-      </Card.Body>
-      <ButtonBase onClick={() => handleShow()} className="b-radius-button position-absolute w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
-    </Card>
-    <Modal
-        show={show}
-        onHide={handleClose}
+              <Figure.Caption className="d-flex flex-column f-12 f-poppings">
+                Orçamento:
+                <span className="f-roboto f-18 text-color fw-bold">{
+                  data.proposalValue.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  })}
+                </span>
+              </Figure.Caption>
+            </Figure>
+            <Figure className="d-flex align-items-center gap-2 w-auto m-0">
+              <Figure.Image
+                width='30px'
+                height='30px'
+                alt="calendario"
+                src="/assets/icons/calendar.svg"
+                className="m-0"
+              />
+              <Figure.Caption className="d-flex flex-column f-12 f-poppings">
+                Prazo:
+                <span className="f-roboto f-18 text-color fw-bold">
+                  {data.expirationTime}
+                </span>
+              </Figure.Caption>
+            </Figure>
+          </Row>
+        </Card.Body>
+        <ButtonBase onClick={() => handleShowDetails()} className="b-radius-button w-100 button-hidden" buttonType={"primary-standart"} label={"Ver detalhes"} ></ButtonBase>
+      </Card>
+      <Modal
+        show={showDetails}
+        onHide={handleCloseDetails}
         backdrop="static"
         size="lg"
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title><button onClick={handleSelectComponent}className="btn-update"><MdOutlineEdit fill="#274c77" size={"32px"}/></button>Detalhes da proposta</Modal.Title>
+          <Modal.Title className="f-inter f-22">Detalhes da proposta</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {proposalComponents[currentComponent]}
+          {!editingProposal ? (
+            <>
+              <ProposalDetails
+                originUser={data.originUser}
+                handleAcceptProposals={handleAcceptProposals}
+                handleRefuseProposals={handleRefuseProposals}
+                handleDeleteProposals={handleDeleteProposals}
+                handleShowEditProposals={handleShowEditProposals}
+                data={data}
+              />
+              <Accordion disableGutters
+                sx={{
+                  border: 'none',
+                  borderRadius: '16px !important',
+                  boxShadow: 'none',
+                  marginTop: '13px',
+                  backgroundColor: 'var(--contrast-background-color)'
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Detalhes do Pedido</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {orderData && <OrderDetailsCard data={orderData} user={orderData.user} />}
+                </AccordionDetails>
+              </Accordion>
+            </>
+          ) : (
+            <ProposalUpdate
+              data={data}
+              originUser={data.originUser}
+              setFormData={setFormData}
+              setErrors={setErrors}
+              formData={formData}
+              errors={errors}
+              handleHiddenEditProposals={handleHiddenEditProposals}
+              handleUpdateProposals={handleUpdateProposals}
+            />
+          )}
         </Modal.Body>
       </Modal>
     </>
-  );
+  ) : null;
 }
 
 export default ProposalCard

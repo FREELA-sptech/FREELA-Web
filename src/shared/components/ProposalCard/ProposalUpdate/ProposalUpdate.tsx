@@ -1,89 +1,179 @@
+import { Avatar, Box, Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateField } from "@mui/x-date-pickers";
 import { Container, Figure, Form, InputGroup, Row } from "react-bootstrap";
 import { MdAttachMoney } from "react-icons/md";
+import { notBlank } from "../../../scripts/validators";
+import { UserStorage } from "../../../../store/userStorage";
+import ClearIcon from '@mui/icons-material/Clear';
+import DoneIcon from '@mui/icons-material/Done';
+import dayjs from 'dayjs';
 
-export function ProposalUpdate() {
-    return (
-        <Container>
-            <Row>
-                <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
-                    <Row style={{
-                        borderRadius: '99%',
-                        padding: '3px',
-                        margin: 0,
-                        width: '50px',
-                        height: '43px',
-                        backgroundColor: 'var(--contrast-background-color)',
-                        overflow: 'hidden'
-                    }}>
-                        <Figure.Image
-                            width='100%'
-                            height='100%'
-                            style={{ padding: 0 }}
-                            alt="dollar"
-                            src="https://www.ogol.com.br/img/jogadores/58/976658_med__20230131161334_cassio.png"
-                            className="m-0"
-                        />
-                    </Row>
-                    <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
-                        <div className="d-flex flex-column">
-                            <span className="text-color fw-bold f-16 f-inter">Cassio Ramos</span>
-                            <span className="f-12 f-roboto fw-semibold">Design</span>
-                        </div>
-                        <Figure className="d-flex align-items-center m-0">
-                            <Figure.Image
-                                width='15px'
-                                height='15px'
-                                alt="dollar"
-                                src="/assets/icons/star.svg"
-                                className="m-0"
-                            />
-                            <Figure.Caption className="f-14 f-inter">
-                                4.9
-                            </Figure.Caption>
-                        </Figure>
-                    </Figure.Caption>
-                </Figure>
-            </Row>
-            <Row>
-                <Form className="d-flex flex-column gap-3">
-                    <Form.Group>
-                        <Form.Label>
-                            Valor que você espera receber
-                        </Form.Label>
-                        <InputGroup hasValidation>
-                            <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
-                            <Form.Control
-                                name="maxValue"
-                                size="lg"
-                                type="number"
-                            />
-                        </InputGroup>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>
-                            Prazo de entrega
-                        </Form.Label>
-                        <Form.Control
-                            name="deadline"
-                            size="lg"
-                            type="date"
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>
-                            Descrição
-                        </Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            name="description"
-                            size="lg"
-                            type="description"
-                        />
-                    </Form.Group>
+export type Props = {
+  originUser: any
+  setFormData: (data: any) => void
+  setErrors: (data: any) => void
+  formData: any
+  errors: any
+  data: any
+  handleHiddenEditProposals: () => void
+  handleUpdateProposals: () => void
+}
 
-                    <button type="submit" className="buttonBase primary-standart">Atualizar</button>
-                </Form>
-            </Row>
-        </Container>
-    )
+export function ProposalUpdate({
+  originUser,
+  setFormData,
+  setErrors,
+  formData,
+  errors,
+  data,
+  handleHiddenEditProposals,
+  handleUpdateProposals
+}: Props) {
+
+  const setField = (field: any, value: any) => {
+    setFormData({
+      ...formData, [field]: value
+    })
+
+    if (!!errors[field]) {
+      setErrors({
+        ...errors, [field]: null
+      })
+    }
+  }
+
+  console.log(formData.expirationTime)
+
+  return (
+    <Grid container className="pt-0 px-0" maxWidth={"100%"}>
+      <Grid item container xs={12} className="position-relative">
+        <Figure className="d-flex align-items-center gap-2" style={{ padding: '1px' }}>
+          <Avatar
+            sx={{
+              width: "50px",
+              height: "50px",
+              bgcolor: "#274C77",
+            }}
+            alt={originUser.name}
+            src={`data:image/png;base64,${originUser.profilePhoto}`}
+          />
+          <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
+            <div className="d-flex flex-column">
+              <span className="text-color fw-bold f-18 f-inter">{originUser.name}</span>
+              <Figure className="d-flex align-items-center m-0">
+                <Figure.Image
+                  width='13px'
+                  height='13px'
+                  alt="dollar"
+                  src="/assets/icons/star.svg"
+                  className="m-0"
+                />
+                <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
+                  {originUser.rate}
+                </Figure.Caption>
+              </Figure>
+            </div>
+          </Figure.Caption>
+        </Figure>
+        {originUser.id === UserStorage.getIdUserLocalStorage() && (
+          <Box
+            className="position-absolute"
+            sx={{
+              right: 0,
+              cursor: 'pointer'
+            }}
+          >
+            <ClearIcon onClick={handleHiddenEditProposals} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
+            <DoneIcon onClick={handleUpdateProposals} sx={{ fontSize: '30px' }} color="success" />
+          </Box>
+        )}
+      </Grid>
+      <Grid item xs={12} className="ps-0 mb-3">
+        <Grid container item xs={5} className="p-0 mb-3">
+          <Grid item xs={6} className="p-0 pe-2 mb-3">
+            <Typography variant="body2" className="f-12 f-poppings">
+              Orçamento:
+            </Typography>
+            <TextField
+              error={!!errors.proposalValue}
+              id="proposalValue"
+              name="proposalValue"
+              fullWidth
+              type="number"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
+              value={formData.proposalValue}
+              autoComplete="given-name"
+              variant="standard"
+              helperText={
+                errors.proposalValue
+                  ? (
+                    <Typography variant="body2" className="f-14">
+                      {errors.proposalValue || " "}
+                    </Typography>
+                  )
+                  : " "
+              }
+              onChange={(e) => setField("proposalValue", e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={6} className="p-0 ps-2 mb-3">
+            <Typography variant="body2" className="f-12">
+              Prazo:
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                fullWidth
+                variant="standard"
+                value={dayjs(formData.expirationTime)}
+                onChange={(e) => {
+                  setField('expirationTime', e.$d)
+                }}
+                className="p-0"
+                slotProps={{
+                  textField: {
+                    helperText: errors.expirationTime ? (
+                      <Typography variant="body2" className="f-14">
+                        {errors.expirationTime}
+                      </Typography>
+                    ) : null
+                  }
+                }}
+                format="DD/MM/YYYY"
+              />
+            </LocalizationProvider>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className="p-0 mb-3">
+          <Typography variant="body2" className="f-12">
+            Descrição:
+          </Typography>
+          <TextField
+            error={!!errors.description}
+            id="description"
+            name="description"
+            fullWidth
+            value={formData.description}
+            variant="outlined"
+            helperText={
+              errors.description
+                ? (
+                  <Typography variant="body2" className="f-14">
+                    {errors.description || " "}
+                  </Typography>
+                )
+                : " "
+            }
+            onChange={(e) => setField("description", e.target.value)}
+            multiline
+            rows={4}
+          />
+        </Grid>
+      </Grid>
+    </Grid>
+  )
 }

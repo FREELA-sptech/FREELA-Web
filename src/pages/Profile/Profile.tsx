@@ -1,6 +1,6 @@
-import { Accordion, Card, Col, Container, Figure, Form, Modal, Row, useAccordionButton } from "react-bootstrap";
+import { Accordion, Card, Col, Container, Figure, Form, Modal, Row, useAccordionButton, Button } from "react-bootstrap";
 import './style.scss'
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ServicesAvailableCard from "../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
 import FreelancerProfileCard from "../../shared/components/FreelancerProfileCard/FreelancerProfileCard";
 import CardProfile from "./components/CardProfile/CardProfile";
@@ -13,27 +13,164 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
 import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
-
+import { UserStorage } from "../../store/userStorage";
+import { Grid, Typography } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
+import { UserAPI } from "../../api/userApi";
+import { OrdersAPI } from "../../api/ordersApi";
+import CardProposta from "../Proposta/components/CardProposta/CardProposta";
+import SnackbarContext from "../../hooks/useSnackbar";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileDownload from "@mui/icons-material/FileDownload";
 
 function Profile() {
+  const { id } = useParams();
   const [show, setShow] = useState(false);
+  const [value, setValue] = useState('1');
+  const [data, setData] = useState([])
+  const [dataAccepted, setDataAccepted] = useState<any>([])
+  const [dataRefused, setDataRefused] = useState<any>([])
+  const { showSnackbar } = useContext(SnackbarContext);
+  const [isFreelancer, setIsFreelancer] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const [value, setValue] = useState('1');
+  const { getOrdersByUser, getOrdersByUserId, extract } = OrdersAPI()
+  const { getProposalsByUser, getProposalsByUserId } = UserAPI();
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const getOrders = () => {
+    getOrdersByUser()
+      .then((res) => {
+        const acceptedList: any[] = []
+        const pedingList: any[] = []
+
+        res.data.map((localData: any) => {
+          localData.accepted && acceptedList.push(localData)
+        })
+        setDataAccepted(acceptedList)
+
+        res.data.map((localData: any) => {
+          !localData.accepted && pedingList.push(localData)
+        })
+        setData(pedingList)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as ordens!")
+      })
+  }
+
+  const getOrdersById = () => {
+    getOrdersByUserId(id)
+      .then((res) => {
+        const acceptedList: any[] = []
+        const pedingList: any[] = []
+
+        res.data.map((localData: any) => {
+          localData.accepted && acceptedList.push(localData)
+        })
+        setDataAccepted(acceptedList)
+
+        res.data.map((localData: any) => {
+          !localData.accepted && pedingList.push(localData)
+        })
+        setData(pedingList)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as ordens!")
+      })
+  }
+
+  const getProposals = () => {
+    getProposalsByUser()
+      .then((res) => {
+        const acceptedList: any[] = []
+        const refusedList: any[] = []
+        const pedingList: any[] = []
+
+        res.data.map((localData: any) => {
+          localData.isAccepted && acceptedList.push(localData)
+        })
+        setDataAccepted(acceptedList)
+
+        res.data.map((localData: any) => {
+          localData.isRefused && refusedList.push(localData)
+        })
+        setDataRefused(refusedList)
+
+        res.data.map((localData: any) => {
+          !localData.isRefused && !localData.isAccepted && pedingList.push(localData)
+        })
+        setData(pedingList)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as propostas!")
+      })
+  }
+
+  const getProposalsById = () => {
+    getProposalsByUserId(id)
+      .then((res) => {
+        const acceptedList: any[] = []
+        const refusedList: any[] = []
+        const pedingList: any[] = []
+
+        res.data.map((localData: any) => {
+          localData.isAccepted && acceptedList.push(localData)
+        })
+        setDataAccepted(acceptedList)
+
+        res.data.map((localData: any) => {
+          localData.isRefused && refusedList.push(localData)
+        })
+        setDataRefused(refusedList)
+
+        res.data.map((localData: any) => {
+          !localData.isRefused && !localData.isAccepted && pedingList.push(localData)
+        })
+        setData(pedingList)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as propostas!")
+      })
+  }
+
+  const handleGetExtract = () => {
+    extract()
+      .then((res) => {
+        const blob = new Blob([res.data], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.setAttribute('download', 'arquivo.txt');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para baixar o txt!")
+      })
+  }
+
+  useEffect(() => {
+    if (!isFreelancer) {
+      !id && getOrders()
+    } else {
+      !id && getProposals()
+    }
+  }, [])
 
   return (
     <section className="home-background">
       <Container>
         <Row className="d-flex py-3">
           <Col lg={12}>
-            <CardProfile />
+            <CardProfile isFreelancer={isFreelancer} setIsFreelancer={setIsFreelancer} userId={id} />
           </Col>
-          <Col lg={12}>
+          <Col lg={12} className="position-relative">
             <Box
               className="px-5 pb-4"
               sx={{
@@ -41,31 +178,120 @@ function Profile() {
                 borderRadius: '0 0 16px 16px'
               }}
             >
-              <TabContext value={value}>
+              {!id && <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleChange} aria-label="lab API tabs example">
-                    <Tab label="Propostas Enviadas" value="1" />
-                    <Tab label="Meu Portifólio" value="2" />
+                    <Tab label={isFreelancer ? "Propostas Pendentes" : "Pedidos Pendentes"} value="1" />
+                    <Tab label={isFreelancer ? "Propostas Aceitas" : "Pedidos Aceitos"} value="2" />
+                    {isFreelancer && (<Tab label="Propostas Recusadas" value="3" />)}
                   </TabList>
                 </Box>
-                <TabPanel value="1" sx={{backgroundColor: 'red'}}>
-                  {/* <Col container xs={12}>
-                    <Col item lg={3}>
-                      <ProposalCard />
-                    </Col>
-                  </Col> */}
+                <TabPanel value="1" className="px-0">
+                  <Grid item xs={12} container justifyContent="space-between" className="pb-4">
+                    <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart d-flex align-items-center'>
+                      {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
+                    </Link>
+                    {!isFreelancer &&
+                      <Button className="primary-text px-0 fw-normal d-flex align-items-center" style={{ right: 0 }} onClick={handleGetExtract}>
+                        download do histórico Pedidos
+                        <FileDownload sx={{ marginLeft: 1 }} />
+                      </Button>}
+                  </Grid>
+                  <Grid container spacing={4}>
+                    {data.length <= 0 ? (
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Typography variant="body2" className="pt-3 f-22">
+                          {!isFreelancer
+                            ? "Você ainda não fez nenhum pedido."
+                            : "Você ainda não fez nenhuma proposta"}
+                        </Typography>
+                      </Grid>
+                    ) : !isFreelancer ? (
+                      data.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ServicesAvailableCard data={localData} />
+                        </Grid>
+                      ))
+                    ) : (data.map((localData: any) => (
+                      <Grid item xs={12} md={6} lg={4}>
+                        <ProposalCard data={localData} />
+                      </Grid>
+                    )))}
+                  </Grid>
                 </TabPanel>
-                <TabPanel value="2">Item Two</TabPanel>
-              </TabContext>
+                <TabPanel value="2" className="px-0">
+                  <Grid container spacing={4}>
+                    {dataAccepted.length <= 0 ? (
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Typography variant="body2" className="f-22">
+                          {isFreelancer ?
+                            "Você ainda não tem nenhuma proposta aceita" :
+                            "Você ainda não aceitou nenhum pedido"}
+                        </Typography>
+                        {isFreelancer &&
+                          <Link to={'/home'} className='primary-standart'>
+                            Faça Proposta!
+                          </Link>}
+                      </Grid>
+                    ) : isFreelancer ? (
+                      dataAccepted.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ProposalCard data={localData} />
+                        </Grid>
+                      ))
+                    ) : (
+                      dataAccepted.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ServicesAvailableCard data={localData} />
+                        </Grid>
+                      ))
+                    )}
+                  </Grid>
+                </TabPanel>
+                <TabPanel value="3" className="px-0">
+                  <Grid container spacing={4}>
+                    {dataRefused.length <= 0 ? (
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Typography variant="body2" className="f-22">
+                          Nenhuma proposta recusada, continue assim! :)
+                        </Typography>
+                      </Grid>
+                    ) : isFreelancer && (
+                      dataRefused.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ProposalCard data={localData} />
+                        </Grid>
+                      ))
+                    )}
+                  </Grid>
+                </TabPanel>
+              </TabContext>}
             </Box>
           </Col>
-
-          {/* <Col lg={7} className="px-3 pt-lg-0 pt-4 d-flex flex-column gap-2">
-            <button onClick={() => setShow(true)} className="buttonBase primary-standart">Adicionar Projeto</button>
-            <Row className="d-flex">
-
-            </Row>
-          </Col> */}
         </Row>
       </Container>
       <Modal

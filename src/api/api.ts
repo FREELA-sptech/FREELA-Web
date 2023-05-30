@@ -3,7 +3,7 @@ import { UserStorage } from "../store/userStorage";
 import { useNavigate } from "react-router";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: "http://localhost:8080/"
 });
 
 export function useApi() {
@@ -12,9 +12,9 @@ export function useApi() {
   api.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response && error.response.status === 401) {
-        UserStorage.removeTokenUserLocalStorage();
-        navigate("/login");
+      if ((error.response && error.response.status === 401) || (error.code === "ERR_NETWORK")) {
+        UserStorage.clearAllLocalStorage();
+        window.location.href = "/login"
       }
       return Promise.reject(error);
     }

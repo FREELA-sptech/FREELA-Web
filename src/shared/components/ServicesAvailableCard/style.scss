@@ -1,16 +1,14 @@
 .services-available {
   &-background {
-    -webkit-box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
-    -moz-box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
-    box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
-    border: none;
+    border: 1px solid #dfe0e4;
+    transition: 0.4s ease-in-out;
 
     &:hover {
-      .button-hidden {
-        bottom: 0;
-      }
+      -webkit-box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
+      -moz-box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
+      box-shadow: 0px 0px 16px 0px rgba(181, 181, 181, 1);
     }
-
+    
     .b-radius-button {
       border-radius: 0 0 16px 16px !important;
     }
@@ -23,6 +21,9 @@
       .button-hidden {
         bottom: 0 !important;
       }
+      .services-available{
+        max-width: 480px;
+      }
     }
   }
 }
@@ -31,4 +32,7 @@
   background-color: var(--extra-ligth-contrast-color) !important;
   opacity: 1 !important;
   color: var(--dark-contrast-color) !important;
+}
+.custom-swipeable-views .css-rjx5t6-MuiPaper-root-MuiMobileStepper-root {
+  display: none !important;
 }

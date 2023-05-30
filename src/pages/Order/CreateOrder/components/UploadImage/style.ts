@@ -20,10 +20,20 @@ export const DropContainer = styled.div.attrs({
     border: 1px dashed #ddd;
     border-radius: 4px;
     cursor: pointer;
+    height: calc(100% - 100px);
+    top: 50px;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
     transition: height 0.2s ease;
+    background-color: #fff;
+    opacity: 0;
     ${props => props.isDragActive && dragActive};
     ${props => props.isDragReject && dragReject};
-    
+
+    &:hover {
+      opacity: 0.3;
+    }
 `;
 
 const messageColor = {

@@ -14,7 +14,12 @@ export function UserAPI() {
   }
 
   async function userDetails() {
-    const response = await api.get(`/user/edit`);
+    const response = await api.get(`/user/details`);
+    return response;
+  }
+
+  async function userDetailsById(id:number) {
+    const response = await api.get(`/user/details-by-id/${id}`);
     return response;
   }
 
@@ -29,7 +34,17 @@ export function UserAPI() {
   }
 
   async function getFreelancersByInterests() {
-    const response = await api.get(`/user/subcategory`);
+    const response = await api.get(`/user/by-subcategories`);
+    return response;
+  }
+
+  async function getProposalsByUser(){
+    const response = await api.get(`/proposals/user`);
+    return response;
+  }
+
+  async function getProposalsByUserId(id:number){
+    const response = await api.get(`/proposals/user-id/${id}`);
     return response;
   }
 
@@ -40,5 +55,8 @@ export function UserAPI() {
     uploadPicture,
     updateUser,
     getFreelancersByInterests,
+    getProposalsByUser,
+    getProposalsByUserId,
+    userDetailsById
   };
 }

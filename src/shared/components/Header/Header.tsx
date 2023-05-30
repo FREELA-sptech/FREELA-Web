@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './style.scss'
 import { Container, Figure, Nav, Navbar, Offcanvas, Row } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
@@ -6,9 +6,11 @@ import { UserStorage } from '../../../store/userStorage';
 import { Box } from '@mui/system';
 import { UserAPI } from '../../../api/userApi';
 
-function Header() {
+function Header(props: any) {
   const [menuIsOpen, setMenuIsOpen] = useState(false)
-  const isFreelancer = UserStorage.getIsFreelancerLocalStorage()
+  const [isFreelancer, setIsFreelancer] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const location = useLocation();
 
   const handleClose = () => setMenuIsOpen(false)
   const handleOpen = () => setMenuIsOpen(true)
@@ -18,10 +20,15 @@ function Header() {
     UserStorage.clearAllLocalStorage()
   }
 
+  useEffect(() => {
+    setIsAuthenticated(UserStorage.isAuthenticated())
+    setIsFreelancer(UserStorage.getIsFreelancerLocalStorage())
+  }, [location]);
+
   return (
     <Navbar
       expand='xl'
-      className='py-3 header-background'
+      className='py-3 header-background z-index-9'
       sticky='top'
     >
       <Container>
@@ -39,18 +46,25 @@ function Header() {
         >
           <Offcanvas.Header closeButton className='align-items-end'>
           </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="text-center justify-content-between h-100 flex-grow-1">
+          <Offcanvas.Body style={{ zIndex: 9 }}>
+            <Nav className="text-center justify-content-between h-100 flex-grow-1" style={{ zIndex: 9 }}>
               <Box className="d-flex flex-column flex-xl-row">
                 <Link to='/' className='logo dark-contrast-color' onClick={handleClose}>
                   FREELA
                 </Link>
-                <Link to='/home' className='tertiary-text' onClick={handleClose}>
-                  {isFreelancer ? "Encontre projetos" : "Encontre Profissionais"}
-                </Link>
+                {isAuthenticated && (
+                  <>
+                    <Link to='/home' className='tertiary-text' onClick={handleClose}>
+                      {isFreelancer ? "Encontre projetos" : "Encontre Profissionais"}
+                    </Link>
+                    <Link to='/chat' className='tertiary-text' onClick={handleClose}>
+                      conversas
+                    </Link>
+                  </>
+                )}
               </Box>
               <Box className="d-flex flex-column flex-xl-row">
-                {!UserStorage.isAuthenticated() ?
+                {!isAuthenticated ?
                   (
                     <>
                       <Link to='/login' className='tertiary-text' onClick={handleClose}>
