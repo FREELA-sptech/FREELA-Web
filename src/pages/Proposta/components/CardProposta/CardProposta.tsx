@@ -91,7 +91,6 @@ function CardProposta(props: any) {
         sendProposals(id, formData)
           .then((res) => {
             handleCloseModal()
-            console.log(res)
           })
           .catch(() => { })
       }

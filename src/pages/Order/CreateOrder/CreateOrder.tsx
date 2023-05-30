@@ -104,7 +104,6 @@ export function CreateOrder() {
 
       createOrder(order)
         .then((res) => {
-          console.log(newFormData.get("images"))
           if (newFormData.get("images")) {
             updatePicture(newFormData, res.data.id)
               .then(() => {

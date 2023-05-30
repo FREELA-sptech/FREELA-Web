@@ -70,8 +70,6 @@ function OrderDetailsCard({
     return formattedToday
   }
 
-  console.log(data)
-
   return (
     <Grid container className="pt-4 px-0 d-flex gap-3" maxWidth={"100%"} position={"relative"}>
       {user.id === UserStorage.getIdUserLocalStorage() ?
@@ -213,7 +211,7 @@ function OrderDetailsCard({
               <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column">
                   <span className="text-color fw-bold f-18 f-inter">{user.name}</span>
-                  <Figure className="d-flex align-items-center m-0">
+                  {/* <Figure className="d-flex align-items-center m-0">
                     <Figure.Image
                       width='13px'
                       height='13px'
@@ -224,7 +222,7 @@ function OrderDetailsCard({
                     <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
                       {user.rate}
                     </Figure.Caption>
-                  </Figure>
+                  </Figure> */}
                 </div>
               </Figure.Caption>
             </Figure>

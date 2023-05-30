@@ -45,8 +45,6 @@ export function ProposalUpdate({
     }
   }
 
-  console.log(formData.expirationTime)
-
   return (
     <Grid container className="pt-0 px-0" maxWidth={"100%"}>
       <Grid item container xs={12} className="position-relative">
@@ -63,7 +61,7 @@ export function ProposalUpdate({
           <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
             <div className="d-flex flex-column">
               <span className="text-color fw-bold f-18 f-inter">{originUser.name}</span>
-              <Figure className="d-flex align-items-center m-0">
+              {/* <Figure className="d-flex align-items-center m-0">
                 <Figure.Image
                   width='13px'
                   height='13px'
@@ -74,7 +72,7 @@ export function ProposalUpdate({
                 <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
                   {originUser.rate}
                 </Figure.Caption>
-              </Figure>
+              </Figure> */}
             </div>
           </Figure.Caption>
         </Figure>

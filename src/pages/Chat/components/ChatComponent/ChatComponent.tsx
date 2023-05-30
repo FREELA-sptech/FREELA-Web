@@ -29,8 +29,6 @@ export default function ChatComponent({
     setMessage('')
   }
 
-  console.log(messagesData)
-
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;

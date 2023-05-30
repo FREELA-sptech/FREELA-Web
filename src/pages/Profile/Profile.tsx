@@ -36,6 +36,7 @@ function Profile() {
   const handleShow = () => setShow(true);
   const { getOrdersByUser, getOrdersByUserId, extract } = OrdersAPI()
   const { getProposalsByUser, getProposalsByUserId } = UserAPI();
+  const hideDetails = Boolean(id)
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -84,6 +85,7 @@ function Profile() {
   }
 
   const getProposals = () => {
+    console.log('rodei')
     getProposalsByUser()
       .then((res) => {
         const acceptedList: any[] = []
@@ -156,10 +158,10 @@ function Profile() {
   }
 
   useEffect(() => {
-    if (!isFreelancer) {
-      !id && getOrders()
+    if (!UserStorage.getIsFreelancerLocalStorage()) {
+      !hideDetails && getOrders()
     } else {
-      !id && getProposals()
+      !hideDetails && getProposals()
     }
   }, [])
 

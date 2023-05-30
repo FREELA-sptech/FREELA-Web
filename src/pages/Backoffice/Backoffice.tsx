@@ -16,8 +16,6 @@ function Backoffice() {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
 
-    console.log('rodei')
-
     if (file) {
       const reader = new FileReader();
 

@@ -282,10 +282,10 @@ function CardProfile(props: any) {
             <>
               <Box className="d-flex align-items-end gap-2">
                 <span className="f-30 f-inter dark-contrast-color fw-bold">{userDetailsData.name}</span>
-                <Box className="h-100 d-flex flex-row align-items-center pb-2">
+                {/* <Box className="h-100 d-flex flex-row align-items-center pb-2">
                   <span className="aditional-color f-16">{userDetailsData.rate}</span>
                   <StarIcon color="primary" sx={{ fontSize: '12px' }} />
-                </Box>
+                </Box> */}
               </Box>
               <span className="text-color fw-normal f-poppings aditional-color">{userDetailsData.city}, {userDetailsData.uf}</span>
               {isFreelancer ? (

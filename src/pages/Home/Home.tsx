@@ -37,7 +37,6 @@ function Home() {
       getFreelancersByInterests()
         .then((res: any) => {
           setFreelancerData(res.data)
-          console.log(res.data);
         }).finally(() => {
           setIsLoading(false)
         })
