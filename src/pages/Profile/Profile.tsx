@@ -1,4 +1,4 @@
-import { Accordion, Card, Col, Container, Figure, Form, Modal, Row, useAccordionButton } from "react-bootstrap";
+import { Accordion, Card, Col, Container, Figure, Form, Modal, Row, useAccordionButton, Button } from "react-bootstrap";
 import './style.scss'
 import { useContext, useEffect, useState } from "react";
 import ServicesAvailableCard from "../../shared/components/ServicesAvailableCard/ServicesAvailableCard";
@@ -103,7 +103,7 @@ function Profile() {
           <Col lg={12}>
             <CardProfile />
           </Col>
-          <Col lg={12}>
+          <Col lg={12} className="position-relative">
             <Box
               className="px-5 pb-4"
               sx={{
@@ -120,6 +120,14 @@ function Profile() {
                   </TabList>
                 </Box>
                 <TabPanel value="1" className="px-0">
+                  <Grid item xs={12} container justifyContent="space-between">
+                    <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart'>
+                      {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
+                    </Link>
+                    <Button className="primary-text px-0" style={{ right: 0 }}>
+                      download do histórico Pedidos
+                    </Button>
+                  </Grid>
                   <Grid container spacing={4}>
                     {data.length > 0 && !isFreelancer &&
                       <Grid
@@ -143,14 +151,11 @@ function Profile() {
                         flexDirection="column"
                         gap={2}
                       >
-                        <Typography variant="body2" className="f-22">
+                        <Typography variant="body2" className="pt-3 f-22">
                           {!isFreelancer
                             ? "Você ainda não fez nenhum pedido."
                             : "Você ainda não fez nenhuma proposta"}
                         </Typography>
-                        <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart'>
-                          {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
-                        </Link>
                       </Grid>
                     ) : !isFreelancer ? (
                       data.map((localData: any) => (

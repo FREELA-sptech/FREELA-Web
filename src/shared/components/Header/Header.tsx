@@ -46,18 +46,22 @@ function Header(props: any) {
         >
           <Offcanvas.Header closeButton className='align-items-end'>
           </Offcanvas.Header>
-          <Offcanvas.Body style={{ zIndex: 9}}>
-            <Nav className="text-center justify-content-between h-100 flex-grow-1" style={{ zIndex: 9}}>
+          <Offcanvas.Body style={{ zIndex: 9 }}>
+            <Nav className="text-center justify-content-between h-100 flex-grow-1" style={{ zIndex: 9 }}>
               <Box className="d-flex flex-column flex-xl-row">
                 <Link to='/' className='logo dark-contrast-color' onClick={handleClose}>
                   FREELA
                 </Link>
-                <Link to='/home' className='tertiary-text' onClick={handleClose}>
-                  {isAuthenticated ? isFreelancer ? "Encontre projetos" : "Encontre Profissionais" : ""}
-                </Link>
-                <Link to='/chat' className='tertiary-text' onClick={handleClose}>
-                  conversas
-                </Link>
+                {isAuthenticated && (
+                  <>
+                    <Link to='/home' className='tertiary-text' onClick={handleClose}>
+                      {isFreelancer ? "Encontre projetos" : "Encontre Profissionais"}
+                    </Link>
+                    <Link to='/chat' className='tertiary-text' onClick={handleClose}>
+                      conversas
+                    </Link>
+                  </>
+                )}
               </Box>
               <Box className="d-flex flex-column flex-xl-row">
                 {!isAuthenticated ?
