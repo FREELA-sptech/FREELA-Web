@@ -92,8 +92,8 @@ function ServicesAvailableCard(data: any) {
                         objectFit: "cover",
                         overflow: 'hidden'
                       }}
-                      src={`data:image/png;base64,${step}`}
-                      alt={step}
+                      src={`data:image/png;base64,${step.bytes}`}
+                      alt={step.bytes}
                     />
                   </Box>
                 ) : null}

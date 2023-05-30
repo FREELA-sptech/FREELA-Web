@@ -80,7 +80,7 @@ function OrderEditCard({
           currentFiles.push(file);
         }
       } else {
-        if (file !== name) {
+        if (file.id !== name) {
           currentFiles.push(file);
         }
       }
@@ -208,7 +208,7 @@ function OrderEditCard({
                             width: 40,
                             cursor: 'pointer'
                           }}
-                          onClick={() => { handleDeletePictures(step.name || step) }}
+                          onClick={() => { handleDeletePictures(step.name || step.id) }}
                         />
                         <Box
                           component="img"
@@ -218,8 +218,8 @@ function OrderEditCard({
                             maxWidth: "100%",
                             overflow: 'hidden'
                           }}
-                          src={step.data || `data:image/png;base64,${step}`}
-                          alt={step.name || step}
+                          src={step.data || `data:image/png;base64,${step.bytes}`}
+                          alt={step.name || step.bytes}
                         />
                       </Box>
                     ) : null}

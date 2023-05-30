@@ -134,7 +134,7 @@ function OrderDetailsCard({
                   }}
                 >
                   {data.photos.map((step: any, index: any) => (
-                    <div key={step} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
+                    <div key={step.id} style={{ height: '100%', backgroundColor: 'var(--background-color)' }}>
                       {Math.abs(activeStep - index) <= 2 ? (
                         <Box className="position-relative d-flex justify-content-center" sx={{ height: '100% !important' }}>
                           <Box
@@ -145,7 +145,7 @@ function OrderDetailsCard({
                               maxWidth: "100%",
                               overflow: 'hidden'
                             }}
-                            src={`data:image/png;base64,${step}`}
+                            src={`data:image/png;base64,${step.bytes}`}
                             alt={step}
                           />
                         </Box>

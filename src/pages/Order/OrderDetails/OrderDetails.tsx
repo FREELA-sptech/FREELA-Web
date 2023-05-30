@@ -74,7 +74,7 @@ function OrderDetails() {
     const newErros = {
       title: '',
       description: '',
-      subCategoryIds: '',
+      subCategoryId: '',
       maxValue: '',
       expirationTime: '',
       photo: ''
@@ -113,7 +113,7 @@ function OrderDetails() {
       description: newValues.description,
       title: newValues.title,
       maxValue: newValues.maxValue,
-      subCategoriesIds: newValues.subCategories,
+      subCategoryId: newValues.subCategories,
       expirationTime: newValues.expirationTime,
       photos: newValues.photos,
       newPhotos: [],
@@ -169,12 +169,12 @@ function OrderDetails() {
     const valores = Object.values(errors);
     const errorsValues = valores.every(valor => valor === "");
     if (errorsValues) {
-      const isArrayOfNumbers = formData.subCategoriesIds.every(
+      const isArrayOfNumbers = formData.subCategoryId.every(
         (element: any) => typeof element === "number"
       );
 
       if (!isArrayOfNumbers) {
-        formData.subCategoriesIds = formData.subCategoriesIds.map((value: any) => {
+        formData.subCategoryId = formData.subCategoryId.map((value: any) => {
           return value.id
         })
       }
@@ -186,9 +186,10 @@ function OrderDetails() {
       });
 
       formData.deletedPhotos.forEach((file) => {
-        newFormData.append("deletedPhotos", file);
+        newFormData.append("deletedPhotos", JSON.stringify(file));
       });
 
+      console.log(newFormData.get("deletedPhotos"))
       updateOrderById(id, formData)
         .then(() => {
           updatePictures(newFormData, id)
