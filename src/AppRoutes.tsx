@@ -13,6 +13,7 @@ import AuthProvider from './core/Auth/AuthContext'
 import RedirectProvider from './core/Auth/RedirectContext'
 import { UserStorage } from './store/userStorage'
 import Chat from './pages/Chat/Chat'
+import Backoffice from './pages/Backoffice/Backoffice'
 
 const AppRoutes = () => {
   return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
         <Route path="/create-order" element={<AuthProvider element={<CreateOrder />} />} />
         <Route path="/proposta" element={<AuthProvider element={<Proposta />} />} />
         <Route path="/chat" element={<AuthProvider element={<Chat />} />} />
+        <Route path="/backoffice" element={<Backoffice/>} />
       </Routes>
     </BrowserRouter>
   )
