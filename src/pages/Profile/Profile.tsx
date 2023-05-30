@@ -20,7 +20,8 @@ import { UserAPI } from "../../api/userApi";
 import { OrdersAPI } from "../../api/ordersApi";
 import CardProposta from "../Proposta/components/CardProposta/CardProposta";
 import SnackbarContext from "../../hooks/useSnackbar";
-
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileDownload from "@mui/icons-material/FileDownload";
 
 function Profile() {
   const [show, setShow] = useState(false);
@@ -121,12 +122,14 @@ function Profile() {
                 </Box>
                 <TabPanel value="1" className="px-0">
                   <Grid item xs={12} container justifyContent="space-between">
-                    <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart'>
+                    <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart d-flex align-items-center'>
                       {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
                     </Link>
-                    <Button className="primary-text px-0" style={{ right: 0 }}>
-                      download do histórico Pedidos
-                    </Button>
+                    {!isFreelancer &&
+                      <Button className="primary-text px-0 fw-normal d-flex align-items-center" style={{ right: 0 }}>
+                        download do histórico Pedidos
+                        <FileDownload sx={{ marginLeft: 1 }} />
+                      </Button>}
                   </Grid>
                   <Grid container spacing={4}>
                     {data.length > 0 && !isFreelancer &&
