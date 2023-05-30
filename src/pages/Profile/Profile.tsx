@@ -39,7 +39,6 @@ function Profile() {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-  // setIsFreelancer(UserStorage.getIsFreelancerLocalStorage())
 
   const getOrders = () => {
     getOrdersByUser()
@@ -140,8 +139,14 @@ function Profile() {
 
   useEffect(() => {
     if (!isFreelancer) {
+      if(id){
+        getOrdersById()
+      }
       getOrders()
     } else {
+      if(id){
+        getProposalsById()
+      }
       getProposals();
     }
   }, [])

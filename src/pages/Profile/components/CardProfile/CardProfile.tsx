@@ -35,17 +35,18 @@ function CardProfile(props: any) {
 
   useEffect(() => {
     if (userId) {
+      console.log(userId)
       userDetailsById(userId)
         .then((res) => {
           updateUserData(res.data)
-          console.log(res.data)
-          setIsFreelancer(res.data)
+          setIsFreelancer(res.data.closedOrders != undefined)
           setLoading(false)
         })
         .catch((error) => {
           showSnackbar(true, error.response.data);
         })
     } else {
+      setIsFreelancer(UserStorage.getIsFreelancerLocalStorage())
       userDetails()
         .then((res) => {
           updateUserData(res.data)
