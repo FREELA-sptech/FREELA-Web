@@ -149,7 +149,7 @@ function CardProposta(props: any) {
                 fullWidth
                 variant="standard"
                 value={formData.expirationTime}
-                onChange={() => { }}
+                onChange={(e) => setField('expirationTime', e.$d)}
                 className="p-0"
                 slotProps={{
                   textField: {

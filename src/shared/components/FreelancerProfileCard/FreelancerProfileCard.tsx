@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 function FreelancerProfileCard(props: any) {
   const navigate = useNavigate()
   const {
+    id,
     name,
     description,
     rate,
@@ -90,7 +91,7 @@ function FreelancerProfileCard(props: any) {
           </Box>
         </Box>
       </Card.Body>
-      <ButtonBase onClick={() => navigate("/perfil")} className="b-radius-button z-index-2 w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
+      <ButtonBase onClick={() => navigate(`/perfil/${id}`)} className="b-radius-button z-index-2 w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
     </Card>
   );
 }

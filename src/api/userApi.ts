@@ -18,6 +18,11 @@ export function UserAPI() {
     return response;
   }
 
+  async function userDetailsById(id:number) {
+    const response = await api.get(`/user/details-by-id/${id}`);
+    return response;
+  }
+
   async function uploadPicture(file: any) {
     const response = await api.post(`/user/upload-image`, file);
     return response;
@@ -38,6 +43,11 @@ export function UserAPI() {
     return response;
   }
 
+  async function getProposalsByUserId(id:number){
+    const response = await api.get(`/proposals/user-id/${id}`);
+    return response;
+  }
+
   return {
     register,
     login,
@@ -45,6 +55,8 @@ export function UserAPI() {
     uploadPicture,
     updateUser,
     getFreelancersByInterests,
-    getProposalsByUser
+    getProposalsByUser,
+    getProposalsByUserId,
+    userDetailsById
   };
 }

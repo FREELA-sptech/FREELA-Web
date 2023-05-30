@@ -15,7 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { Grid, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { UserAPI } from "../../api/userApi";
 import { OrdersAPI } from "../../api/ordersApi";
 import CardProposta from "../Proposta/components/CardProposta/CardProposta";
@@ -23,25 +23,47 @@ import SnackbarContext from "../../hooks/useSnackbar";
 
 
 function Profile() {
+  const { id } = useParams();
   const [show, setShow] = useState(false);
-  const isFreelancer = UserStorage.getIsFreelancerLocalStorage()
   const [value, setValue] = useState('1');
   const [data, setData] = useState([])
   const [dataAccepted, setDataAccepted] = useState<any>([])
   const [dataRefused, setDataRefused] = useState<any>([])
   const { showSnackbar } = useContext(SnackbarContext);
-
+  const [isFreelancer,setIsFreelancer] = useState(false); 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const { getOrdersByUser } = OrdersAPI()
-  const { getProposalsByUser } = UserAPI();
+  const { getOrdersByUser,getOrdersByUserId } = OrdersAPI()
+  const { getProposalsByUser, getProposalsByUserId} = UserAPI();
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  // setIsFreelancer(UserStorage.getIsFreelancerLocalStorage())
 
   const getOrders = () => {
     getOrdersByUser()
+      .then((res) => {
+        const acceptedList: any[] = []
+        const pedingList: any[] = []
+
+        res.data.map((localData: any) => {
+          localData.accepted && acceptedList.push(localData)
+        })
+        setDataAccepted(acceptedList)
+
+        res.data.map((localData: any) => {
+          !localData.accepted && pedingList.push(localData)
+        })
+        setData(pedingList)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as ordens!")
+      })
+  }
+
+  const getOrdersById = () => {
+    getOrdersByUserId(id)
       .then((res) => {
         const acceptedList: any[] = []
         const pedingList: any[] = []
@@ -88,6 +110,34 @@ function Profile() {
       })
   }
 
+  const getProposalsById = () => {
+    getProposalsByUserId(id)
+      .then((res) => {
+        const acceptedList: any[] = []
+        const refusedList: any[] = []
+        const pedingList: any[] = []
+
+        res.data.map((localData: any) => {
+          localData.isAccepted && acceptedList.push(localData)
+        })
+        setDataAccepted(acceptedList)
+
+        res.data.map((localData: any) => {
+          localData.isRefused && refusedList.push(localData)
+        })
+        setDataRefused(refusedList)
+
+        res.data.map((localData: any) => {
+          !localData.isRefused && !localData.isAccepted && pedingList.push(localData)
+        })
+        setData(pedingList)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para trazer as propostas!")
+      })
+  }
+
+
   useEffect(() => {
     if (!isFreelancer) {
       getOrders()
@@ -101,7 +151,7 @@ function Profile() {
       <Container>
         <Row className="d-flex py-3">
           <Col lg={12}>
-            <CardProfile />
+            <CardProfile isFreelancer={isFreelancer} setIsFreelancer={setIsFreelancer} userId={id}/>
           </Col>
           <Col lg={12}>
             <Box
