@@ -24,7 +24,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<RedirectProvider element={<Login />} path='/home' />} />
         <Route path='/home' element={<AuthProvider element={<Home />} />} />
         <Route path="/cadastro" element={<RedirectProvider element={<Cadastro />} path='/home' />} />
-        <Route path="/perfil" element={<AuthProvider element={<Profile />} />} />
+        <Route path="/perfil/:id?" element={<AuthProvider element={<Profile />} />} />
         <Route path="/order-details/:id" element={<AuthProvider element={<OrderDetails />} />} />
         <Route path="/create-order" element={<AuthProvider element={<CreateOrder />} />} />
         <Route path="/proposta" element={<AuthProvider element={<Proposta />} />} />

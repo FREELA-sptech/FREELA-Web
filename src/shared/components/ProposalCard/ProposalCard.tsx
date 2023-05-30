@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import OrderDetailsCard from "../../../pages/Order/OrderDetails/components/OrderDetailsCard/OrderDetailsCard";
 import { ChatApi } from "../../../api/chatApi";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 
 function ProposalCard(props: any) {
@@ -68,7 +69,7 @@ function ProposalCard(props: any) {
   }, [])
 
   const validateForm = () => {
-    const { proposalValue, expirationTime, description, } = formData;
+    const { proposalValue, expirationTime, description } = formData;
     const newErros = {
       description: '',
       proposalValue: '',
@@ -81,12 +82,18 @@ function ProposalCard(props: any) {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
 
-    if (notBlank(proposalValue)) {
-      newErros.proposalValue = "O campo Valor máximo não pode estar vazio";
+    if(notBlank(proposalValue)){
+      newErros.proposalValue = "O campo valor máximo não pode estar vazio";
+    }else if(Number(proposalValue) <= 0){
+      newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
     }
 
     if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O campo prazo não pode estar vazio";
+      newErros.expirationTime = "O prazo não pode estar vazio";
+    }else if(Number(expirationTime) <= 0) {
+      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
+      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
     }
 
     return newErros;

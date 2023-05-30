@@ -19,6 +19,11 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function getOrdersByUserId(id:number) {
+    const response = await api.get(`/orders/by-user-id/${id}`);
+    return response;
+  }
+
   async function createOrder(formData: any) {
     const response = await api.post("/orders", formData);
     return response;
@@ -69,7 +74,7 @@ export function OrdersAPI() {
     return response;
   }
 
-  async function updateProposals(proposalsId: any, formData) {
+  async function updateProposals(proposalsId: any, formData:any) {
     const response = await api.put(`/proposals/update/${proposalsId}`, formData);
     return response;
   }
@@ -94,6 +99,7 @@ export function OrdersAPI() {
     deleteProposals,
     updateProposals,
     updatePictures,
-    findByTitle
+    findByTitle,
+    getOrdersByUserId
   };
 }

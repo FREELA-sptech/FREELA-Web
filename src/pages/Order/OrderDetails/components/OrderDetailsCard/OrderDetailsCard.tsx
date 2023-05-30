@@ -262,7 +262,7 @@ function OrderDetailsCard({
                 <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                   Prazo:
                   <span className="f-roboto f-18 text-color fw-bold">
-                    {convertTime(data.expirationTime)}
+                    {data.expirationTime}
                   </span>
                 </Figure.Caption>
               </Figure>

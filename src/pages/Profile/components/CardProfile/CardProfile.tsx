@@ -19,7 +19,7 @@ import SnackbarContext from "../../../../hooks/useSnackbar";
 
 
 
-function CardProfile() {
+function CardProfile(props: any) {
   const [userDetailsData, setUserDetailsData] = useState<any>({})
   const [userEditDetails, setUserEditDetails] = useState<any>({})
   const [userEditErrorDetails, setUserEditErrorDetails] = useState<any>({})
@@ -30,18 +30,32 @@ function CardProfile() {
   const [ufsData, setUfsData] = useState<any>([])
   const [citysData, setCitysData] = useState<any>([])
   const { showSnackbar } = useContext(SnackbarContext);
-  const { userDetails, uploadPicture, updateUser } = UserAPI();
-  const isFreelancer = UserStorage.getIsFreelancerLocalStorage();
+  const { userDetails, uploadPicture, updateUser, userDetailsById } = UserAPI();
+  const { setIsFreelancer, isFreelancer, userId } = props;
 
   useEffect(() => {
-    userDetails()
-      .then((res) => {
-        updateUserData(res.data)
-        setLoading(false)
-      })
-      .catch((error) => {
-        showSnackbar(true, error.response.data);
-      })
+    if (userId) {
+      console.log(userId)
+      userDetailsById(userId)
+        .then((res) => {
+          updateUserData(res.data)
+          setIsFreelancer(res.data.closedOrders != undefined)
+          setLoading(false)
+        })
+        .catch((error) => {
+          showSnackbar(true, error.response.data);
+        })
+    } else {
+      setIsFreelancer(UserStorage.getIsFreelancerLocalStorage())
+      userDetails()
+        .then((res) => {
+          updateUserData(res.data)
+          setLoading(false)
+        })
+        .catch((error) => {
+          showSnackbar(true, error.response.data);
+        })
+    }
   }, [])
 
   const setField = (field: any, value: any) => {

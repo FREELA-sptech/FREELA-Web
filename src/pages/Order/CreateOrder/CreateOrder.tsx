@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { OrdersAPI } from "../../../api/ordersApi";
 import { UserAPI } from "../../../api/userApi";
 import SnackbarContext from "../../../hooks/useSnackbar";
+import dayjs from "dayjs";
 
 const steps = ['Informe os dados do pedido', 'asdasd', 'Create an ad', 'asdasd'];
 
@@ -64,12 +65,18 @@ export function CreateOrder() {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
 
-    // if (Number(expirationTime) <= 0) {
-    //   newErros.expirationTime = "O prazo não pode menor ou igual a zero";
-    // }
+    if(notBlank(maxValue)){
+      newErros.maxValue = "O campo valor máximo não pode estar vazio";
+    }else if(Number(maxValue) <= 0){
+      newErros.maxValue = "O campo valor máximo não pode ser negativo ou 0";
+    }
 
-    if (notBlank(maxValue)) {
-      newErros.maxValue = "O campo preço não pode estar vazio";
+    if (notBlank(expirationTime)) {
+      newErros.expirationTime = "O prazo não pode estar vazio";
+    }else if(Number(expirationTime) <= 0) {
+      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
+      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
     }
 
     return newErros;

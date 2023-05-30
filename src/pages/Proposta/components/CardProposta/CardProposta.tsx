@@ -15,6 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateField } from "@mui/x-date-pickers";
 import { OrdersAPI } from "../../../../api/ordersApi";
+import dayjs from "dayjs";
 
 function CardProposta(props: any) {
   const { handleCloseModal } = props
@@ -48,24 +49,32 @@ function CardProposta(props: any) {
   }
 
   const validateForm = () => {
-    const { proposalValue, expirationTime, description, } = formData;
+    const { description, expirationTime, proposalValue } = formData;
     const newErros = {
       description: '',
-      maxValue: '',
-      expirationTime: ''
+      proposalValue: '',
+      expirationTime: '',
     }
 
-    // if (notBlank(description)) {
-    //   newErros.description = "O campo descrição não pode estar vazio";
-    // } else if (description.length < 30) {
-    //   newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
-    // }
-    // if (notBlank(maxValue)) {
-    //   newErros.maxValue = "O campo Valor máximo não pode estar vazio";
-    // }
-    // if (notBlank(expirationTime)) {
-    //   newErros.expirationTime = "O campo prazo não pode estar vazio";
-    // }
+    if (notBlank(description)) {
+      newErros.description = "O campo descrição não pode estar vazio";
+    } else if (description.length < 30) {
+      newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
+    }
+
+    if (notBlank(proposalValue)) {
+      newErros.proposalValue = "O campo valor máximo não pode estar vazio";
+    } else if (Number(proposalValue) <= 0) {
+      newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
+    }
+
+    if (notBlank(expirationTime)) {
+      newErros.expirationTime = "O prazo não pode estar vazio";
+    } else if (Number(expirationTime) <= 0) {
+      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
+      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
+    }
 
     return newErros;
   }
@@ -140,7 +149,7 @@ function CardProposta(props: any) {
                 fullWidth
                 variant="standard"
                 value={formData.expirationTime}
-                onChange={() => { }}
+                onChange={(e) => setField('expirationTime', e.$d)}
                 className="p-0"
                 slotProps={{
                   textField: {
@@ -151,7 +160,7 @@ function CardProposta(props: any) {
                     ) : null
                   }
                 }}
-                format="MM-DD-YYYY"
+                format="DD-MM-YYYY"
               />
             </LocalizationProvider>
           </Grid>
