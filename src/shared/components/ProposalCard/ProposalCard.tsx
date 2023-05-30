@@ -21,7 +21,7 @@ function ProposalCard(props: any) {
   const [orderData, setOrderData] = useState<any>()
   const [showDetails, setShowDetails] = useState(false);
   const [editingProposal, setEditingProposal] = useState(false);
-  const { aceptProposals, deleteProposals, updateProposals, getOrdersById } = OrdersAPI();
+  const { aceptProposals, deleteProposals, updateProposals, getOrdersById, refuseProposal } = OrdersAPI();
   const { createChat } = ChatApi();
   const { showSnackbar } = useContext(SnackbarContext);
   const navigate = useNavigate();
@@ -82,15 +82,15 @@ function ProposalCard(props: any) {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
 
-    if(notBlank(proposalValue)){
+    if (notBlank(proposalValue)) {
       newErros.proposalValue = "O campo valor máximo não pode estar vazio";
-    }else if(Number(proposalValue) <= 0){
+    } else if (Number(proposalValue) <= 0) {
       newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
     }
 
     if (notBlank(expirationTime)) {
       newErros.expirationTime = "O prazo não pode estar vazio";
-    }else if(Number(expirationTime) <= 0) {
+    } else if (Number(expirationTime) <= 0) {
       newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
     } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
       newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
@@ -169,7 +169,16 @@ function ProposalCard(props: any) {
   };
 
   const handleRefuseProposals = () => {
-
+    refuseProposal(props.data.id)
+      .then(() => {
+        showSnackbar(false, "Proposta recusada com sucesso")
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000)
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para recusar a proposta, tente novamente!")
+      })
   }
 
   return data ? (

@@ -89,6 +89,11 @@ export function OrdersAPI() {
     return response
   }
 
+  async function refuseProposal(proposalsId: number) {
+    const response = await api.put(`/proposals/refuse-propose/${proposalsId}`);
+    return response;
+  }
+
   return {
     getOrders,
     getAllOrders,
@@ -106,6 +111,7 @@ export function OrdersAPI() {
     updatePictures,
     findByTitle,
     getOrdersByUserId,
-    extract
+    extract,
+    refuseProposal
   };
 }

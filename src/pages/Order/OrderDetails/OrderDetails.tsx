@@ -107,7 +107,6 @@ function OrderDetails() {
   }
 
   const updateValues = (newValues: any) => {
-
     setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime) })
     const date = new Date(newValues.expirationTime);
     setFormData({
@@ -120,10 +119,10 @@ function OrderDetails() {
       newPhotos: [],
       deletedPhotos: []
     })
-    setProposals(newValues.proposals)
 
     const acceptedList: any[] = []
     const refusedList: any = []
+    const pedingList: any[] = []
 
     newValues.proposals.map((localData: any) => {
       localData.isAccepted && acceptedList.push(localData)
@@ -134,6 +133,11 @@ function OrderDetails() {
       localData.isRefused && refusedList.push(localData)
     })
     setDataRefused(refusedList)
+
+    newValues.proposals.map((localData: any) => {
+      !localData.accepted && !localData.isRefused && pedingList.push(localData)
+    })
+    setProposals(pedingList)
   }
 
   const handleGetOrderDetails = () => {

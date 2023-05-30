@@ -57,7 +57,7 @@ export function ProposalDetails({
             </div>
           </Figure.Caption>
         </Figure>
-        {originUser.id === UserStorage.getIdUserLocalStorage() && !data.isAccepted && (
+        {originUser.id === UserStorage.getIdUserLocalStorage() && !data.isAccepted && !data.isRefused && (
           <Box
             className="position-absolute"
             sx={{
@@ -116,7 +116,7 @@ export function ProposalDetails({
             {data.description}
           </p>
         </Grid>
-        {originUser.id !== UserStorage.getIdUserLocalStorage() && !data.isAccepted &&
+        {originUser.id !== UserStorage.getIdUserLocalStorage() && !data.isAccepted && !data.isRefused &&
           <Grid item xs={12} className="d-flex justify-content-between my-3 gap-2">
             <button className="primary-outline w-auto" onClick={handleRefuseProposals}>Recusar</button>
             <button className="primary-standart w-auto" onClick={handleAcceptProposals}>Aceitar</button>
