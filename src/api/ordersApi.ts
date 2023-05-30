@@ -3,8 +3,8 @@ import { useApi } from "./api";
 export function OrdersAPI() {
   const api = useApi();
 
-  async function getOrders() {
-    const response = await api.get("/orders");
+  async function getOrders(order: string) {
+    const response = await api.get(`/orders?orderType=${order}`);
     return response;
   }
 
@@ -84,6 +84,11 @@ export function OrdersAPI() {
     return response;
   }
 
+  async function extract() {
+    const response = await api.get("/orders/extrato");
+    return response
+  }
+
   return {
     getOrders,
     getAllOrders,
@@ -100,6 +105,7 @@ export function OrdersAPI() {
     updateProposals,
     updatePictures,
     findByTitle,
-    getOrdersByUserId
+    getOrdersByUserId,
+    extract
   };
 }

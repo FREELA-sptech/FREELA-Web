@@ -35,7 +35,6 @@ function CardProfile(props: any) {
 
   useEffect(() => {
     if (userId) {
-      console.log(userId)
       userDetailsById(userId)
         .then((res) => {
           updateUserData(res.data)
@@ -257,7 +256,7 @@ function CardProfile(props: any) {
             <ClearIcon onClick={handleCloseEdit} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
             <DoneIcon onClick={handleSendEdit} sx={{ fontSize: '30px' }} color="success" />
           </Box>
-        ) : (
+        ) : !userId && (
           <EditIcon
             onClick={handleEdit}
             className="position-absolute"

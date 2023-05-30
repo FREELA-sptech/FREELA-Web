@@ -31,11 +31,11 @@ function Profile() {
   const [dataAccepted, setDataAccepted] = useState<any>([])
   const [dataRefused, setDataRefused] = useState<any>([])
   const { showSnackbar } = useContext(SnackbarContext);
-  const [isFreelancer,setIsFreelancer] = useState(false); 
+  const [isFreelancer, setIsFreelancer] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const { getOrdersByUser,getOrdersByUserId } = OrdersAPI()
-  const { getProposalsByUser, getProposalsByUserId} = UserAPI();
+  const { getOrdersByUser, getOrdersByUserId, extract } = OrdersAPI()
+  const { getProposalsByUser, getProposalsByUserId } = UserAPI();
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -137,18 +137,29 @@ function Profile() {
       })
   }
 
+  const handleGetExtract = () => {
+    extract()
+      .then((res) => {
+        const blob = new Blob([res.data], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.setAttribute('download', 'arquivo.txt');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch(() => {
+        showSnackbar(true, "Problemas para baixar o txt!")
+      })
+  }
 
   useEffect(() => {
     if (!isFreelancer) {
-      if(id){
-        getOrdersById()
-      }
-      getOrders()
+      !id && getOrders()
     } else {
-      if(id){
-        getProposalsById()
-      }
-      getProposals();
+      !id && getProposals()
     }
   }, [])
 
@@ -157,7 +168,7 @@ function Profile() {
       <Container>
         <Row className="d-flex py-3">
           <Col lg={12}>
-            <CardProfile isFreelancer={isFreelancer} setIsFreelancer={setIsFreelancer} userId={id}/>
+            <CardProfile isFreelancer={isFreelancer} setIsFreelancer={setIsFreelancer} userId={id} />
           </Col>
           <Col lg={12} className="position-relative">
             <Box
@@ -167,7 +178,7 @@ function Profile() {
                 borderRadius: '0 0 16px 16px'
               }}
             >
-              <TabContext value={value}>
+              {!id && <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleChange} aria-label="lab API tabs example">
                     <Tab label={isFreelancer ? "Propostas Pendentes" : "Pedidos Pendentes"} value="1" />
@@ -176,29 +187,17 @@ function Profile() {
                   </TabList>
                 </Box>
                 <TabPanel value="1" className="px-0">
-                  <Grid item xs={12} container justifyContent="space-between">
+                  <Grid item xs={12} container justifyContent="space-between" className="pb-4">
                     <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart d-flex align-items-center'>
                       {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
                     </Link>
                     {!isFreelancer &&
-                      <Button className="primary-text px-0 fw-normal d-flex align-items-center" style={{ right: 0 }}>
+                      <Button className="primary-text px-0 fw-normal d-flex align-items-center" style={{ right: 0 }} onClick={handleGetExtract}>
                         download do histórico Pedidos
                         <FileDownload sx={{ marginLeft: 1 }} />
                       </Button>}
                   </Grid>
                   <Grid container spacing={4}>
-                    {data.length > 0 && !isFreelancer &&
-                      <Grid
-                        container
-                        item
-                        justifyContent="flex-end"
-                        alignItems="center"
-                        xs={12}
-                      >
-                        <Link to='/create-order' className='primary-standart'>
-                          faça um pedido
-                        </Link>
-                      </Grid>}
                     {data.length <= 0 ? (
                       <Grid
                         item
@@ -290,7 +289,7 @@ function Profile() {
                     )}
                   </Grid>
                 </TabPanel>
-              </TabContext>
+              </TabContext>}
             </Box>
           </Col>
         </Row>

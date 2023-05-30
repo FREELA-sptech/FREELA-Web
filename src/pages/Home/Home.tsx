@@ -8,7 +8,7 @@ import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { OrdersAPI } from "../../api/ordersApi";
 import { UserAPI } from "../../api/userApi";
-import { CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
@@ -17,7 +17,7 @@ function Home() {
   const [freelancerData, setFreelancerData] = useState([])
   const { getOrders, findByTitle, getAllOrders } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
-  const [filter, setFilter] = useState("interest");
+  const [filter, setFilter] = useState("all");
   const [message, setMessage] = useState("");
   const items = [];
 
@@ -27,7 +27,7 @@ function Home() {
 
   useEffect(() => {
     if (UserStorage.getIsFreelancerLocalStorage()) {
-      getOrders()
+      getOrders("all")
         .then((res: any) => {
           setResponseData(res.data)
         }).finally(() => {
@@ -59,30 +59,14 @@ function Home() {
 
   const handleSelectDataByInterest = (type: string) => {
     setFilter(type)
-    if (type == "interest") {
-      return getOrders()
-        .then((response: any) => {
-          setResponseData(response.data)
-          if (response.data.length <= 0) {
-            setMessage("Nenhuma ordem disponível")
-          }
-        }).finally(() => {
-          setIsLoading(false)
-        })
-    } else {
-      return getAllOrders()
-        .then((res: any) => {
-          setResponseData(res.data)
-          if (res.data.length <= 0) {
-            setMessage("Nenhuma ordem disponível")
-          }
-        }).finally(() => {
-          setIsLoading(false)
-        })
-    }
+    getOrders(type)
+      .then((res: any) => {
+        setResponseData(res.data)
+      }).finally(() => {
+        setIsLoading(false)
+      })
   }
 
-  console.log(filteredFreelancer, ' filteredFreelancer')
 
   return (
     <section className="home-background">
@@ -93,26 +77,10 @@ function Home() {
               {UserStorage.getIsFreelancerLocalStorage() ? 'projetos disponíveis' : 'profissionais disponíveis'}
             </h1>
           </Row>
-          <Modal className="d-block w-100 h-100" show={showModal} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Ordenar por:</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <FiltersCard handleSelectDataByInterest={handleSelectDataByInterest} />
-            </Modal.Body>
-          </Modal>
+
           <Col lg={12}>
             <Row className="px-lg-3 px-0 d-flex gap-2">
-              <Figure style={{ cursor: "pointer" }} onClick={handleOpen} className="home-icon-background d-flex justify-content-center align-items-center">
-                <Figure.Image
-                  width='40px'
-                  height='40px'
-                  alt="icone filtro"
-                  src="assets/icons/filter.svg"
-                  className="m-0"
-                />
-              </Figure>
-              <InputGroup className="p-0 primary-input w-auto flex-grow-1">
+              <InputGroup className="p-0 primary-input w-auto flex-grow-1 mb-3">
                 <Figure.Image
                   width='15px'
                   height='15px'
@@ -133,6 +101,24 @@ function Home() {
           </Col>
           <Col lg={12} className="px-3 d-flex flex-column gap-2">
             <Row className="d-flex">
+              {UserStorage.getIsFreelancerLocalStorage() &&
+                <Col xs={12} className="w-100 justify-content-end d-flex flex-column py-2">
+                  <Box className="w-25">
+                    <InputLabel id="demo-simple-select-helper-label">Ordernar por:</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      value={filter}
+                      className="w-100"
+                      onChange={(e) => handleSelectDataByInterest(e.target.value)}
+                    >
+                      <MenuItem value={"all"}>Relevância</MenuItem>
+                      <MenuItem value={"mais-barato"}>Menor Preço</MenuItem>
+                      <MenuItem value={"mais-caro"}>Maior Preço</MenuItem>
+                    </Select>
+                  </Box>
+                </Col>}
+
               {filteredFreelancer.length <= 0 && filteredItems.length <= 0 && (
                 <Col xs={12} className="d-flex justify-content-center pt-2">
                   <Typography variant="body2" className="f-22">
@@ -149,7 +135,7 @@ function Home() {
                 ))}
 
               {UserStorage.getIsFreelancerLocalStorage() &&
-                filteredFreelancer.map((data: any) => (
+                filteredItems.map((data: any) => (
                   <Col xs={12} md={6} lg={4} className="p-3">
                     <ServicesAvailableCard data={data} />
                   </Col>
