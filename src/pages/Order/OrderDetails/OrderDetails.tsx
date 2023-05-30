@@ -21,6 +21,8 @@ import OrderDetailsCard from "./components/OrderDetailsCard/OrderDetailsCard";
 import CardProposta from "../../Proposta/components/CardProposta/CardProposta";
 import OrderEditCard from "./components/OrderEditCard/OrderEditCard";
 import SnackbarContext from "../../../hooks/useSnackbar";
+import { notBlank } from "../../../shared/scripts/validators";
+import dayjs from "dayjs";
 
 function OrderDetails() {
   const params = useParams();
@@ -39,7 +41,7 @@ function OrderDetails() {
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState({
     description: '',
-    proposalValue: '',
+    maxValue: '',
     expirationTime: ''
   });
 
@@ -66,7 +68,45 @@ function OrderDetails() {
     return formattedToday
   }
 
+  const validateFormInfo = () => {
+    const { title, description, expirationTime, maxValue } = formData;
+    const newErros = {
+      title: '',
+      description: '',
+      subCategoryIds: '',
+      maxValue: '',
+      expirationTime: '',
+      photo: ''
+    }
+
+    if (notBlank(title)) {
+      newErros.title = "O campo titulo não pode estar vazio";
+    }
+    if (notBlank(description)) {
+      newErros.description = "O campo descrição não pode estar vazio";
+    } else if (description.length < 30) {
+      newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
+    }
+
+    if (notBlank(maxValue)) {
+      newErros.maxValue = "O campo valor máximo não pode estar vazio";
+    } else if (Number(maxValue) <= 0) {
+      newErros.maxValue = "O campo valor máximo não pode ser negativo ou 0";
+    }
+
+    if (notBlank(expirationTime)) {
+      newErros.expirationTime = "O prazo não pode estar vazio";
+    } else if (Number(expirationTime) <= 0) {
+      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
+      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
+    }
+
+    return newErros;
+  }
+
   const updateValues = (newValues: any) => {
+
     setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime) })
     const date = new Date(newValues.expirationTime);
     setFormData({
@@ -120,38 +160,45 @@ function OrderDetails() {
   }
 
   const handleUpdateOrder = () => {
-    const isArrayOfNumbers = formData.subCategoriesIds.every(
-      (element: any) => typeof element === "number"
-    );
+    const errors = validateFormInfo();
+    const valores = Object.values(errors);
+    const errorsValues = valores.every(valor => valor === "");
+    if (errorsValues) {
+      const isArrayOfNumbers = formData.subCategoriesIds.every(
+        (element: any) => typeof element === "number"
+      );
 
-    if (!isArrayOfNumbers) {
-      formData.subCategoriesIds = formData.subCategoriesIds.map((value: any) => {
-        return value.id
-      })
+      if (!isArrayOfNumbers) {
+        formData.subCategoriesIds = formData.subCategoriesIds.map((value: any) => {
+          return value.id
+        })
+      }
+
+      const newFormData = new FormData()
+
+      formData.newPhotos.forEach((file) => {
+        newFormData.append("newPhotos", file);
+      });
+
+      formData.deletedPhotos.forEach((file) => {
+        newFormData.append("deletedPhotos", file);
+      });
+
+      updateOrderById(id, formData)
+        .then(() => {
+          updatePictures(newFormData, id)
+            .then((res) => {
+              updateValues(res.data)
+              handleHiddenEditOrder()
+              showSnackbar(false, "Pedido editado com sucesso!")
+            })
+        })
+        .catch((error) => {
+          showSnackbar(true, "Problemas para editar o pedido!")
+        })
+    } else {
+      setErrors(errors)
     }
-
-    const newFormData = new FormData()
-
-    formData.newPhotos.forEach((file) => {
-      newFormData.append("newPhotos", file);
-    });
-
-    formData.deletedPhotos.forEach((file) => {
-      newFormData.append("deletedPhotos", file);
-    });
-
-    updateOrderById(id, formData)
-      .then(() => {
-        updatePictures(newFormData, id)
-          .then((res) => {
-            updateValues(res.data)
-            handleHiddenEditOrder()
-            showSnackbar(false, "Pedido editado com sucesso!")
-          })
-      })
-      .catch((error) => {
-        showSnackbar(true, "Problemas para editar o pedido!")
-      })
   }
 
   useEffect(() => {
