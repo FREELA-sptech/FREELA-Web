@@ -75,7 +75,7 @@ function OrderDetailsCard({
   return (
     <Grid container className="pt-4 px-0 d-flex gap-3" maxWidth={"100%"} position={"relative"}>
       {user.id === UserStorage.getIdUserLocalStorage() ?
-        handleShowEditOrder && data && (
+        handleShowEditOrder && !data.accepted && (
           <Box
             className="position-absolute"
             sx={{
@@ -86,7 +86,7 @@ function OrderDetailsCard({
             <EditIcon onClick={handleShowEditOrder} className="me-2" />
             <DeleteIcon color='error' onClick={handleDeleteOrder} />
           </Box>
-        ) : handleShowEditOrder && (
+        ) : handleShowEditOrder && !data.accepted && (
           <Box
             className="position-absolute"
             sx={{

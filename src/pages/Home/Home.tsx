@@ -8,11 +8,13 @@ import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { OrdersAPI } from "../../api/ordersApi";
 import { UserAPI } from "../../api/userApi";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('');
   const [responseData, setResponseData] = useState([])
+  const [freelancerData, setFreelancerData] = useState([])
   const { getOrders, findByTitle, getAllOrders } = OrdersAPI()
   const { getFreelancersByInterests } = UserAPI()
   const [filter, setFilter] = useState("interest");
@@ -34,7 +36,7 @@ function Home() {
     } else {
       getFreelancersByInterests()
         .then((res: any) => {
-          setResponseData(res.data)
+          setFreelancerData(res.data)
         }).finally(() => {
           setIsLoading(false)
         })
@@ -42,38 +44,17 @@ function Home() {
   }, [])
 
   const handleFilterByText = (text: string) => {
-    if (UserStorage.getIsFreelancerLocalStorage()) {
-      findByTitle(text, filter)
-        .then((res) => {
-          console.log(res.data.status)
-          if (res.status == 204) setMessage("Nenhum pedido com esse nome")
-          if (res.data) return setResponseData(res.data)
-        })
-        .catch((e) => {
-          console.log("erro")
-          setMessage("")
-          if (filter == "interest") return getOrders()
-            .then((response: any) => {
-              setResponseData(response.data)
-            }).finally(() => {
-              setIsLoading(false)
-            })
-          else {
-            return getAllOrders()
-              .then((res: any) => {
-                setResponseData(res.data);
-              }).finally(() => {
-                setIsLoading(false)
-              })
-          }
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    } else {
-
-    }
+    setSearchTerm(text)
   }
+
+  const filteredItems = responseData && responseData.filter((item: any) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredFreelancer = freelancerData && freelancerData.filter((item: any) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   const handleSelectDataByInterest = (type: string) => {
     setFilter(type)
@@ -81,18 +62,26 @@ function Home() {
       return getOrders()
         .then((response: any) => {
           setResponseData(response.data)
+          if (response.data.length <= 0) {
+            setMessage("Nenhuma ordem disponível")
+          }
         }).finally(() => {
           setIsLoading(false)
         })
     } else {
       return getAllOrders()
         .then((res: any) => {
-          setResponseData(res.data);
+          setResponseData(res.data)
+          if (res.data.length <= 0) {
+            setMessage("Nenhuma ordem disponível")
+          }
         }).finally(() => {
           setIsLoading(false)
         })
     }
   }
+
+  console.log(filteredFreelancer, ' filteredFreelancer')
 
   return (
     <section className="home-background">
@@ -105,7 +94,7 @@ function Home() {
           </Row>
           <Modal className="d-block w-100 h-100" show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>
-              <Modal.Title>Listar Pedidos por:</Modal.Title>
+              <Modal.Title>Ordenar por:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <FiltersCard handleSelectDataByInterest={handleSelectDataByInterest} />
@@ -143,22 +132,27 @@ function Home() {
           </Col>
           <Col lg={12} className="px-3 d-flex flex-column gap-2">
             <Row className="d-flex">
-              {
-                loading ? (<CircularProgress style={{ margin: "auto" }} />) :
-                  message != "" ?
-                    <h3>{message}</h3> :
-                    responseData.map((data: any) => {
-                      return UserStorage.getIsFreelancerLocalStorage() ? (
-                        <Col xs={12} md={6} lg={4} className="p-3">
-                          <ServicesAvailableCard data={data} />
-                        </Col>
-                      ) : (
-                        <Col xs={12} md={6} lg={4} className="p-3">
-                          <FreelancerProfileCard props={data} />
-                        </Col>
-                      )
-                    })
-              }
+              {filteredFreelancer.length <= 0 && filteredItems.length <= 0 && (
+                <Col xs={12} className="d-flex justify-content-center pt-2">
+                  <Typography variant="body2" className="f-22">
+                    Nenhum resultado para a busca
+                  </Typography>
+                </Col>
+              )}
+
+              {!UserStorage.getIsFreelancerLocalStorage() &&
+                filteredFreelancer.map((data: any) => (
+                  <Col xs={12} md={6} lg={4} className="p-3">
+                    <FreelancerProfileCard data={data} />
+                  </Col>
+                ))}
+
+              {UserStorage.getIsFreelancerLocalStorage() &&
+                filteredFreelancer.map((data: any) => (
+                  <Col xs={12} md={6} lg={4} className="p-3">
+                    <ServicesAvailableCard data={data} />
+                  </Col>
+                ))}
             </Row>
           </Col>
         </Row>
