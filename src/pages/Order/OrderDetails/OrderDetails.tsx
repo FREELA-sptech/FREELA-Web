@@ -21,6 +21,7 @@ import OrderDetailsCard from "./components/OrderDetailsCard/OrderDetailsCard";
 import CardProposta from "../../Proposta/components/CardProposta/CardProposta";
 import OrderEditCard from "./components/OrderEditCard/OrderEditCard";
 import SnackbarContext from "../../../hooks/useSnackbar";
+import { UserStorage } from "../../../store/userStorage";
 import { notBlank } from "../../../shared/scripts/validators";
 import dayjs from "dayjs";
 
@@ -234,23 +235,43 @@ function OrderDetails() {
               />
             )}
           </Col>
-          <Grid container lg={12} className="pb-4" flexDirection="column">
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <TabList onChange={handleChange} aria-label="lab API tabs example">
-                  <Tab label={"Propostas Recebidas"} value="1" />
-                  <Tab label="Proposta Aceita" value="2" />
-                  <Tab label="Propostas Recusadas" value="3" />
-                </TabList>
-              </Box>
-              <TabPanel value="1" className="px-0">
-                <Grid container spacing={4} xs={12}>
-                  {proposals && proposals.length > 0 ?
-                    proposals.map((localData: any) => (
-                      <Grid item xs={12} md={6} lg={3} key={localData.id}>
-                        <ProposalCard data={localData} />
-                      </Grid>)
-                    ) : (
+          {data && data.user.id == UserStorage.getIdUserLocalStorage() &&
+            <Grid container lg={12} className="pb-4" flexDirection="column">
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <TabList onChange={handleChange} aria-label="lab API tabs example">
+                    {data && !data.accepted && <Tab label={"Propostas Recebidas"} value="1" />}
+                    <Tab label="Proposta Aceita" value="2" />
+                    {data && !data.accepted && <Tab label="Propostas Recusadas" value="3" />}
+                  </TabList>
+                </Box>
+                <TabPanel value="1" className="px-0">
+                  <Grid container spacing={4} xs={12}>
+                    {proposals && proposals.length > 0 ?
+                      proposals.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={3} key={localData.id}>
+                          <ProposalCard data={localData} />
+                        </Grid>)
+                      ) : (
+                        <Grid
+                          item
+                          container
+                          xs={12}
+                          justifyContent="flex-end"
+                          alignItems="center"
+                          flexDirection="column"
+                          gap={2}
+                        >
+                          <Typography variant="body2" className="f-22 pt-4">
+                            Você ainda não possui nenhuma proposta
+                          </Typography>
+                        </Grid>
+                      )}
+                  </Grid>
+                </TabPanel>
+                <TabPanel value="2" className="px-0">
+                  <Grid container spacing={4}>
+                    {dataAccepted.length <= 0 ? (
                       <Grid
                         item
                         container
@@ -260,65 +281,46 @@ function OrderDetails() {
                         flexDirection="column"
                         gap={2}
                       >
-                        <Typography variant="body2" className="f-22 pt-4">
-                          Você ainda não possui nenhuma proposta
+                        <Typography variant="body2" className="f-22">
+                          Você ainda não aceitou nenhuma proposta!
                         </Typography>
                       </Grid>
+                    ) : (
+                      dataAccepted.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ProposalCard data={localData} />
+                        </Grid>
+                      ))
                     )}
-                </Grid>
-              </TabPanel>
-              <TabPanel value="2" className="px-0">
-                <Grid container spacing={4}>
-                  {dataAccepted.length <= 0 ? (
-                    <Grid
-                      item
-                      container
-                      xs={12}
-                      justifyContent="flex-end"
-                      alignItems="center"
-                      flexDirection="column"
-                      gap={2}
-                    >
-                      <Typography variant="body2" className="f-22">
-                        Você ainda não aceitou nenhuma proposta!
-                      </Typography>
-                    </Grid>
-                  ) : (
-                    dataAccepted.map((localData: any) => (
-                      <Grid item xs={12} md={6} lg={4}>
-                        <ProposalCard data={localData} />
+                  </Grid>
+                </TabPanel>
+                <TabPanel value="3" className="px-0">
+                  <Grid container spacing={4}>
+                    {dataRefused.length <= 0 ? (
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Typography variant="body2" className="f-22">
+                          Nenhuma proposta recusada, continue assim! :)
+                        </Typography>
                       </Grid>
-                    ))
-                  )}
-                </Grid>
-              </TabPanel>
-              <TabPanel value="3" className="px-0">
-                <Grid container spacing={4}>
-                  {dataRefused.length <= 0 ? (
-                    <Grid
-                      item
-                      container
-                      xs={12}
-                      justifyContent="flex-end"
-                      alignItems="center"
-                      flexDirection="column"
-                      gap={2}
-                    >
-                      <Typography variant="body2" className="f-22">
-                        Nenhuma proposta recusada, continue assim! :)
-                      </Typography>
-                    </Grid>
-                  ) : (
-                    dataRefused.map((localData: any) => (
-                      <Grid item xs={12} md={6} lg={4}>
-                        <ProposalCard data={localData} />
-                      </Grid>
-                    ))
-                  )}
-                </Grid>
-              </TabPanel>
-            </TabContext>
-          </Grid>
+                    ) : (
+                      dataRefused.map((localData: any) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          <ProposalCard data={localData} />
+                        </Grid>
+                      ))
+                    )}
+                  </Grid>
+                </TabPanel>
+              </TabContext>
+            </Grid>}
         </Row>
         <Modal
           show={showSendProposalsModal}

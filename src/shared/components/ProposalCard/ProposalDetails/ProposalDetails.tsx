@@ -26,7 +26,6 @@ export function ProposalDetails({
   handleShowEditProposals,
   data
 }: Props) {
-
   return (
     <Grid container className="pt-0 px-3" maxWidth={"100%"}>
       <Grid item container xs={12} className="position-relative">
@@ -58,7 +57,7 @@ export function ProposalDetails({
             </div>
           </Figure.Caption>
         </Figure>
-        {originUser.id === UserStorage.getIdUserLocalStorage() && (
+        {originUser.id === UserStorage.getIdUserLocalStorage() && !data.isAccepted && (
           <Box
             className="position-absolute"
             sx={{
@@ -117,7 +116,7 @@ export function ProposalDetails({
             {data.description}
           </p>
         </Grid>
-        {originUser.id !== UserStorage.getIdUserLocalStorage() &&
+        {originUser.id !== UserStorage.getIdUserLocalStorage() && !data.isAccepted &&
           <Grid item xs={12} className="d-flex justify-content-between my-3 gap-2">
             <button className="primary-outline w-auto" onClick={handleRefuseProposals}>Recusar</button>
             <button className="primary-standart w-auto" onClick={handleAcceptProposals}>Aceitar</button>

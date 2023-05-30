@@ -5,18 +5,18 @@ function FiltersCard(props: any) {
   const {handleSelectDataByInterest} = props;
   return (
     <>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">Filtrar:</InputLabel>
+      <FormControl sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-helper-label">Ordernar:</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          label="Seus Interesses"
+          label="Ordernar:"
           onChange={(e) => handleSelectDataByInterest(e.target.value)}
         >
-          <MenuItem value={"interest"}>Seus Interesses</MenuItem>
-          <MenuItem value={"all"}>Todos</MenuItem>
+          <MenuItem value={"low-price"}>Menor Preço</MenuItem>
+          <MenuItem value={"high-price"}>Maior Preço</MenuItem>
         </Select>
-        <FormHelperText>Selecione aqui como deseja listar os pedidos</FormHelperText>
+        <FormHelperText></FormHelperText>
       </FormControl>
     </>
   );
