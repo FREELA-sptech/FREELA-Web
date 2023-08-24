@@ -15,7 +15,7 @@ export default function Chat() {
   const [chatData, setChatData] = useState()
   const [chatDataDetails, setChatDataDetails] = useState()
   const [messagesData, setMessagesData] = useState()
-  const url = `ws://ec2-35-153-138-18.compute-1.amazonaws.com:8080/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
+  const url = `ws://44.218.118.231/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
 
   const options = {
     onOpen: () => {
