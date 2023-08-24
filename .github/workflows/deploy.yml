@@ -1,4 +1,4 @@
-name: Deploy da aplicacao no nginx
+name: Deploy to EC2
 
 on:
   push:
@@ -12,11 +12,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
-      - name: Build and Deploy
-        run: |
-          ssh -i ${{ secrets.EC2_SSH_KEY }} ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com
 
-          cd /home/ubuntu/FREELA-Web
-          yarn
-          sudo systemctl restart freela
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Copy files to EC2
+        run: |
+          scp -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no -r ./* ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com:/home/ubuntu/FREELA-Web
+
+      - name: SSH into EC2 and Restart Nginx
+        run: |
+          ssh -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com 'sudo systemctl restart freela'
