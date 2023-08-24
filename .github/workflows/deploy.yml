@@ -18,7 +18,7 @@ jobs:
         with:
           host: ec2-52-207-200-178.compute-1.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY }}
 
       - name: Build and Deploy
         run: |
