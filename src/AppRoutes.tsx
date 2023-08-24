@@ -18,7 +18,6 @@ import Backoffice from './pages/Backoffice/Backoffice'
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
         <Route path="/" element={<RedirectProvider element={<Index />} path='/home' />} />
         <Route path="/login" element={<RedirectProvider element={<Login />} path='/home' />} />
