@@ -18,10 +18,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Copy files to EC2
-        run: |
-          scp -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no -r ./* ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com:/home/ubuntu/FREELA-Web
-
       - name: SSH into EC2 and Restart Nginx
         run: |
-          ssh -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com 'sudo systemctl restart freela'
+          cd /home/ubuntu/FREELA-Web
+          git pull origin main
+          yarn 
+          sudo systemctl restart freela
