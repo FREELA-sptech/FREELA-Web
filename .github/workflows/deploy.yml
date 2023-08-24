@@ -1,29 +1,27 @@
-name: Push-to-EC2
+name: Deploy da aplicacao no nginx
+
 on:
   push:
     branches:
       - main
+
 jobs:
   deploy:
-    name: Deploy to EC2
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout the files
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Copy files with SSH
-      uses: easingthemes/ssh-deploy@main
-      env:
-        SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
-        ARGS: "-rltgoDzvO --delete"
-        SOURCE: "./"
-        REMOTE_HOST: ec2-52-207-200-178.compute-1.amazonaws.com
-        REMOTE_USER: ubuntu
-        TARGET: /home/ubuntu
-        EXCLUDE: "/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
+      - name: Setup SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-52-207-200-178.compute-1.amazonaws.com
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Build and Deploy
-      run: |
+      - name: Build and Deploy
+        run: |
+          cd /home/ubuntu/FREELA-Web
           yarn
-
           sudo systemctl restart freela
