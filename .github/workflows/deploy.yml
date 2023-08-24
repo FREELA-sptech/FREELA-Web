@@ -19,4 +19,4 @@ jobs:
     
     - name: SSH into EC2
       run: |
-        ssh -i ~/.ssh/freela.pem ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com "git pull origin main && yarn && sudo systemctl restart freela"
+        ssh -i ~/.ssh/freela.pem ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com "cd /home/ubuntu/FREELA-Web && git pull origin main && yarn && sudo systemctl restart freela"
