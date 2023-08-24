@@ -1,23 +1,22 @@
-name: Deploy to EC2
+name: SSH to EC2
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-
-      - name: SSH into EC2 and Deploy
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com 'cd /home/ubuntu/FREELA-Web && git pull origin main && yarn install && sudo systemctl restart freela'
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "$EC2_SSH_KEY" > ~/.ssh/freela.pem
+        chmod 600 ~/.ssh/freela.pem
+        ssh-keyscan -t rsa ec2-52-207-200-178.compute-1.amazonaws.com >> ~/.ssh/known_hosts
+    
+    - name: SSH into EC2
+      run: |
+        ssh -i ~/.ssh/freela.pem ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com "git pull origin main && yarn && sudo systemctl restart freela"
