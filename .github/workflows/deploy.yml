@@ -13,7 +13,7 @@ jobs:
     - name: Setup SSH
       run: |
         mkdir -p ~/.ssh
-        echo "$EC2_SSH_KEY" > ~/.ssh/freela.pem
+        echo "${{EC2_SSH_KEY}}" > ~/.ssh/freela.pem
         chmod 600 ~/.ssh/freela.pem
         ssh-keyscan -t rsa ec2-52-207-200-178.compute-1.amazonaws.com >> ~/.ssh/known_hosts
     
