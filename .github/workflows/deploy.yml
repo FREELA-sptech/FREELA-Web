@@ -12,16 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Setup SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ec2-52-207-200-178.compute-1.amazonaws.com
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-
+        
       - name: Build and Deploy
         run: |
+          ssh -i ${{ secrets.EC2_SSH_KEY }} ubuntu@ec2-52-207-200-178.compute-1.amazonaws.com
+
           cd /home/ubuntu/FREELA-Web
           yarn
           sudo systemctl restart freela
