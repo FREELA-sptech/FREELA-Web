@@ -182,94 +182,74 @@ function CardProfile(props: any) {
         borderRadius: '16px 16px 0 0'
       }}
     >
-      <Box className="position-relative d-flex flex-row gap-4"
-        sx={{
-          height: '200px',
-          background: 'var(--ligth-contrast-color)'
-        }}>
-        {loading ? (
-          <Box
-            className="position-absolute"
-            sx={{
-              bottom: '-75px',
-              left: '50px',
-              backgroundColor: 'white',
-              height: '158px',
-              width: '158px',
-              padding: '4px',
-              borderRadius: '50%'
-            }}
-          >
-            <Skeleton
-              variant="circular"
-              width={150}
-              height={150}
-            />
-          </Box>
-        ) : (
-          <>
-            <Avatar
-              className="position-absolute"
-              sx={{
-                width: 150,
-                height: 150,
-                bgcolor: "#274C77",
-                border: '4px solid white',
-                bottom: '-75px',
-                left: '50px'
-              }}
-              alt={userDetailsData.name}
-              src={`data:image/png;base64,${userDetailsData.profilePhoto}`}
-            />
-            {editing && (
-              <Fab
-                component="label"
-                className="position-absolute"
-                size="small"
-                color="primary"
-                aria-label="add"
-                sx={{
-                  bottom: '-75px',
-                  left: '150px'
-                }}
-                disabled={loadingImage}
-              >
-                <Input
-                  type="file"
-                  hidden
-                  onChange={handleImageChange}
-                />
-                {loadingImage ? <CircularProgress color="secondary" size={20} /> : <AddIcon />}
-              </Fab>
-            )}
-          </>
-        )}
-        {editing ? (
-          <Box
-            className="position-absolute"
-            sx={{
-              bottom: '-55px',
-              cursor: 'pointer',
-              right: '50px'
-            }}
-          >
-            <ClearIcon onClick={handleCloseEdit} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
-            <DoneIcon onClick={handleSendEdit} sx={{ fontSize: '30px' }} color="success" />
-          </Box>
-        ) : !userId && (
-          <EditIcon
-            onClick={handleEdit}
-            className="position-absolute"
-            sx={{
-              bottom: '-55px',
-              cursor: 'pointer',
-              right: '50px'
-            }}
-          />
-        )}
-      </Box>
       {!editing ? (
-        <Box className="d-flex flex-column px-5" sx={{ paddingTop: '100px' }}>
+        <Box className="d-flex flex-column px-5 py-4">
+          <Box display='flex' justifyContent='space-between'>
+            {loading ? (
+              <Box
+                sx={{
+                  backgroundColor: 'white',
+                  height: '158px',
+                  width: '158px',
+                  padding: '4px',
+                  borderRadius: '50%'
+                }}
+              >
+                <Skeleton
+                  variant="circular"
+                  width={150}
+                  height={150}
+                />
+              </Box>
+            ) : (
+              <>
+                <Avatar
+                  sx={{
+                    width: 150,
+                    height: 150,
+                    bgcolor: "#274C77",
+                    border: '4px solid white',
+                  }}
+                  alt={userDetailsData.name}
+                  src={`data:image/png;base64,${userDetailsData.profilePhoto}`}
+                />
+                {editing && (
+                  <Fab
+                    component="label"
+                    size="small"
+                    color="primary"
+                    aria-label="add"
+                    disabled={loadingImage}
+                  >
+                    <Input
+                      type="file"
+                      hidden
+                      onChange={handleImageChange}
+                    />
+                    {loadingImage ? <CircularProgress color="secondary" size={20} /> : <AddIcon />}
+                  </Fab>
+                )}
+              </>
+            )}
+            {editing ? (
+              <Box
+                sx={{
+                  cursor: 'pointer',
+                }}
+              >
+                <ClearIcon onClick={handleCloseEdit} sx={{ fontSize: '30px', marginRight: '5px' }} color="error" />
+                <DoneIcon onClick={handleSendEdit} sx={{ fontSize: '30px' }} color="success" />
+              </Box>
+            ) : !userId && (
+              <EditIcon
+                onClick={handleEdit}
+                sx={{
+                  cursor: 'pointer',
+                }}
+              />
+            )}
+
+          </Box>
           {loading ? (
             <>
               <Skeleton width={200} height={50} />

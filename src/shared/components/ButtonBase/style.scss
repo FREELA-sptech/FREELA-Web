@@ -11,8 +11,14 @@
   transition: 0.3s !important;
   text-decoration: none;
 
-  &:hover {
+  &:not(.disabled-button):hover {
     opacity: 0.8;
+  }
+
+  &.disabled-button {
+    cursor: unset !important;
+    color: var(--dark-contrast-color) !important;
+    background-color: var(--contrast-background-color);
   }
 }
 

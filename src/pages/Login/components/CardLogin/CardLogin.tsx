@@ -14,9 +14,11 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
 import SnackbarContext from "../../../../hooks/useSnackbar";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 function CardLogin() {
   const [errors, setErrors] = useState<any>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { showSnackbar } = useContext(SnackbarContext);
@@ -73,9 +75,11 @@ function CardLogin() {
     const errors = validateForm();
     const valores = Object.values(errors);
     const errorsValues = valores.every(valor => valor === "");
+    setIsLoading(true);
 
     if (!errorsValues) {
       setErrors(errors);
+      setIsLoading(false);
     } else {
       login(formData)
         .then((res) => {
@@ -99,6 +103,7 @@ function CardLogin() {
               showSnackbar(true, "Houve algum erro interno, tente novamente mais tarde!")
           }
         })
+        .finally(() => setIsLoading(false));
     }
   }
 
@@ -173,7 +178,14 @@ function CardLogin() {
               onChange={(e) => setField("password", e.target.value)}
             />
           </Grid>
-          <button className="button-base primary-standart" type="submit">Entrar</button>
+          <ButtonBase
+            onClick={() => { }}
+            buttonType={"primary-standart"}
+            label={"entrar"}
+            type="submit"
+            isLoading={isLoading}
+            icon={<ArrowForwardIcon sx={{height: '18px'}} />}
+          />
           <Form.Text className="summary mt-3 text-center w-100 d-block">
             <p className="f-roboto f-16 aditional-color">Ainda não tem uma conta? &nbsp;<Link to='/cadastro' className="f-roboto f-16 contrast-color">Cadastre-se</Link></p>
           </Form.Text>

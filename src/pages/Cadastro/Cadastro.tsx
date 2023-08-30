@@ -13,12 +13,16 @@ import { useNavigate } from "react-router-dom";
 import { UserAPI } from "../../api/userApi";
 import React, { useContext } from 'react';
 import SnackbarContext from "../../hooks/useSnackbar";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ButtonBase from "../../shared/components/ButtonBase/ButtonBase";
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 
 function Cadastro() {
   const navigate = useNavigate();
   const { showSnackbar } = useContext(SnackbarContext);
   const { register } = UserAPI();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -122,13 +126,17 @@ function Cadastro() {
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     event.preventDefault();
 
-    if (currentStep == 0)
+    if (currentStep == 0) {
+      setIsLoading(false);
       return changeStep(currentStep + 1)
+    }
 
     if (currentStep == 1) {
       if (handleValidateInterest()) {
+        setIsLoading(false);
         return changeStep(currentStep + 1)
       }
     }
@@ -149,6 +157,7 @@ function Cadastro() {
                 showSnackbar(true, "Houve algum erro interno, tente novamente mais tarde!")
             }
           })
+          .finally(() => setIsLoading(false))
       }
     }
   }
@@ -193,9 +202,25 @@ function Cadastro() {
                   {currentComponent}
                   <Col lg={12} xs={12}>
                     {!isLastStep ? (
-                      <button className="button-base primary-standart w-100" type="submit">Avançar</button>
+                      <ButtonBase
+                        onClick={() => { }}
+                        buttonType={"primary-standart"}
+                        label={"Avançar"}
+                        type="submit"
+                        className="w-100"
+                        isLoading={isLoading}
+                        icon={<ArrowForwardIcon sx={{ height: '18px' }} />}
+                      />
                     ) : (
-                      <button className="button-base primary-standart w-100" type="submit">Concluir</button>
+                      <ButtonBase
+                        onClick={() => { }}
+                        buttonType={"primary-standart"}
+                        label={"Concluir"}
+                        type="submit"
+                        className="w-100"
+                        isLoading={isLoading}
+                        icon={<DoneAllIcon sx={{ height: '18px' }} />}
+                      />
                     )}
                   </Col>
                 </Form>
