@@ -42,7 +42,7 @@ export default function ListConversation({
       <Grid
         item
         className="list-conversation-content d-flex flex-column align-items-center"
-        style={{ gap: "0.5rem", padding: '10px', padding }}
+        style={{ gap: "0.5rem", padding: '10px' }}
       >
         {chatData.map((localData: any) => (
           <Conversation

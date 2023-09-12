@@ -1,15 +1,16 @@
 .message-box{
-    padding: 1rem;
+    padding: 10px 20px;
     border-radius: 20px;
     width: fit-content;
 }
 
 .addressee{
     background-color: var(--background-color);
+    border-radius: 20px 20px 20px 0px;
     color: var(--text-color);
 }
 .sender{
     background-color: var(--dark-contrast-color);
     color: var(--background-color);
-
+    border-radius: 20px 20px 0px 20px;
 }

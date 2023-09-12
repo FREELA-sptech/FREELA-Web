@@ -46,7 +46,7 @@ export default function ChatComponent({
               bgcolor: "#274C77",
             }}
             alt={"Criação de Site Dahora e Legal"}
-            src={`data:image/png;base64, ${UserStorage.getIsFreelancerLocalStorage() ?
+            src={`data:image/png;base64, ${!UserStorage.getIsFreelancerLocalStorage() ?
               chatData.freelancerUser.profilePhoto :
               chatData.clientUser.profilePhoto}`}
           />
@@ -55,7 +55,7 @@ export default function ChatComponent({
               {chatData.order.title}
             </h2>
             <p className="fw-bold f-roboto aditional-color f-14" style={{ padding: 0, margin: 0 }}>
-              {UserStorage.getIsFreelancerLocalStorage() ?
+              {!UserStorage.getIsFreelancerLocalStorage() ?
                 chatData.freelancerUser.name :
                 chatData.clientUser.name}
             </p>

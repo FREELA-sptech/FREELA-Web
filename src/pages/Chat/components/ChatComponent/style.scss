@@ -1,9 +1,9 @@
 .chat-component {
     height: 90vh;
+
     &-header {
-        height: 15%;
-        padding: 0 0 0 1rem;
-        border-bottom: 1.5px solid #dcdcdc;
+        height: 70px;
+        padding-left: 20px;
     }
 
     &-content {

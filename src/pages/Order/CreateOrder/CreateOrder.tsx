@@ -114,6 +114,9 @@ export function CreateOrder() {
                 showSnackbar(true, "Problemas para salvar imagens!")
                 deleteOrder(res.data.id)
               })
+          } else {
+            showSnackbar(false, "Ordem Criada com sucesso!")
+            navigate("/perfil")
           }
         })
         .catch((error) => {

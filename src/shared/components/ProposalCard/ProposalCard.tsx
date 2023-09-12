@@ -60,9 +60,13 @@ function ProposalCard(props: any) {
   const getOrderDetails = () => {
     getOrdersById(props.data.destinedOrder)
       .then((res) => {
-        setOrderData(res.data)
+        const resposta: any = res.data;
+        const expirationTime = convertTime(resposta.expirationTime);
+
+        setOrderData({ ...resposta, expirationTime });
       })
-  }
+  };
+
 
   useEffect(() => {
     updateValues(props.data)
