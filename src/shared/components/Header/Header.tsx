@@ -50,7 +50,7 @@ function Header(props: any) {
             <Nav className="text-center justify-content-between h-100 flex-grow-1" style={{ zIndex: 9 }}>
               <Box className="d-flex flex-column flex-xl-row">
                 <Link to='/' className='logo dark-contrast-color' onClick={handleClose}>
-                  FREELA
+                  FREELINHA
                 </Link>
                 {isAuthenticated && (
                   <>
