@@ -15,7 +15,7 @@ export default function Chat() {
   const [chatData, setChatData] = useState<any>();
   const [chatDataDetails, setChatDataDetails] = useState();
   const [messagesData, setMessagesData] = useState<any>();
-  const url = `ws://44.218.118.231/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
+  const url = `ws://api-freela.duckdns.org/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
   //const url = `ws://localhost:8080/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
 
   const options = {

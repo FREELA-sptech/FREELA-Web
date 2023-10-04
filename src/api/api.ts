@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 
 const api = axios.create({
   //baseURL: "http://localhost:8080/"
-  baseURL: "http://44.218.118.231/"
+  baseURL: "https://api-freela.duckdns.org/"
 });
 
 export function useApi() {
