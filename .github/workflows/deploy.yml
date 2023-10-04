@@ -8,10 +8,10 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Build Front-01
     runs-on: ubuntu-latest
     steps:
-      - name: Conectando na EC2 e atualizando repositorio
+      - name: Conectando na EC2 front-01 e atualizando repositorio
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS }}
@@ -23,13 +23,11 @@ jobs:
             yarn build
             sudo cp -r /home/ubuntu/FREELA-Web/dist* /var/www/html/
             sudo systemctl restart nginx
-
-jobs:
   build:
-    name: Build
+    name: Build Front-02
     runs-on: ubuntu-latest
     steps:
-      - name: Conectando na EC2 e atualizando repositorio
+      - name: Conectando na EC2 front-02 e atualizando repositorio
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS_02 }}
