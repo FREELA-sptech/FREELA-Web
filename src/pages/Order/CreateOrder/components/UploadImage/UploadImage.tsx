@@ -24,18 +24,20 @@ export function UploadImage(props: any) {
   }
 
   return (
-    <Dropzone style={{position: 'absolute'}} accept={{ 'image/*': ['.jpeg', '.jpg', '.png'] }} onDropAccepted={handleDropAccepted}>
-      {({ getRootProps, getInputProps, isDragActive, isDragReject }: any) => (
-        <DropContainer
-          {...getRootProps()}
-          isDragActive={isDragActive}
-          isDragReject={isDragReject}
-        >
-          <MdUploadFile size={"32px"} />
-          <input {...getInputProps()} />
-          {renderDragMessage(isDragActive, isDragReject)}
-        </DropContainer>
-      )}
-    </Dropzone>
+    <div style={{ position: 'absolute' }}>
+      <Dropzone accept={{ 'image/*': ['.jpeg', '.jpg', '.png'] }} onDropAccepted={handleDropAccepted}>
+        {({ getRootProps, getInputProps, isDragActive, isDragReject }: any) => (
+          <DropContainer
+            {...getRootProps()}
+            isDragActive={isDragActive}
+            isDragReject={isDragReject}
+          >
+            <MdUploadFile size={"32px"} />
+            <input {...getInputProps()} />
+            {renderDragMessage(isDragActive, isDragReject)}
+          </DropContainer>
+        )}
+      </Dropzone>
+    </div>
   );
 }

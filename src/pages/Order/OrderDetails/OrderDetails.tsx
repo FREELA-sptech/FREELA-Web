@@ -35,7 +35,7 @@ function OrderDetails() {
   const { detailsOrder, deleteOrder, updateOrderById, updatePictures } = OrdersAPI();
   const [showSendProposalsModal, setShowSendProposalsModal] = useState(false)
   const { showSnackbar } = useContext(SnackbarContext);
-  const [proposals, setProposals] = useState()
+  const [proposals, setProposals] = useState<any[]>()
   const [dataAccepted, setDataAccepted] = useState<any>([])
   const [dataRefused, setDataRefused] = useState<any>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -141,7 +141,7 @@ function OrderDetails() {
   }
 
   const handleGetOrderDetails = () => {
-    detailsOrder(id)
+    detailsOrder(Number(id))
       .then((res) => {
         updateValues(res.data)
       })
@@ -154,7 +154,7 @@ function OrderDetails() {
   }
 
   const handleDeleteOrder = () => {
-    deleteOrder(id)
+    deleteOrder(Number(id))
       .then((res) => {
         showSnackbar(false, "Ordem deletada com sucesso!")
         navigate("/perfil")
@@ -181,18 +181,18 @@ function OrderDetails() {
 
       const newFormData = new FormData()
 
-      formData.newPhotos.forEach((file) => {
+      formData.newPhotos.forEach((file: any) => {
         newFormData.append("newPhotos", file);
       });
 
-      formData.deletedPhotos.forEach((file) => {
+      formData.deletedPhotos.forEach((file: any) => {
         newFormData.append("deletedPhotos", JSON.stringify(file));
       });
 
       console.log(newFormData.get("deletedPhotos"))
-      updateOrderById(id, formData)
+      updateOrderById(Number(id), formData)
         .then(() => {
-          updatePictures(newFormData, id)
+          updatePictures(newFormData, Number(id))
             .then((res) => {
               updateValues(res.data)
               handleHiddenEditOrder()

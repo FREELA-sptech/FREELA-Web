@@ -27,7 +27,7 @@ function Profile() {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [value, setValue] = useState('1');
-  const [data, setData] = useState([])
+  const [data, setData] = useState<any[]>([])
   const [dataAccepted, setDataAccepted] = useState<any>([])
   const [dataRefused, setDataRefused] = useState<any>([])
   const { showSnackbar } = useContext(SnackbarContext);
@@ -64,7 +64,7 @@ function Profile() {
   }
 
   const getOrdersById = () => {
-    getOrdersByUserId(id)
+    getOrdersByUserId(Number(id))
       .then((res) => {
         const acceptedList: any[] = []
         const pedingList: any[] = []
@@ -113,7 +113,7 @@ function Profile() {
   }
 
   const getProposalsById = () => {
-    getProposalsByUserId(id)
+    getProposalsByUserId(Number(id))
       .then((res) => {
         const acceptedList: any[] = []
         const refusedList: any[] = []

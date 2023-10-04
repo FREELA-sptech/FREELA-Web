@@ -4,7 +4,7 @@ import Conversation from "../Conversation/Conversation";
 
 export type Props = {
   chatData: any;
-  handleGetMessagesData: (id) => void;
+  handleGetMessagesData: (id: number) => void;
 };
 
 export default function ListConversation({

@@ -3,7 +3,16 @@ import { Snackbar, Alert } from '@mui/material';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const SnackbarContext = createContext({
+interface SnackbarContextType {
+  showSnackbar: (isError: boolean, message: string) => void;
+  snackbarData: {
+    open: boolean;
+    isError: boolean;
+    message: string;
+  };
+}
+
+const SnackbarContext = createContext<SnackbarContextType>({
   showSnackbar: () => {},
   snackbarData: {
     open: false,
@@ -12,14 +21,14 @@ const SnackbarContext = createContext({
   },
 });
 
-export const SnackbarProvider = ({ children }) => {
+export const SnackbarProvider = ({ children }: any) => {
   const [snackbarData, setSnackbarData] = useState({
     open: false,
     isError: false,
     message: '',
   });
 
-  const showSnackbar = (isError, message) => {
+  const showSnackbar = (isError: boolean, message: string) => {
     setSnackbarData({
       open: true,
       isError,

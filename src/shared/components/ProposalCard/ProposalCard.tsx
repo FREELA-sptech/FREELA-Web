@@ -168,7 +168,6 @@ function ProposalCard(props: any) {
         .catch(() => {
           showSnackbar(true, "Problemas para atualizar a proposta, tente novamente!")
         })
-      return () => clearTimeout(timeoutId);
     }
   };
 

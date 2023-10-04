@@ -162,7 +162,7 @@ export function InfoOrder(props: any) {
                   fullWidth
                   variant="standard"
                   value={dayjs(props.formData.expirationTime)}
-                  onChange={(e) => {
+                  onChange={(e: any) => {
                     setField('expirationTime', e.$d)
                   }}
                   className="p-0"

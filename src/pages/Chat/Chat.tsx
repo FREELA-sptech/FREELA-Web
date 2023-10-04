@@ -12,9 +12,9 @@ import { ChatApi } from "../../api/chatApi";
 
 export default function Chat() {
   const { getMessagesById, getChats } = ChatApi();
-  const [chatData, setChatData] = useState();
+  const [chatData, setChatData] = useState<any>();
   const [chatDataDetails, setChatDataDetails] = useState();
-  const [messagesData, setMessagesData] = useState();
+  const [messagesData, setMessagesData] = useState<any>();
   const url = `ws://44.218.118.231/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
   //const url = `ws://localhost:8080/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
 
@@ -32,9 +32,9 @@ export default function Chat() {
     });
   };
 
-  const handleGetMessagesData = (id) => {
+  const handleGetMessagesData = (id: any) => {
     getMessagesById(id).then((res) => {
-      const newChatData = chatData.filter((data) => data.id == id);
+      const newChatData = chatData.filter((data: any) => data.id == id);
 
       setChatDataDetails(newChatData[0]);
       setMessagesData(res.data);

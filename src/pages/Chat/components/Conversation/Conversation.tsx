@@ -11,7 +11,7 @@ export default function Conversation({
   localData,
   handleGetMessagesData,
 }: Props) {
-  const convertTime = (time) => {
+  const convertTime = (time: string) => {
     const newTime = new Date(time);
     const hours =
       newTime.getHours() < 10 ? "0" + newTime.getHours() : newTime.getHours();

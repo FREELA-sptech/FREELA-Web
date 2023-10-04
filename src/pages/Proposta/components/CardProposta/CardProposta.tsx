@@ -17,6 +17,8 @@ import { DateField } from "@mui/x-date-pickers";
 import { OrdersAPI } from "../../../../api/ordersApi";
 import dayjs from "dayjs";
 
+type FormField = 'description' | 'proposalValue' | 'expirationTime';
+
 function CardProposta(props: any) {
   const { handleCloseModal } = props
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ function CardProposta(props: any) {
   const [formData, setFormData] = useState({
     description: '',
     proposalValue: '',
-    expirationTime: ''
+    expirationTime: '' as string
   });
 
   const [errors, setErrors] = useState({
@@ -37,7 +39,7 @@ function CardProposta(props: any) {
     expirationTime: ''
   });
 
-  const setField = (field: any, value: any) => {
+  const setField = (field: FormField, value: any) => {
     setFormData({
       ...formData, [field]: value
     })
@@ -88,7 +90,7 @@ function CardProposta(props: any) {
         setErrors(errors);
       } else {
         setFormData(formData);
-        sendProposals(id, formData)
+        sendProposals(Number(id), formData)
           .then((res) => {
             handleCloseModal()
           })
@@ -148,7 +150,7 @@ function CardProposta(props: any) {
                 fullWidth
                 variant="standard"
                 value={formData.expirationTime}
-                onChange={(e) => setField('expirationTime', e.$d)}
+                onChange={(e: any) => setField('expirationTime', e.$d)}
                 className="p-0"
                 slotProps={{
                   textField: {

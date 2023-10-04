@@ -17,7 +17,7 @@ export default function ChatComponent({
   handleSendMessage
 }: Props) {
   const [message, setMessage] = useState('')
-  const messagesContainerRef = useRef(null);
+  const messagesContainerRef = useRef<any>(null);
 
   const handleSubmit = () => {
     const to =
