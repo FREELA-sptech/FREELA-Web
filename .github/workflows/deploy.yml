@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-front-01:
     name: Build Front-01
     runs-on: ubuntu-latest
     steps:
@@ -23,7 +23,7 @@ jobs:
             yarn build
             sudo cp -r /home/ubuntu/FREELA-Web/dist* /var/www/html/
             sudo systemctl restart nginx
-  build:
+  build-front-02:
     name: Build Front-02
     runs-on: ubuntu-latest
     steps:
