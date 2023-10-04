@@ -15,7 +15,7 @@ export function useApi() {
     (error) => {
       if ((error.response && error.response.status === 401) || (error.code === "ERR_NETWORK")) {
         UserStorage.clearAllLocalStorage();
-        window.location.href = "/login"
+        //window.location.href = "/login"
       }
       return Promise.reject(error);
     }
