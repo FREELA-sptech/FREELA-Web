@@ -1,4 +1,5 @@
 import { useApi } from "./api";
+import axios from "axios";
 
 export function OrdersAPI() {
   const api = useApi();
@@ -14,7 +15,7 @@ export function OrdersAPI() {
   }
 
   async function getOrdersByUser() {
-    const response = await api.get("/orders/by-user");
+    const response = await api.get("/orders/user");
     return response;
   }
 
@@ -24,7 +25,16 @@ export function OrdersAPI() {
   }
 
   async function createOrder(formData: any) {
-    const response = await api.post("/orders", formData);
+    const apinew = axios.create({
+      baseURL: "http://localhost:9090/"
+      //baseURL: "https://api-freela.duckdns.org/"
+      //baseURL: "https://bff-freela.duckdns.org/"
+    });
+
+    console.warn(formData)
+
+    const response = await apinew.post("/order", formData);
+    
     return response;
   }
 
@@ -39,7 +49,7 @@ export function OrdersAPI() {
   }
 
   async function detailsOrder(orderId: number) {
-    const response = await api.get(`/orders/edit/${orderId}`);
+    const response = await api.get(`/orders/${orderId}`);
     return response;
   }
 

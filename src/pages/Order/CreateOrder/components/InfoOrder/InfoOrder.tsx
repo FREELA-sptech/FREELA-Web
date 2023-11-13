@@ -130,27 +130,27 @@ export function InfoOrder(props: any) {
                 Preço:
               </Typography>
               <TextField
-                error={!!props.errors.maxValue}
-                id="maxValue"
-                name="maxValue"
+                error={!!props.errors.value}
+                id="value"
+                name="value"
                 fullWidth
                 type="number"
                 InputProps={{
                   startAdornment: <InputAdornment position="start">$</InputAdornment>
                 }}
-                value={props.formData.maxValue}
+                value={props.formData.value}
                 autoComplete="given-name"
                 variant="standard"
                 helperText={
-                  props.errors.maxValue
+                  props.errors.value
                     ? (
                       <Typography variant="body2" className="f-14">
-                        {props.errors.maxValue || " "}
+                        {props.errors.value || " "}
                       </Typography>
                     )
                     : " "
                 }
-                onChange={(e) => setField("maxValue", e.target.value)}
+                onChange={(e) => setField("value", e.target.value)}
               />
             </Grid>
             <Grid item xs={6} className="p-0 ps-2 mb-3">
@@ -161,16 +161,16 @@ export function InfoOrder(props: any) {
                 <DateField
                   fullWidth
                   variant="standard"
-                  value={dayjs(props.formData.expirationTime)}
+                  value={dayjs(props.formData.deadline)}
                   onChange={(e: any) => {
-                    setField('expirationTime', e.$d)
+                    setField('deadline', e.$d)
                   }}
                   className="p-0"
                   slotProps={{
                     textField: {
-                      helperText: props.errors.expirationTime ? (
+                      helperText: props.errors.deadline ? (
                         <Typography variant="body2" className="f-14">
-                          {props.errors.expirationTime}
+                          {props.errors.deadline}
                         </Typography>
                       ) : null
                     }

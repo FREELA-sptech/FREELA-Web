@@ -56,7 +56,7 @@ export function ProposalUpdate({
               bgcolor: "#274C77",
             }}
             alt={originUser.name}
-            src={`data:image/png;base64,${originUser.profilePhoto}`}
+            src={`data:image/png;base64,${originUser.photo}`}
           />
           <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
             <div className="d-flex flex-column">
@@ -127,16 +127,16 @@ export function ProposalUpdate({
               <DateField
                 fullWidth
                 variant="standard"
-                value={dayjs(formData.expirationTime)}
+                value={dayjs(formData.deadline)}
                 onChange={(e: any) => {
-                  setField('expirationTime', e.$d)
+                  setField('deadline', e.$d)
                 }}
                 className="p-0"
                 slotProps={{
                   textField: {
-                    helperText: errors.expirationTime ? (
+                    helperText: errors.deadline ? (
                       <Typography variant="body2" className="f-14">
-                        {errors.expirationTime}
+                        {errors.deadline}
                       </Typography>
                     ) : null
                   }

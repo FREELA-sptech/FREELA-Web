@@ -318,27 +318,27 @@ function OrderEditCard({
                 Preço:
               </Typography>
               <TextField
-                error={!!errors.maxValue}
-                id="maxValue"
-                name="maxValue"
+                error={!!errors.value}
+                id="value"
+                name="value"
                 fullWidth
                 type="number"
                 InputProps={{
                   startAdornment: <InputAdornment position="start">$</InputAdornment>
                 }}
-                value={formData.maxValue}
+                value={formData.value}
                 autoComplete="given-name"
                 variant="standard"
                 helperText={
-                  errors.maxValue
+                  errors.value
                     ? (
                       <Typography variant="body2" className="f-14">
-                        {errors.maxValue || " "}
+                        {errors.value || " "}
                       </Typography>
                     )
                     : " "
                 }
-                onChange={(e) => setField("maxValue", e.target.value)}
+                onChange={(e) => setField("value", e.target.value)}
               />
             </Grid>
             <Grid item xs={6} className="p-0 ps-2 mb-3">
@@ -349,16 +349,16 @@ function OrderEditCard({
                 <DateField
                   fullWidth
                   variant="standard"
-                  value={dayjs(formData.expirationTime)}
+                  value={dayjs(formData.deadline)}
                   onChange={(e: any) => {
-                    setField('expirationTime', e.$d)
+                    setField('deadline', e.$d)
                   }}
                   className="p-0"
                   slotProps={{
                     textField: {
-                      helperText: errors.expirationTime ? (
+                      helperText: errors.deadline ? (
                         <Typography variant="body2" className="f-14">
-                          {errors.expirationTime}
+                          {errors.deadline}
                         </Typography>
                       ) : null
                     }

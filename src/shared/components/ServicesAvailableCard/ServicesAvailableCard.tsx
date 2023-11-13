@@ -115,7 +115,7 @@ function ServicesAvailableCard(data: any) {
             <Figure.Caption className="d-flex flex-column f-12 f-poppings">
               Orçamento:
               <span className="f-roboto f-18 text-color fw-bold">{
-                localData.maxValue.toLocaleString('pt-BR', {
+                localData.value.toLocaleString('pt-BR', {
                   style: 'currency',
                   currency: 'BRL'
                 })}
@@ -124,7 +124,7 @@ function ServicesAvailableCard(data: any) {
           </Figure>
           <Figure className="d-flex align-items-center gap-2 w-auto m-0">
             <Figure.Caption className="d-flex flex-column f-12 f-poppings">
-              Prazo: <span className="f-roboto f-18 text-color fw-bold">{convertTime(localData.expirationTime)}</span>
+              Prazo: <span className="f-roboto f-18 text-color fw-bold">{convertTime(localData.deadline)}</span>
             </Figure.Caption>
           </Figure>
         </Row>

@@ -16,7 +16,7 @@ function FreelancerProfileCard(props: any) {
     description,
     rate,
     subCategories,
-    profilePhoto
+    photo
   } = props.data
 
   return (
@@ -31,7 +31,7 @@ function FreelancerProfileCard(props: any) {
                 bgcolor: "#274C77",
               }}
               alt={name}
-              src={`data:image/png;base64,${profilePhoto}`}
+              src={`data:image/png;base64,${photo}`}
             />
             <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
               <div className="d-flex flex-column">

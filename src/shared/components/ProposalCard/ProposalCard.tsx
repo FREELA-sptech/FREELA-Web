@@ -29,7 +29,7 @@ function ProposalCard(props: any) {
   const [errors, setErrors] = useState({
     description: '',
     proposalValue: '',
-    expirationTime: ''
+    deadline: ''
   });
 
   const convertTime = (date: string) => {
@@ -47,12 +47,12 @@ function ProposalCard(props: any) {
   }
 
   const updateValues = (newValues: any) => {
-    setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime) })
-    const date = new Date(newValues.expirationTime);
+    setData({ ...newValues, deadline: convertTime(newValues.deadline) })
+    const date = new Date(newValues.deadline);
     setFormData({
       description: newValues.description,
       proposalValue: newValues.proposalValue,
-      expirationTime: date
+      deadline: date
     })
     getOrderDetails()
   }
@@ -61,9 +61,9 @@ function ProposalCard(props: any) {
     getOrdersById(props.data.destinedOrder)
       .then((res) => {
         const resposta: any = res.data;
-        const expirationTime = convertTime(resposta.expirationTime);
+        const deadline = convertTime(resposta.deadline);
 
-        setOrderData({ ...resposta, expirationTime });
+        setOrderData({ ...resposta, deadline });
       })
   };
 
@@ -73,11 +73,11 @@ function ProposalCard(props: any) {
   }, [])
 
   const validateForm = () => {
-    const { proposalValue, expirationTime, description } = formData;
+    const { proposalValue, deadline, description } = formData;
     const newErros = {
       description: '',
       proposalValue: '',
-      expirationTime: ''
+      deadline: ''
     }
 
     if (notBlank(description)) {
@@ -92,12 +92,12 @@ function ProposalCard(props: any) {
       newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
     }
 
-    if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O prazo não pode estar vazio";
-    } else if (Number(expirationTime) <= 0) {
-      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
-    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
-      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
+    if (notBlank(deadline)) {
+      newErros.deadline = "O prazo não pode estar vazio";
+    } else if (Number(deadline) <= 0) {
+      newErros.deadline = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(deadline).isBefore(dayjs(), 'day')) {
+      newErros.deadline = "A data de expiração deve ser a partir de hoje";
     }
 
     return newErros;
@@ -197,7 +197,7 @@ function ProposalCard(props: any) {
                   bgcolor: "#274C77",
                 }}
                 alt={data.originUser.name}
-                src={`data:image/png;base64,${data.originUser.profilePhoto}`}
+                src={`data:image/png;base64,${data.originUser.photo}`}
               />
               <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column">
@@ -248,7 +248,7 @@ function ProposalCard(props: any) {
               <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                 Prazo:
                 <span className="f-roboto f-18 text-color fw-bold">
-                  {data.expirationTime}
+                  {data.deadline}
                 </span>
               </Figure.Caption>
             </Figure>

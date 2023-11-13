@@ -47,7 +47,7 @@ export function InterestForm(props: any) {
   }
 
   useEffect(() => {
-    props.errors.subCategoryId && showSnackbar(true, props.errors.subCategoryId)
+    props.errors.subCategoriesIds && showSnackbar(true, props.errors.subCategoriesIds)
   }, [props.errors])
 
   useEffect(() => {
@@ -55,10 +55,10 @@ export function InterestForm(props: any) {
       .then((res) => {
         setSubCategories(res.data)
         let filteredData = []
-        if (typeof props.formData.subCategoryId[0] === "number") {
-          filteredData = res.data.filter((item: any) => props.formData.subCategoryId.includes(item.id))
+        if (typeof props.formData.subCategoriesIds[0] === "number") {
+          filteredData = res.data.filter((item: any) => props.formData.subCategoriesIds.includes(item.id))
         } else {
-          filteredData = res.data.filter((item: any) => props.formData.subCategoryId.some((obj: any) => obj.id === item.id))
+          filteredData = res.data.filter((item: any) => props.formData.subCategoriesIds.some((obj: any) => obj.id === item.id))
         }
 
         setSelectedItems(filteredData)
@@ -90,7 +90,7 @@ export function InterestForm(props: any) {
             const ids = newValue.map((value: any) => {
               return value.id
             })
-            setField("subCategoryId", ids)
+            setField("subCategoriesIds", ids)
             setSelectedItems(newValue)
           }}
           renderOption={(props, option) => (
@@ -109,10 +109,10 @@ export function InterestForm(props: any) {
               {...params}
               variant="standard"
               helperText={
-                props.errors.subCategoryId
+                props.errors.subCategoriesIds
                   ? (
                     <Typography variant="body2" className="f-14">
-                      {props.errors.subCategoryId || " "}
+                      {props.errors.subCategoriesIds || " "}
                     </Typography>
                   )
                   : " "
@@ -140,7 +140,7 @@ export function InterestForm(props: any) {
                     return value.id
                   })
 
-                  setField("subCategoryId", ids)
+                  setField("subCategoriesIds", ids)
                   setSelectedItems(newItems)
                 }}
                 deleteIcon={<DeleteIcon />}

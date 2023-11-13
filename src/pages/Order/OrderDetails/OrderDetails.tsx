@@ -42,8 +42,8 @@ function OrderDetails() {
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState({
     description: '',
-    maxValue: '',
-    expirationTime: ''
+    value: '',
+    deadline: ''
   });
 
   const handleShowEditOrder = () => setEditingOrder(true)
@@ -70,13 +70,13 @@ function OrderDetails() {
   }
 
   const validateFormInfo = () => {
-    const { title, description, expirationTime, maxValue } = formData;
+    const { title, description, deadline, value } = formData;
     const newErros = {
       title: '',
       description: '',
-      subCategoryId: '',
-      maxValue: '',
-      expirationTime: '',
+      subCategoriesIds: '',
+      value: '',
+      deadline: '',
       photo: ''
     }
 
@@ -89,32 +89,32 @@ function OrderDetails() {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
 
-    if (notBlank(maxValue)) {
-      newErros.maxValue = "O campo valor máximo não pode estar vazio";
-    } else if (Number(maxValue) <= 0) {
-      newErros.maxValue = "O campo valor máximo não pode ser negativo ou 0";
+    if (notBlank(value)) {
+      newErros.value = "O campo valor máximo não pode estar vazio";
+    } else if (Number(value) <= 0) {
+      newErros.value = "O campo valor máximo não pode ser negativo ou 0";
     }
 
-    if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O prazo não pode estar vazio";
-    } else if (Number(expirationTime) <= 0) {
-      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
-    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
-      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
+    if (notBlank(deadline)) {
+      newErros.deadline = "O prazo não pode estar vazio";
+    } else if (Number(deadline) <= 0) {
+      newErros.deadline = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(deadline).isBefore(dayjs(), 'day')) {
+      newErros.deadline = "A data de expiração deve ser a partir de hoje";
     }
 
     return newErros;
   }
 
   const updateValues = (newValues: any) => {
-    setData({ ...newValues, expirationTime: convertTime(newValues.expirationTime) })
-    const date = new Date(newValues.expirationTime);
+    setData({ ...newValues, deadline: convertTime(newValues.deadline) })
+    const date = new Date(newValues.deadline);
     setFormData({
       description: newValues.description,
       title: newValues.title,
-      maxValue: newValues.maxValue,
-      subCategoryId: newValues.subCategories,
-      expirationTime: newValues.expirationTime,
+      value: newValues.value,
+      subCategoriesIds: newValues.subCategories,
+      deadline: newValues.deadline,
       photos: newValues.photos,
       newPhotos: [],
       deletedPhotos: []
@@ -169,12 +169,12 @@ function OrderDetails() {
     const valores = Object.values(errors);
     const errorsValues = valores.every(valor => valor === "");
     if (errorsValues) {
-      const isArrayOfNumbers = formData.subCategoryId.every(
+      const isArrayOfNumbers = formData.subCategoriesIds.every(
         (element: any) => typeof element === "number"
       );
 
       if (!isArrayOfNumbers) {
-        formData.subCategoryId = formData.subCategoryId.map((value: any) => {
+        formData.subCategoriesIds = formData.subCategoriesIds.map((value: any) => {
           return value.id
         })
       }

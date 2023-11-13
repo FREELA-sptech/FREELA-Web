@@ -30,15 +30,16 @@ function Cadastro() {
     password: "",
     uf: "",
     city: "",
-    subCategoryId: [],
-    isFreelancer: false
+    subCategoriesIds: [],
+    isFreelancer: false,
+    deviceId: ""
   });
 
   const [errors, setErrors] = useState({
     name: '',
     userName: '',
     email: '',
-    subCategoryId: '',
+    subCategoriesIds: '',
     password: ''
   });
 
@@ -50,14 +51,14 @@ function Cadastro() {
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
   const validateForm = () => {
-    const { name, email, password, city, uf, subCategoryId } = formData;
+    const { name, email, password, city, uf, subCategoriesIds } = formData;
     const newErros = {
       name: '',
       userName: '',
       city: '',
       uf: '',
       email: '',
-      subCategoryId: '',
+      subCategoriesIds: '',
       password: ''
     }
 
@@ -101,9 +102,9 @@ function Cadastro() {
   }
 
   const handleValidateInterest = () => {
-    if (formData.subCategoryId.length <= 0) {
+    if (formData.subCategoriesIds.length <= 0) {
       const newErrors = errors;
-      newErrors.subCategoryId = "Você precisa selecionar pelo menos 1 categoria"
+      newErrors.subCategoriesIds = "Você precisa selecionar pelo menos 1 categoria"
 
       setErrors(newErrors)
       return false

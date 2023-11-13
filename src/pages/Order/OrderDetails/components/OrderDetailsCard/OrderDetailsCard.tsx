@@ -206,7 +206,7 @@ function OrderDetailsCard({
                   bgcolor: "#274C77",
                 }}
                 alt={user.name}
-                src={`data:image/png;base64,${user.profilePhoto}`}
+                src={`data:image/png;base64,${user.photo}`}
               />
               <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column">
@@ -240,7 +240,7 @@ function OrderDetailsCard({
                 <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                   Orçamento:
                   <span className="f-roboto f-18 text-color fw-bold">{
-                    data.maxValue.toLocaleString('pt-BR', {
+                    data.value.toLocaleString('pt-BR', {
                       style: 'currency',
                       currency: 'BRL'
                     })}
@@ -260,7 +260,7 @@ function OrderDetailsCard({
                 <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                   Prazo:
                   <span className="f-roboto f-18 text-color fw-bold">
-                    {data.expirationTime}
+                    {data.deadline}
                   </span>
                 </Figure.Caption>
               </Figure>

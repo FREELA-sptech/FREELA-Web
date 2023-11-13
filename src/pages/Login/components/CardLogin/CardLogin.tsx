@@ -85,7 +85,7 @@ function CardLogin() {
         .then((res) => {
           const userData = res.data
 
-          UserStorage.setIdUserLocalStorage(userData.id)
+          UserStorage.setIdUserLocalStorage(userData.userId)
           UserStorage.setIsFreelancerLocalStorage(userData.freelancer)
           UserStorage.setTokenUserLocalStorage(userData.token)
 

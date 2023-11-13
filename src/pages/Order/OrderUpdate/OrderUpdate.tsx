@@ -37,7 +37,7 @@ export function OrderUpdate(props:any) {
                 <InputGroup hasValidation>
                     <InputGroup.Text id="inputGroupPrepend"><MdAttachMoney /></InputGroup.Text>
                     <Form.Control
-                        name="maxValue"
+                        name="value"
                         size="lg"
                         type="number"
                     />

@@ -47,8 +47,8 @@ export default function ChatComponent({
             }}
             alt={"Criação de Site Dahora e Legal"}
             src={`data:image/png;base64, ${!UserStorage.getIsFreelancerLocalStorage() ?
-              chatData.freelancerUser.profilePhoto :
-              chatData.clientUser.profilePhoto}`}
+              chatData.freelancerUser.photo :
+              chatData.clientUser.photo}`}
           />
           <Box className="d-flex align-items-start justify-content-center flex-column">
             <h2 className="f-20 f-inter dark-contrast-color fw-bold" style={{ padding: 0, margin: 0 }}>

@@ -3,8 +3,9 @@ import { UserStorage } from "../store/userStorage";
 import { useNavigate } from "react-router";
 
 const api = axios.create({
-  //baseURL: "http://localhost:8080/"
-  baseURL: "https://api-freela.duckdns.org/"
+  baseURL: "http://localhost:8080/"
+  //baseURL: "https://api-freela.duckdns.org/"
+  //baseURL: "https://bff-freela.duckdns.org/"
 });
 
 export function useApi() {

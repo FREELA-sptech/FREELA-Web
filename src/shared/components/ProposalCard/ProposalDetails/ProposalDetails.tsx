@@ -37,7 +37,7 @@ export function ProposalDetails({
               bgcolor: "#274C77",
             }}
             alt={originUser.name}
-            src={`data:image/png;base64,${originUser.profilePhoto}`}
+            src={`data:image/png;base64,${originUser.photo}`}
           />
           <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
             <div className="d-flex flex-column">
@@ -104,7 +104,7 @@ export function ProposalDetails({
               <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                 Prazo:
                 <span className="f-roboto f-18 text-color fw-bold">
-                  {data.expirationTime}
+                  {data.deadline}
                 </span>
               </Figure.Caption>
             </Figure>

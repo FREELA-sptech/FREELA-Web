@@ -30,29 +30,29 @@ export function CreateOrder() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    subCategoryId: [],
-    maxValue: '',
-    expirationTime: '',
+    subCategoriesIds: [],
+    value: '',
+    deadline: '',
     photo: []
   });
 
   const [errors, setErrors] = useState({
     title: '',
     description: '',
-    subCategoryIds: '',
-    maxValue: '',
-    expirationTime: '',
+    subCategoriesIds: '',
+    value: '',
+    deadline: '',
     photo: ''
   });
 
   const validateFormInfo = () => {
-    const { title, description, expirationTime, maxValue } = formData;
+    const { title, description, deadline, value } = formData;
     const newErros = {
       title: '',
       description: '',
-      subCategoryIds: '',
-      maxValue: '',
-      expirationTime: '',
+      subCategoriesIds: '',
+      value: '',
+      deadline: '',
       photo: ''
     }
 
@@ -65,67 +65,73 @@ export function CreateOrder() {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
 
-    if(notBlank(maxValue)){
-      newErros.maxValue = "O campo valor máximo não pode estar vazio";
-    }else if(Number(maxValue) <= 0){
-      newErros.maxValue = "O campo valor máximo não pode ser negativo ou 0";
+    if(notBlank(value)){
+      newErros.value = "O campo valor máximo não pode estar vazio";
+    }else if(Number(value) <= 0){
+      newErros.value = "O campo valor máximo não pode ser negativo ou 0";
     }
 
-    if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O prazo não pode estar vazio";
-    }else if(Number(expirationTime) <= 0) {
-      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
-    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
-      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
+    if (notBlank(deadline)) {
+      newErros.deadline = "O prazo não pode estar vazio";
+    }else if(Number(deadline) <= 0) {
+      newErros.deadline = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(deadline).isBefore(dayjs(), 'day')) {
+      newErros.deadline = "A data de expiração deve ser a partir de hoje";
     }
 
     return newErros;
   }
 
-  const handleSubmit = () => {
-    const errors = validateFormInfo();
-    const valores = Object.values(errors);
-    const errorsValues = valores.every(valor => valor === "");
+    const handleSubmit = () => {
+      const errors = validateFormInfo();
+      const valores = Object.values(errors);
+      const errorsValues = valores.every(valor => valor === "");
 
-    if (errorsValues) {
-      const newFormData = new FormData()
+      if (errorsValues) {
+        const newFormData = new FormData()
 
-      formData.photo.forEach((file) => {
-        newFormData.append("images", file);
-      });
+        const order = {
+          description: formData.description,
+          title: formData.title,
+          value: parseFloat(formData.value), // Certifique-se de enviar um número, não uma string
+          subCategoriesIds: formData.subCategoriesIds,
+          deadline: formData.deadline,
+          userId: 20,
+        };
 
-      const order = {
-        title: formData.title,
-        description: formData.description,
-        maxValue: formData.maxValue,
-        subCategoryId: formData.subCategoryId,
-        expirationTime: `${formData.expirationTime}`
-      };
+        newFormData.append("createOrderRequest", JSON.stringify(order))
+        formData.photo.forEach((file) => {
+          newFormData.append(`photos`, file);
+        });
 
-      createOrder(order)
-        .then((res) => {
-          if (newFormData.get("images")) {
-            updatePicture(newFormData, res.data.id)
-              .then(() => {
-                showSnackbar(false, "Ordem Criada com sucesso!")
-                navigate("/perfil")
-              })
-              .catch(() => {
-                showSnackbar(true, "Problemas para salvar imagens!")
-                deleteOrder(res.data.id)
-              })
-          } else {
-            showSnackbar(false, "Ordem Criada com sucesso!")
-            navigate("/perfil")
-          }
-        })
-        .catch((error) => {
-          showSnackbar(true, "Problemas para criar ordem!")
-        })
-    } else {
-      setErrors(errors)
+        console.log(newFormData.get("images"))
+        console.log(newFormData);
+        console.log(formData.photo)
+
+        createOrder(newFormData)
+          .then((res) => {
+            if (newFormData.get("images")) {
+              updatePicture(newFormData, res.data.id)
+                .then(() => {
+                  showSnackbar(false, "Ordem Criada com sucesso!")
+                  navigate("/perfil")
+                })
+                .catch(() => {
+                  showSnackbar(true, "Problemas para salvar imagens!")
+                  deleteOrder(res.data.id)
+                })
+            } else {
+              showSnackbar(false, "Ordem Criada com sucesso!")
+              navigate("/perfil")
+            }
+          })
+          .catch((error) => {
+            showSnackbar(true, "Problemas para criar ordem!")
+          })
+      } else {
+        setErrors(errors)
+      }
     }
-  }
 
   const handleCancel = () => {
     navigate("/home")

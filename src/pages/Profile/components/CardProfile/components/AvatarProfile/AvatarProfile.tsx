@@ -14,7 +14,7 @@ interface UserDetailsProps {
   editing: boolean;
   loadingImage: boolean;
   namePhoto: string;
-  profilePhoto: string;
+  photo: string;
   handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -23,7 +23,7 @@ const AvatarProfile: React.FC<UserDetailsProps> = ({
   editing,
   loadingImage,
   namePhoto,
-  profilePhoto,
+  photo,
   handleImageChange,
 }) => {
   return (
@@ -50,7 +50,7 @@ const AvatarProfile: React.FC<UserDetailsProps> = ({
               border: "4px solid white",
             }}
             alt={namePhoto}
-            src={`data:image/png;base64,${profilePhoto}`}
+            src={`data:image/png;base64,${photo}`}
           />
           <Fab
             component="label"

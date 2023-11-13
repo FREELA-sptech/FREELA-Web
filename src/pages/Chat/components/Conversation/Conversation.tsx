@@ -42,8 +42,8 @@ export default function Conversation({
           alt={"Usuario"}
           src={`data:image/png;base64, ${
             !UserStorage.getIsFreelancerLocalStorage()
-              ? localData.freelancerUser.profilePhoto
-              : localData.clientUser.profilePhoto
+              ? localData.freelancerUser.photo
+              : localData.clientUser.photo
           }`}
         />
         <Box className="info-order-main">

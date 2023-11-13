@@ -69,7 +69,7 @@ function CardProfile(props: any) {
       city: user.city,
       uf: user.uf,
       description: user.description,
-      subCategoryId: user.subCategories,
+      subCategoriesIds: user.subCategoriesIds,
     };
 
     setUserEditDetails(initalEditingValues);
@@ -121,7 +121,7 @@ function CardProfile(props: any) {
         formData.append("image", file);
         uploadPicture(formData)
           .then((res) => {
-            userDetailsData.profilePhoto = res.data.profilePhoto;
+            userDetailsData.photo = res.data.photo;
             setUserDetailsData(userDetailsData);
             showSnackbar(false, "Imagem atualizada com sucesso");
           })
@@ -147,12 +147,12 @@ function CardProfile(props: any) {
   };
 
   const handleSendEdit = () => {
-    const isArrayOfNumbers = userEditDetails.subCategoryId.every(
+    const isArrayOfNumbers = userEditDetails.subCategoriesIds.every(
       (element: any) => typeof element === "number"
     );
 
     if (!isArrayOfNumbers) {
-      userEditDetails.subCategoryId = userEditDetails.subCategoryId.map(
+      userEditDetails.subCategoriesIds = userEditDetails.subCategoriesIds.map(
         (value: any) => {
           return value.id;
         }
@@ -185,7 +185,7 @@ function CardProfile(props: any) {
             editing={editing}
             loadingImage={loadingImage}
             namePhoto={userDetailsData.name}
-            profilePhoto={userDetailsData.profilePhoto}
+            photo={userDetailsData.photo}
             handleImageChange={handleImageChange}
           />
 

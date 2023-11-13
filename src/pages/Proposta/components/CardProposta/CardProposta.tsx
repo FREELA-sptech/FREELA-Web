@@ -17,7 +17,7 @@ import { DateField } from "@mui/x-date-pickers";
 import { OrdersAPI } from "../../../../api/ordersApi";
 import dayjs from "dayjs";
 
-type FormField = 'description' | 'proposalValue' | 'expirationTime';
+type FormField = 'description' | 'proposalValue' | 'deadline';
 
 function CardProposta(props: any) {
   const { handleCloseModal } = props
@@ -30,13 +30,13 @@ function CardProposta(props: any) {
   const [formData, setFormData] = useState({
     description: '',
     proposalValue: '',
-    expirationTime: '' as string
+    deadline: '' as string
   });
 
   const [errors, setErrors] = useState({
     description: '',
     proposalValue: '',
-    expirationTime: ''
+    deadline: ''
   });
 
   const setField = (field: FormField, value: any) => {
@@ -51,11 +51,11 @@ function CardProposta(props: any) {
   }
 
   const validateForm = () => {
-    const { description, expirationTime, proposalValue } = formData;
+    const { description, deadline, proposalValue } = formData;
     const newErros = {
       description: '',
       proposalValue: '',
-      expirationTime: '',
+      deadline: '',
     }
 
     if (notBlank(description)) {
@@ -70,12 +70,12 @@ function CardProposta(props: any) {
       newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
     }
 
-    if (notBlank(expirationTime)) {
-      newErros.expirationTime = "O prazo não pode estar vazio";
-    } else if (Number(expirationTime) <= 0) {
-      newErros.expirationTime = "O prazo não pode ser menor ou igual a zero";
-    } else if (dayjs(expirationTime).isBefore(dayjs(), 'day')) {
-      newErros.expirationTime = "A data de expiração deve ser a partir de hoje";
+    if (notBlank(deadline)) {
+      newErros.deadline = "O prazo não pode estar vazio";
+    } else if (Number(deadline) <= 0) {
+      newErros.deadline = "O prazo não pode ser menor ou igual a zero";
+    } else if (dayjs(deadline).isBefore(dayjs(), 'day')) {
+      newErros.deadline = "A data de expiração deve ser a partir de hoje";
     }
 
     return newErros;
@@ -149,14 +149,14 @@ function CardProposta(props: any) {
               <DateField
                 fullWidth
                 variant="standard"
-                value={formData.expirationTime}
-                onChange={(e: any) => setField('expirationTime', e.$d)}
+                value={formData.deadline}
+                onChange={(e: any) => setField('deadline', e.$d)}
                 className="p-0"
                 slotProps={{
                   textField: {
-                    helperText: errors.expirationTime ? (
+                    helperText: errors.deadline ? (
                       <Typography variant="body2" className="f-14">
-                        {errors.expirationTime}
+                        {errors.deadline}
                       </Typography>
                     ) : null
                   }
