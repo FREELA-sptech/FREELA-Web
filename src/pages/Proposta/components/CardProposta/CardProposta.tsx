@@ -17,7 +17,7 @@ import { DateField } from "@mui/x-date-pickers";
 import { OrdersAPI } from "../../../../api/ordersApi";
 import dayjs from "dayjs";
 
-type FormField = 'description' | 'proposalValue' | 'deadline';
+type FormField = 'description' | 'value' | 'deadline';
 
 function CardProposta(props: any) {
   const { handleCloseModal } = props
@@ -29,13 +29,13 @@ function CardProposta(props: any) {
 
   const [formData, setFormData] = useState({
     description: '',
-    proposalValue: '',
+    value: '',
     deadline: '' as string
   });
 
   const [errors, setErrors] = useState({
     description: '',
-    proposalValue: '',
+    value: '',
     deadline: ''
   });
 
@@ -51,10 +51,10 @@ function CardProposta(props: any) {
   }
 
   const validateForm = () => {
-    const { description, deadline, proposalValue } = formData;
+    const { description, deadline, value } = formData;
     const newErros = {
       description: '',
-      proposalValue: '',
+      value: '',
       deadline: '',
     }
 
@@ -64,10 +64,10 @@ function CardProposta(props: any) {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
 
-    if (notBlank(proposalValue)) {
-      newErros.proposalValue = "O campo valor máximo não pode estar vazio";
-    } else if (Number(proposalValue) <= 0) {
-      newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
+    if (notBlank(value)) {
+      newErros.value = "O campo valor máximo não pode estar vazio";
+    } else if (Number(value) <= 0) {
+      newErros.value = "O campo valor máximo não pode ser negativo ou 0";
     }
 
     if (notBlank(deadline)) {
@@ -118,27 +118,27 @@ function CardProposta(props: any) {
               Preço:
             </Typography>
             <TextField
-              error={!!errors.proposalValue}
-              id="proposalValue"
-              name="proposalValue"
+              error={!!errors.value}
+              id="value"
+              name="value"
               fullWidth
               type="number"
               InputProps={{
                 startAdornment: <InputAdornment position="start">$</InputAdornment>
               }}
-              value={formData.proposalValue}
+              value={formData.value}
               autoComplete="given-name"
               variant="standard"
               helperText={
-                errors.proposalValue
+                errors.value
                   ? (
                     <Typography variant="body2" className="f-14">
-                      {errors.proposalValue || " "}
+                      {errors.value || " "}
                     </Typography>
                   )
                   : " "
               }
-              onChange={(e) => setField("proposalValue", e.target.value)}
+              onChange={(e) => setField("value", e.target.value)}
             />
           </Grid>
           <Grid item xs={6} className="p-0 ps-2 mb-3">

@@ -59,12 +59,12 @@ export function OrdersAPI() {
   }
 
   async function getOrdersById(orderId: number) {
-    const response = await api.get(`/orders/edit/${orderId}`);
+    const response = await api.get(`/orders/${orderId}`);
     return response;
   }
 
   async function updateOrderById(orderId: number, formData: any) {
-    const response = await api.put(`/orders/update/${orderId}`, formData);
+    const response = await api.patch(`/orders/status/${orderId}?status=ACCEPTED`);
     return response;
   }
 
@@ -84,7 +84,7 @@ export function OrdersAPI() {
   }
 
   async function updateProposals(proposalsId: any, formData:any) {
-    const response = await api.put(`/proposals/update/${proposalsId}`, formData);
+    const response = await api.patch(`/proposals/${proposalsId}`, formData);
     return response;
   }
 
@@ -99,7 +99,7 @@ export function OrdersAPI() {
   }
 
   async function refuseProposal(proposalsId: number) {
-    const response = await api.put(`/proposals/refuse-propose/${proposalsId}`);
+    const response = await api.patch(`/proposals/status/${proposalsId}?status=REFUSED`);
     return response;
   }
 

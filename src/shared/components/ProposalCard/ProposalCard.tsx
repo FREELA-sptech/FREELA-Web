@@ -28,7 +28,7 @@ function ProposalCard(props: any) {
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState({
     description: '',
-    proposalValue: '',
+    value: '',
     deadline: ''
   });
 
@@ -51,14 +51,14 @@ function ProposalCard(props: any) {
     const date = new Date(newValues.deadline);
     setFormData({
       description: newValues.description,
-      proposalValue: newValues.proposalValue,
+      value: newValues.value,
       deadline: date
     })
     getOrderDetails()
   }
 
   const getOrderDetails = () => {
-    getOrdersById(props.data.destinedOrder)
+    getOrdersById(props.data.order.id)
       .then((res) => {
         const resposta: any = res.data;
         const deadline = convertTime(resposta.deadline);
@@ -67,16 +67,18 @@ function ProposalCard(props: any) {
       })
   };
 
+  console.log(data)
+
 
   useEffect(() => {
     updateValues(props.data)
   }, [])
 
   const validateForm = () => {
-    const { proposalValue, deadline, description } = formData;
+    const { value, deadline, description } = formData;
     const newErros = {
       description: '',
-      proposalValue: '',
+      value: '',
       deadline: ''
     }
 
@@ -86,10 +88,10 @@ function ProposalCard(props: any) {
       newErros.description = "O campo descrição deve ter pelo menos 30 caracteres";
     }
 
-    if (notBlank(proposalValue)) {
-      newErros.proposalValue = "O campo valor máximo não pode estar vazio";
-    } else if (Number(proposalValue) <= 0) {
-      newErros.proposalValue = "O campo valor máximo não pode ser negativo ou 0";
+    if (notBlank(value)) {
+      newErros.value = "O campo valor máximo não pode estar vazio";
+    } else if (Number(value) <= 0) {
+      newErros.value = "O campo valor máximo não pode ser negativo ou 0";
     }
 
     if (notBlank(deadline)) {
@@ -116,7 +118,7 @@ function ProposalCard(props: any) {
         const time = new Date()
 
         const request = {
-          freelancerId: data.originUser.id,
+          freelancerId: data.user.id,
           userId: orderData.user.id,
           orderId: orderData.id,
           lastUpdate: time
@@ -196,12 +198,12 @@ function ProposalCard(props: any) {
                   height: "50px",
                   bgcolor: "#274C77",
                 }}
-                alt={data.originUser.name}
-                src={`data:image/png;base64,${data.originUser.photo}`}
+                alt={data.user.name}
+                src={`data:image/png;base64,${data.user.photo}`}
               />
               <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column">
-                  <span className="text-color fw-bold f-18 f-inter">{data.originUser.name}</span>
+                  <span className="text-color fw-bold f-18 f-inter">{data.user.name}</span>
                   {/* <Figure className="d-flex align-items-center m-0">
                     <Figure.Image
                       width='13px'
@@ -211,7 +213,7 @@ function ProposalCard(props: any) {
                       className="m-0"
                     />
                     <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
-                      {data.originUser.rate}
+                      {data.user.rate}
                     </Figure.Caption>
                   </Figure> */}
                 </div>
@@ -230,7 +232,7 @@ function ProposalCard(props: any) {
               <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                 Orçamento:
                 <span className="f-roboto f-18 text-color fw-bold">{
-                  data.proposalValue.toLocaleString('pt-BR', {
+                  data.value.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                   })}
@@ -270,7 +272,7 @@ function ProposalCard(props: any) {
           {!editingProposal ? (
             <>
               <ProposalDetails
-                originUser={data.originUser}
+                user={data.user}
                 handleAcceptProposals={handleAcceptProposals}
                 handleRefuseProposals={handleRefuseProposals}
                 handleDeleteProposals={handleDeleteProposals}
@@ -301,7 +303,7 @@ function ProposalCard(props: any) {
           ) : (
             <ProposalUpdate
               data={data}
-              originUser={data.originUser}
+              user={data.user}
               setFormData={setFormData}
               setErrors={setErrors}
               formData={formData}

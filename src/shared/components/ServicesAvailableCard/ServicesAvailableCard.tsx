@@ -45,6 +45,8 @@ function ServicesAvailableCard(data: any) {
     return formattedToday
   }
 
+  console.log(localData.photos);
+
   return (
     <Card style={{ cursor: "pointer" }} title="Ver detalhes do pedido" onClick={() => navigate(`/order-details/${localData.id}`)} className="services-available-background b-radius position-relative overflow-hidden">
       <Box sx={{ height: '230px' }}>
@@ -92,8 +94,8 @@ function ServicesAvailableCard(data: any) {
                         objectFit: "cover",
                         overflow: 'hidden'
                       }}
-                      src={`data:image/png;base64,${step.bytes}`}
-                      alt={step.bytes}
+                      src={`data:image/png;base64,${step.photo}`}
+                      alt={step.photo}
                     />
                   </Box>
                 ) : null}

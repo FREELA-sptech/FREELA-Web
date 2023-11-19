@@ -145,8 +145,8 @@ function OrderDetailsCard({
                               maxWidth: "100%",
                               overflow: 'hidden'
                             }}
-                            src={`data:image/png;base64,${step.bytes}`}
-                            alt={step}
+                            src={`data:image/png;base64,${step.photo}`}
+                            alt={step.photo}
                           />
                         </Box>
                       ) : null}

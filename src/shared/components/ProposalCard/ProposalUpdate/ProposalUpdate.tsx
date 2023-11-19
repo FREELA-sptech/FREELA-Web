@@ -12,7 +12,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import dayjs from 'dayjs';
 
 export type Props = {
-  originUser: any
+  user: any
   setFormData: (data: any) => void
   setErrors: (data: any) => void
   formData: any
@@ -23,7 +23,7 @@ export type Props = {
 }
 
 export function ProposalUpdate({
-  originUser,
+  user,
   setFormData,
   setErrors,
   formData,
@@ -55,12 +55,12 @@ export function ProposalUpdate({
               height: "50px",
               bgcolor: "#274C77",
             }}
-            alt={originUser.name}
-            src={`data:image/png;base64,${originUser.photo}`}
+            alt={user.name}
+            src={`data:image/png;base64,${user.photo}`}
           />
           <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
             <div className="d-flex flex-column">
-              <span className="text-color fw-bold f-18 f-inter">{originUser.name}</span>
+              <span className="text-color fw-bold f-18 f-inter">{user.name}</span>
               {/* <Figure className="d-flex align-items-center m-0">
                 <Figure.Image
                   width='13px'
@@ -70,13 +70,13 @@ export function ProposalUpdate({
                   className="m-0"
                 />
                 <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
-                  {originUser.rate}
+                  {user.rate}
                 </Figure.Caption>
               </Figure> */}
             </div>
           </Figure.Caption>
         </Figure>
-        {originUser.id === UserStorage.getIdUserLocalStorage() && (
+        {user.id === UserStorage.getIdUserLocalStorage() && (
           <Box
             className="position-absolute"
             sx={{
@@ -96,27 +96,27 @@ export function ProposalUpdate({
               Orçamento:
             </Typography>
             <TextField
-              error={!!errors.proposalValue}
-              id="proposalValue"
-              name="proposalValue"
+              error={!!errors.value}
+              id="value"
+              name="value"
               fullWidth
               type="number"
               InputProps={{
                 startAdornment: <InputAdornment position="start">$</InputAdornment>
               }}
-              value={formData.proposalValue}
+              value={formData.value}
               autoComplete="given-name"
               variant="standard"
               helperText={
-                errors.proposalValue
+                errors.value
                   ? (
                     <Typography variant="body2" className="f-14">
-                      {errors.proposalValue || " "}
+                      {errors.value || " "}
                     </Typography>
                   )
                   : " "
               }
-              onChange={(e) => setField("proposalValue", e.target.value)}
+              onChange={(e) => setField("value", e.target.value)}
             />
           </Grid>
           <Grid item xs={6} className="p-0 ps-2 mb-3">

@@ -10,7 +10,7 @@ import { UserStorage } from "../../../../store/userStorage";
 import SnackbarContext from "../../../../hooks/useSnackbar";
 
 export type Props = {
-  originUser: any
+  user: any
   handleAcceptProposals: () => void
   handleRefuseProposals: () => void
   handleDeleteProposals: () => void
@@ -19,7 +19,7 @@ export type Props = {
 }
 
 export function ProposalDetails({
-  originUser,
+  user,
   handleAcceptProposals,
   handleRefuseProposals,
   handleDeleteProposals,
@@ -36,12 +36,12 @@ export function ProposalDetails({
               height: "50px",
               bgcolor: "#274C77",
             }}
-            alt={originUser.name}
-            src={`data:image/png;base64,${originUser.photo}`}
+            alt={user.name}
+            src={`data:image/png;base64,${user.photo}`}
           />
           <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
             <div className="d-flex flex-column">
-              <span className="text-color fw-bold f-18 f-inter">{originUser.name}</span>
+              <span className="text-color fw-bold f-18 f-inter">{user.name}</span>
               {/* <Figure className="d-flex align-items-center m-0">
                 <Figure.Image
                   width='13px'
@@ -51,13 +51,13 @@ export function ProposalDetails({
                   className="m-0"
                 />
                 <Figure.Caption className="fw-bold f-roboto aditional-color f-14" style={{ paddingLeft: '2px' }}>
-                  {originUser.rate}
+                  {user.rate}
                 </Figure.Caption>
               </Figure> */}
             </div>
           </Figure.Caption>
         </Figure>
-        {originUser.id === UserStorage.getIdUserLocalStorage() && !data.isAccepted && !data.isRefused && (
+        {user.id === UserStorage.getIdUserLocalStorage() && !data.isAccepted && !data.isRefused && (
           <Box
             className="position-absolute"
             sx={{
@@ -84,7 +84,7 @@ export function ProposalDetails({
               <Figure.Caption className="d-flex flex-column f-12 f-poppings">
                 Orçamento:
                 <span className="f-roboto f-18 text-color fw-bold">{
-                  data.proposalValue.toLocaleString('pt-BR', {
+                  data.value.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                   })}
@@ -116,7 +116,7 @@ export function ProposalDetails({
             {data.description}
           </p>
         </Grid>
-        {originUser.id !== UserStorage.getIdUserLocalStorage() && !data.isAccepted && !data.isRefused &&
+        {user.id !== UserStorage.getIdUserLocalStorage() && !data.isAccepted && !data.isRefused &&
           <Grid item xs={12} className="d-flex justify-content-between my-3 gap-2">
             <button className="primary-outline w-auto" onClick={handleRefuseProposals}>Recusar</button>
             <button className="primary-standart w-auto" onClick={handleAcceptProposals}>Aceitar</button>
