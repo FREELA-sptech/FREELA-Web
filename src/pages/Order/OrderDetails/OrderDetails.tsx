@@ -125,17 +125,17 @@ function OrderDetails() {
     const pedingList: any[] = []
 
     newValues.proposals.map((localData: any) => {
-      localData.isAccepted && acceptedList.push(localData)
+      localData.status == "ACCEPTED" && acceptedList.push(localData)
     })
     setDataAccepted(acceptedList)
 
     newValues.proposals.map((localData: any) => {
-      localData.isRefused && refusedList.push(localData)
+      localData.status == "REFUSED" && refusedList.push(localData)
     })
     setDataRefused(refusedList)
 
     newValues.proposals.map((localData: any) => {
-      !localData.accepted && !localData.isRefused && pedingList.push(localData)
+      localData.status == "OPEN" && pedingList.push(localData)
     })
     setProposals(pedingList)
   }
@@ -165,7 +165,11 @@ function OrderDetails() {
   }
 
   const handleUpdateOrder = () => {
+    console.log("RODEI AQUI")
+
     const errors = validateFormInfo();
+
+    console.log(errors, " erros")
     const valores = Object.values(errors);
     const errorsValues = valores.every(valor => valor === "");
     if (errorsValues) {
@@ -185,19 +189,14 @@ function OrderDetails() {
         newFormData.append("newPhotos", file);
       });
 
-      formData.deletedPhotos.forEach((file: any) => {
-        newFormData.append("deletedPhotos", JSON.stringify(file));
-      });
+      newFormData.append("updateOrderRequest", JSON.stringify(formData));
 
       console.log(newFormData.get("deletedPhotos"))
-      updateOrderById(Number(id), formData)
-        .then(() => {
-          updatePictures(newFormData, Number(id))
-            .then((res) => {
-              updateValues(res.data)
-              handleHiddenEditOrder()
-              showSnackbar(false, "Pedido editado com sucesso!")
-            })
+      updateOrderById(Number(id), newFormData)
+        .then((res) => {
+            updateValues(res.data)
+            handleHiddenEditOrder()
+            showSnackbar(false, "Pedido editado com sucesso!")
         })
         .catch((error) => {
           showSnackbar(true, "Problemas para editar o pedido!")

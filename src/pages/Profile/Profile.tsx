@@ -49,12 +49,12 @@ function Profile() {
         const pedingList: any[] = []
 
         res.data.map((localData: any) => {
-          localData.accepted && acceptedList.push(localData)
+          localData.status == "ACCEPTED" && acceptedList.push(localData)
         })
         setDataAccepted(acceptedList)
 
         res.data.map((localData: any) => {
-          !localData.accepted && pedingList.push(localData)
+          localData.status == "OPEN" && pedingList.push(localData)
         })
         setData(pedingList)
       })
@@ -93,17 +93,17 @@ function Profile() {
         const pedingList: any[] = []
 
         res.data.map((localData: any) => {
-          localData.isAccepted && acceptedList.push(localData)
+          localData.status == "ACCEPTED" && acceptedList.push(localData)
         })
         setDataAccepted(acceptedList)
 
         res.data.map((localData: any) => {
-          localData.isRefused && refusedList.push(localData)
+          localData.status == "REFUSED" && refusedList.push(localData)
         })
         setDataRefused(refusedList)
 
         res.data.map((localData: any) => {
-          !localData.isRefused && !localData.isAccepted && pedingList.push(localData)
+          localData.status == "OPEN" && pedingList.push(localData)
         })
         setData(pedingList)
       })

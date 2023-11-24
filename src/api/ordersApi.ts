@@ -25,15 +25,7 @@ export function OrdersAPI() {
   }
 
   async function createOrder(formData: any) {
-    const apinew = axios.create({
-      baseURL: "http://localhost:9090/"
-      //baseURL: "https://api-freela.duckdns.org/"
-      //baseURL: "https://bff-freela.duckdns.org/"
-    });
-
-    console.warn(formData)
-
-    const response = await apinew.post("/order", formData);
+    const response = await api.post("/orders", formData);
     
     return response;
   }
@@ -64,12 +56,12 @@ export function OrdersAPI() {
   }
 
   async function updateOrderById(orderId: number, formData: any) {
-    const response = await api.patch(`/orders/status/${orderId}?status=ACCEPTED`);
+    const response = await api.patch(`/orders/${orderId}`, formData);
     return response;
   }
 
   async function aceptProposals(orderId: number, proposalsId: number) {
-    const response = await api.post(`/orders/${orderId}/${proposalsId}`);
+    const response = await api.patch(`/proposals/status/${proposalsId}?status=ACCEPTED  `);
     return response;
   }
 

@@ -208,7 +208,7 @@ function OrderEditCard({
                             width: 40,
                             cursor: 'pointer'
                           }}
-                          onClick={() => { handleDeletePictures(step.name || step.id) }}
+                          onClick={() => { handleDeletePictures(step.id) }}
                         />
                         <Box
                           component="img"
@@ -218,7 +218,7 @@ function OrderEditCard({
                             maxWidth: "100%",
                             overflow: 'hidden'
                           }}
-                          src={step.data || `data:image/png;base64,${step.bytes}`}
+                          src={step.data || `data:image/png;base64,${step.photo}`}
                           alt={step.name || step.bytes}
                         />
                       </Box>
