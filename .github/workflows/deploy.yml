@@ -19,6 +19,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
+            node --version
+            yarn --version
+            tsc --version
             rm -rf node_modules
             rm package-lock.json
             git pull
@@ -39,6 +42,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
+            node --version
+            yarn --version
+            tsc --version
             rm -rf node_modules
             rm package-lock.json
             git pull
