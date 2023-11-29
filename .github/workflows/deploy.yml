@@ -19,9 +19,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
-            sudo apt install nvm
-            nvm install 14
-            nvm use 14
+  curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+  sudo apt-get install -y nodejs
             node --version
             yarn --version
             tsc --version
@@ -45,9 +44,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
-            sudo apt install nvm
-            nvm install 14
-            nvm use 14
+  curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+  sudo apt-get install -y nodejs
             node --version
             yarn --version
             tsc --version
