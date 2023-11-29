@@ -20,6 +20,7 @@ jobs:
           script: |
             cd /home/ubuntu/FREELA-Web
             git pull
+            yarn cache clean
             yarn build
             sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
             sudo systemctl restart nginx
@@ -36,6 +37,7 @@ jobs:
           script: |
             cd /home/ubuntu/FREELA-Web
             git pull
+            yarn cache clean
             yarn build
             sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
             sudo systemctl restart nginx            
