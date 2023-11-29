@@ -20,6 +20,7 @@ jobs:
           script: |
             cd /home/ubuntu/FREELA-Web
             rm -rf node_modules
+            rm package-lock.json
             git pull
             yarn cache clean
             yarn install
@@ -39,6 +40,7 @@ jobs:
           script: |
             cd /home/ubuntu/FREELA-Web
             rm -rf node_modules
+            rm package-lock.json
             git pull
             yarn cache clean
             yarn install
