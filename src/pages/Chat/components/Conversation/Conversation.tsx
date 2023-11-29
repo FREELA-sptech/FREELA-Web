@@ -42,8 +42,8 @@ export default function Conversation({
           alt={"Usuario"}
           src={`data:image/png;base64, ${
             !UserStorage.getIsFreelancerLocalStorage()
-              ? localData.freelancerUser.photo
-              : localData.clientUser.photo
+              ? localData.freelancerId.photo
+              : localData.userId.photo
           }`}
         />
         <Box className="info-order-main">
@@ -54,16 +54,8 @@ export default function Conversation({
               margin: 0,
             }}
           >
-            {localData.order.title}
+            {UserStorage.getIsFreelancerLocalStorage() ? localData.userId.name : localData.freelancerId.name }
           </h2>
-          <p
-            className="fw-bold f-roboto aditional-color f-14"
-            style={{ padding: 0, margin: 0 }}
-          >
-            {!UserStorage.getIsFreelancerLocalStorage()
-              ? localData.freelancerUser.name
-              : localData.clientUser.name}
-          </p>
         </Box>
       </Box>
       <Box className="align-self-start">

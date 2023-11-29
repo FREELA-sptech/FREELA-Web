@@ -15,8 +15,8 @@ export default function Chat() {
   const [chatData, setChatData] = useState<any>();
   const [chatDataDetails, setChatDataDetails] = useState();
   const [messagesData, setMessagesData] = useState<any>();
-  const url = `wss://api-freela.duckdns.org/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
-  //const url = `ws://localhost:8080/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
+  //const url = `ws://freela-chat-service.duckdns.org/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
+  const url = `ws://localhost:9090/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
 
   const options = {
     onOpen: () => {
@@ -27,7 +27,7 @@ export default function Chat() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(url, options);
 
   const handleGetChats = () => {
-    getChats().then((res) => {
+    getChats(UserStorage.getIdUserLocalStorage(), UserStorage.getIsFreelancerLocalStorage()).then((res) => {
       setChatData(res.data);
     });
   };

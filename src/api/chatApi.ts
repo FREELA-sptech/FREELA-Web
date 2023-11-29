@@ -3,8 +3,8 @@ import { useApi } from "./api";
 export function ChatApi() {
   const api = useApi();
 
-  async function getChats() {
-    const response = await api.get("/chats");
+  async function getChats(userId: any, isFreelancer: any) {
+    const response = await api.get(`/chats?userId=${userId}&isFreelancer=${isFreelancer}`);
     return response;
   }
 

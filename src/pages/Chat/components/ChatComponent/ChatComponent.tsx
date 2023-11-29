@@ -22,8 +22,8 @@ export default function ChatComponent({
   const handleSubmit = () => {
     const to =
       !UserStorage.getIsFreelancerLocalStorage() ?
-        chatData.freelancerUser.id :
-        chatData.clientUser.id
+        chatData.freelancerId.id :
+        chatData.userId.id
 
     handleSendMessage(message, chatData.id, to)
     setMessage('')
@@ -47,17 +47,19 @@ export default function ChatComponent({
             }}
             alt={"Criação de Site Dahora e Legal"}
             src={`data:image/png;base64, ${!UserStorage.getIsFreelancerLocalStorage() ?
-              chatData.freelancerUser.photo :
-              chatData.clientUser.photo}`}
+              chatData.freelancerId.photo :
+              chatData.userId.photo}`}
           />
           <Box className="d-flex align-items-start justify-content-center flex-column">
             <h2 className="f-20 f-inter dark-contrast-color fw-bold" style={{ padding: 0, margin: 0 }}>
-              {chatData.order.title}
+            {!UserStorage.getIsFreelancerLocalStorage() ?
+                chatData.freelancerId.name :
+                chatData.userId.name}
             </h2>
             <p className="fw-bold f-roboto aditional-color f-14" style={{ padding: 0, margin: 0 }}>
               {!UserStorage.getIsFreelancerLocalStorage() ?
-                chatData.freelancerUser.name :
-                chatData.clientUser.name}
+                chatData.freelancerId.name :
+                chatData.userId.name}
             </p>
           </Box>
         </Box>
@@ -71,7 +73,7 @@ export default function ChatComponent({
         {messagesData && messagesData.map((messageLocal: any) => (
           <MessageBox
             message={messageLocal.message}
-            sender={UserStorage.getIdUserLocalStorage() == messageLocal.from.id} />
+            sender={UserStorage.getIdUserLocalStorage() == messageLocal.userIdFrom} />
         ))}
       </Grid>
       <Grid item className="chat-component-footer w-100 d-flex" style={{ padding: "1rem", gap: "1rem" }}>
