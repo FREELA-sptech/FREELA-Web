@@ -19,6 +19,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
+            nvm install 14
+            nvm use 14
             node --version
             yarn --version
             tsc --version
@@ -42,6 +44,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
+            nvm install 14
+            nvm use 14
             node --version
             yarn --version
             tsc --version
