@@ -15,8 +15,8 @@ export default function Chat() {
   const [chatData, setChatData] = useState<any>();
   const [chatDataDetails, setChatDataDetails] = useState();
   const [messagesData, setMessagesData] = useState<any>();
-  //const url = `ws://freela-chat-service.duckdns.org/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
-  const url = `ws://localhost:9090/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
+  const url = `wss://freela-chat-service.duckdns.org/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
+  //const url = `ws://localhost:9090/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
 
   const options = {
     onOpen: () => {
