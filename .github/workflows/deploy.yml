@@ -19,13 +19,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
-  curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-  sudo apt-get install -y nodejs
-            node --version
-            yarn --version
-            tsc --version
-            rm -rf node_modules
-            rm package-lock.json
             git pull
             yarn cache clean
             yarn install
@@ -44,16 +37,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/FREELA-Web
-  curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-  sudo apt-get install -y nodejs
-            node --version
-            yarn --version
-            tsc --version
-            rm -rf node_modules
-            rm package-lock.json
             git pull
             yarn cache clean
             yarn install
             yarn build
             sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
-            sudo systemctl restart nginx    
+            sudo systemctl restart nginx
