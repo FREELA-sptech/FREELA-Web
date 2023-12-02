@@ -1505,7 +1505,7 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-date-pickers@^6.3.1":
+"@mui/x-date-pickers@6.3.1":
   version "6.3.1"
   resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-6.3.1.tgz"
   integrity sha512-YPQrsi10rpeEUJkp77NkHqkcZbzAAWITl3MZJ8Mv8ZiS9MEFKmr2kU+SPWUomDByor2UlaS9EmvtslQW74hiWg==

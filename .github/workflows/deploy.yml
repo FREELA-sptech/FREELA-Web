@@ -18,6 +18,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            nvm install 14
+            nvm use 14
+            node -v
             cd /home/ubuntu/FREELA-Web
             git pull
             yarn cache clean
@@ -36,6 +41,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            nvm install 14
+            nvm use 14
+            node -v
             cd /home/ubuntu/FREELA-Web
             git pull
             yarn cache clean
