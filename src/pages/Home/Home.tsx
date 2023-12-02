@@ -8,7 +8,7 @@ import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
 import { OrdersAPI } from "../../api/ordersApi";
 import { UserAPI } from "../../api/userApi";
-import { Box, CircularProgress, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, InputLabel, MenuItem, Select, Skeleton, Typography } from "@mui/material";
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
@@ -20,6 +20,7 @@ function Home() {
   const [filter, setFilter] = useState("all");
   const [message, setMessage] = useState("");
   const items = [];
+  const [isLoadingOrder, setIsLoadingOrder] = useState<boolean>(true)
 
   const handleClose = () => setShowModal(false)
   const handleOpen = () => setShowModal(true)
@@ -32,6 +33,7 @@ function Home() {
           setResponseData(res.data)
         }).finally(() => {
           setIsLoading(false)
+          setIsLoadingOrder(false)
         })
     } else {
       getFreelancersByInterests()
@@ -39,6 +41,7 @@ function Home() {
           setFreelancerData(res.data)
         }).finally(() => {
           setIsLoading(false)
+          setIsLoadingOrder(false)
         })
     }
   }, [])
@@ -118,7 +121,7 @@ function Home() {
                   </Box>
                 </Col>}
 
-              {filteredFreelancer.length <= 0 && filteredItems.length <= 0 && (
+              {filteredFreelancer.length <= 0 && filteredItems.length <= 0 && !isLoadingOrder && (
                 <Col xs={12} className="d-flex justify-content-center pt-2">
                   <Typography variant="body2" className="f-22">
                     Nenhum resultado para a busca
@@ -126,19 +129,38 @@ function Home() {
                 </Col>
               )}
 
-              {!UserStorage.getIsFreelancerLocalStorage() &&
-                filteredFreelancer.map((data: any) => (
-                  <Col xs={12} md={6} lg={4} className="p-3">
-                    <FreelancerProfileCard data={data} />
-                  </Col>
-                ))}
+              {!UserStorage.getIsFreelancerLocalStorage() && (
+                isLoadingOrder ? (
+                  [1, 2, 3].map(() => (
+                    <Col xs={12} md={6} lg={4} className="p-3">
+                      <Skeleton className="b-radius" sx={{ height: "250px" }} animation="wave" variant="rectangular" />
+                    </Col>
+                  ))
+                ) : (
+                  filteredFreelancer.map((data: any) => (
+                    <Col key={data.id} xs={12} md={6} lg={4} className="p-3">
+                      <FreelancerProfileCard data={data} />
+                    </Col>
+                  ))
+                )
+              )}
 
-              {UserStorage.getIsFreelancerLocalStorage() &&
-                filteredItems.map((data: any) => (
-                  <Col xs={12} md={6} lg={4} className="p-3">
-                    <ServicesAvailableCard data={data} />
-                  </Col>
-                ))}
+
+              {UserStorage.getIsFreelancerLocalStorage() && (
+                isLoadingOrder ? (
+                  [1, 2, 3].map(() => (
+                    <Col xs={12} md={6} lg={4} className="p-3">
+                      <Skeleton className="b-radius" sx={{ height: "400px" }} animation="wave" variant="rectangular" />
+                    </Col>
+                  ))
+                ) : (
+                  filteredItems.map((data: any) => (
+                    <Col xs={12} md={6} lg={4} className="p-3">
+                      <ServicesAvailableCard data={data} />
+                    </Col>
+                  ))
+                )
+              )}
             </Row>
           </Col>
         </Row>

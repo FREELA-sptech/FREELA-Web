@@ -67,9 +67,6 @@ function ProposalCard(props: any) {
       })
   };
 
-  console.log(data)
-
-
   useEffect(() => {
     updateValues(props.data)
   }, [])
@@ -199,7 +196,7 @@ function ProposalCard(props: any) {
                   bgcolor: "#274C77",
                 }}
                 alt={data.user.name}
-                src={`data:image/png;base64,${data.user.photo}`}
+                src={data.user.photo ? `data:image/png;base64, ${data.user.photo}` : "/assets/images/profile.png"}
               />
               <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column">

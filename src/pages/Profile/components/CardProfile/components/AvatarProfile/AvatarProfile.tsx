@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Skeleton,
@@ -8,6 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { UserStorage } from "../../../../../../store/userStorage";
 
 interface UserDetailsProps {
   loading: boolean;
@@ -26,19 +27,23 @@ const AvatarProfile: React.FC<UserDetailsProps> = ({
   photo,
   handleImageChange,
 }) => {
+  useEffect(() => {
+    photo && UserStorage.setPhotoUserLocalStorage(photo)
+  }, [photo])
+
   return (
     <>
       {loading ? (
         <Box
           sx={{
             backgroundColor: "white",
-            height: "158px",
-            width: "158px",
+            height: "258px",
+            width: "258px",
             padding: "4px",
             borderRadius: "50%",
           }}
         >
-          <Skeleton variant="circular" width={150} height={150} />
+          <Skeleton variant="circular" width={250} height={250} />
         </Box>
       ) : (
         <Box position='relative' height='auto'>
@@ -50,7 +55,7 @@ const AvatarProfile: React.FC<UserDetailsProps> = ({
               border: "4px solid white",
             }}
             alt={namePhoto}
-            src={`data:image/png;base64,${photo}`}
+            src={photo ? `data:image/png;base64, ${photo}` : "/assets/images/profile.png"}
           />
           <Fab
             component="label"
@@ -61,7 +66,8 @@ const AvatarProfile: React.FC<UserDetailsProps> = ({
             sx={{
               position: 'absolute',
               top: '190px',
-              left: '190px'
+              left: '190px',
+              zIndex: 1
             }}
           >
             <Input type="file" hidden onChange={handleImageChange} />

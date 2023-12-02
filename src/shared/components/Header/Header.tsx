@@ -30,6 +30,7 @@ function Header(props: any) {
       expand='xl'
       className='py-3 header-background z-index-9'
       sticky='top'
+      style={{ zIndex: 9999 }}
     >
       <Container>
         <Navbar.Toggle

@@ -206,7 +206,7 @@ function OrderDetailsCard({
                   bgcolor: "#274C77",
                 }}
                 alt={user.name}
-                src={`data:image/png;base64,${user.photo}`}
+                src={user.photo ? `data:image/png;base64, ${user.photo}` : "/assets/images/profile.png"}
               />
               <Figure.Caption className="w-100 d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column">

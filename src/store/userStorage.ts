@@ -2,6 +2,7 @@ export class UserStorage {
   private static readonly isFreelancerKey: string = "IS_FREELANCER"
   private static readonly tokenUserKey: string = "TOKEN_USER"
   private static readonly idUserKey: string = "ID_USER"
+  private static readonly userProfile: string = "USER_PHOTO_PROFILE"
 
   public static setIsFreelancerLocalStorage(mode: boolean) {
     localStorage.setItem(this.isFreelancerKey, JSON.stringify(mode))
@@ -30,6 +31,18 @@ export class UserStorage {
     localStorage.removeItem(this.tokenUserKey)
   }
 
+  public static setPhotoUserLocalStorage(photo: string) {
+    localStorage.setItem(this.userProfile, photo)
+  }
+
+  public static getPhotoUserLocalStorage() {
+    return localStorage.getItem(this.userProfile)
+  }
+
+  public static removePhotoUserLocalStorage() {
+    localStorage.removeItem(this.userProfile)
+  }
+
   public static setIdUserLocalStorage(id: number) {
     localStorage.setItem(this.idUserKey, JSON.stringify(id))
   }
@@ -46,6 +59,7 @@ export class UserStorage {
     this.removeIsFreelancerLocalStorage()
     this.removeTokenUserLocalStorage()
     this.removeIdUserLocalStorage()
+    this.removePhotoUserLocalStorage()
   }
 
   public static isAuthenticated() {

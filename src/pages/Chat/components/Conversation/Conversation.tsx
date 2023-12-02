@@ -11,6 +11,8 @@ export default function Conversation({
   localData,
   handleGetMessagesData,
 }: Props) {
+  const photo = !UserStorage.getIsFreelancerLocalStorage() ? localData.freelancerId.photo : localData.userId.photo
+
   const convertTime = (time: string) => {
     const newTime = new Date(time);
     const hours =
@@ -40,11 +42,7 @@ export default function Conversation({
             bgcolor: "#274C77",
           }}
           alt={"Usuario"}
-          src={`data:image/png;base64, ${
-            !UserStorage.getIsFreelancerLocalStorage()
-              ? localData.freelancerId.photo
-              : localData.userId.photo
-          }`}
+          src={photo ? `data:image/png;base64, ${photo}` : "/assets/images/profile.png"}
         />
         <Box className="info-order-main">
           <h2

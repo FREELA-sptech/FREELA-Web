@@ -14,7 +14,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
 import ProposalCard from "../../shared/components/ProposalCard/ProposalCard";
 import { UserStorage } from "../../store/userStorage";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Skeleton, Typography } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { UserAPI } from "../../api/userApi";
 import { OrdersAPI } from "../../api/ordersApi";
@@ -37,6 +37,7 @@ function Profile() {
   const { getOrdersByUser, getOrdersByUserId, extract } = OrdersAPI()
   const { getProposalsByUser, getProposalsByUserId } = UserAPI();
   const hideDetails = Boolean(id)
+  const [isLoadingOrder, setIsLoadingOrder] = useState<boolean>(true);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -60,7 +61,9 @@ function Profile() {
       })
       .catch(() => {
         showSnackbar(true, "Problemas para trazer as ordens!")
+        setIsLoadingOrder(false)
       })
+      .finally(() => setIsLoadingOrder(false))
   }
 
   const getOrdersById = () => {
@@ -85,7 +88,6 @@ function Profile() {
   }
 
   const getProposals = () => {
-    console.log('rodei')
     getProposalsByUser()
       .then((res) => {
         const acceptedList: any[] = []
@@ -109,7 +111,9 @@ function Profile() {
       })
       .catch(() => {
         showSnackbar(true, "Problemas para trazer as propostas!")
+        setIsLoadingOrder(false)
       })
+      .finally(() => setIsLoadingOrder(false))
   }
 
   const getProposalsById = () => {
@@ -136,6 +140,7 @@ function Profile() {
       })
       .catch(() => {
         showSnackbar(true, "Problemas para trazer as propostas!")
+
       })
   }
 
@@ -193,14 +198,19 @@ function Profile() {
                     <Link to={!isFreelancer ? '/create-order' : '/home'} className='primary-standart d-flex align-items-center'>
                       {!isFreelancer ? 'faça um pedido' : 'encontre um pedido'}
                     </Link>
-                    {!isFreelancer &&
-                      <Button className="primary-text px-0 fw-normal d-flex align-items-center" style={{ right: 0 }} onClick={handleGetExtract}>
-                        download do histórico Pedidos
-                        <FileDownload sx={{ marginLeft: 1 }} />
-                      </Button>}
                   </Grid>
                   <Grid container spacing={4}>
-                    {data.length <= 0 ? (
+                    {isLoadingOrder ? (
+                      [1,2,3].map(() => (
+                        <Grid item xs={12} md={6} lg={4}>
+                          {isFreelancer ? (
+                            <Skeleton className="b-radius" sx={{ height: "250px" }} animation="wave" variant="rectangular" />
+                          ) : (
+                            <Skeleton className="b-radius" sx={{ height: "400px" }} animation="wave" variant="rectangular" />
+                          )}
+                        </Grid>
+                      ))
+                    ) : data.length <= 0 ? (
                       <Grid
                         item
                         container

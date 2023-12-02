@@ -19,9 +19,7 @@ export default function Chat() {
   //const url = `ws://localhost:9090/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
 
   const options = {
-    onOpen: () => {
-      console.log("Conexão estabelecida com o servidor WebSocket");
-    },
+    onOpen: () => {},
   };
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(url, options);
@@ -64,7 +62,6 @@ export default function Chat() {
     handleGetChats();
     if (lastMessage !== null) {
       const message = JSON.parse(lastMessage.data);
-      console.log("Mensagem recebida:", message);
       setMessagesData([...messagesData, message]);
     }
   }, [lastMessage]);

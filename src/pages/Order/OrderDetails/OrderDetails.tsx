@@ -165,11 +165,8 @@ function OrderDetails() {
   }
 
   const handleUpdateOrder = () => {
-    console.log("RODEI AQUI")
-
     const errors = validateFormInfo();
 
-    console.log(errors, " erros")
     const valores = Object.values(errors);
     const errorsValues = valores.every(valor => valor === "");
     if (errorsValues) {
@@ -191,7 +188,6 @@ function OrderDetails() {
 
       newFormData.append("updateOrderRequest", JSON.stringify(formData));
 
-      console.log(newFormData.get("deletedPhotos"))
       updateOrderById(Number(id), newFormData)
         .then((res) => {
             updateValues(res.data)

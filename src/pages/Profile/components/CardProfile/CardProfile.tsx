@@ -69,7 +69,7 @@ function CardProfile(props: any) {
       city: user.city,
       uf: user.uf,
       description: user.description,
-      subCategoriesIds: user.subCategoriesIds,
+      subCategoriesIds: user.subCategories,
     };
 
     setUserEditDetails(initalEditingValues);

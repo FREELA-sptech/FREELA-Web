@@ -28,7 +28,7 @@ const DetailsProfile: React.FC<DetailsProfileProps> = ({
         <>
           <Skeleton width={200} height={50} />
           <Skeleton width={150} height={20} />
-          <Skeleton width={650} height={30} />
+          {isFreelancer && <Skeleton width={650} height={30} />}
           <h1 className="text-color f-18 f-inter fw-bold mt-2">
             Minhas Especialidades
           </h1>

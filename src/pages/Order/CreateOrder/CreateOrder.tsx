@@ -104,10 +104,6 @@ export function CreateOrder() {
           newFormData.append(`photos`, file);
         });
 
-        console.log(newFormData.get("images"))
-        console.log(newFormData);
-        console.log(formData.photo)
-
         createOrder(newFormData)
           .then((res) => {
             if (newFormData.get("images")) {

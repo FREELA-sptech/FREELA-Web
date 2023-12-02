@@ -18,6 +18,7 @@ export default function ChatComponent({
 }: Props) {
   const [message, setMessage] = useState('')
   const messagesContainerRef = useRef<any>(null);
+  const photo = !UserStorage.getIsFreelancerLocalStorage() ? chatData.freelancerId.photo : chatData.userId.photo
 
   const handleSubmit = () => {
     const to =
@@ -46,13 +47,11 @@ export default function ChatComponent({
               bgcolor: "#274C77",
             }}
             alt={"Criação de Site Dahora e Legal"}
-            src={`data:image/png;base64, ${!UserStorage.getIsFreelancerLocalStorage() ?
-              chatData.freelancerId.photo :
-              chatData.userId.photo}`}
+            src={photo ? `data:image/png;base64, ${photo}` : "/assets/images/profile.png"}
           />
           <Box className="d-flex align-items-start justify-content-center flex-column">
             <h2 className="f-20 f-inter dark-contrast-color fw-bold" style={{ padding: 0, margin: 0 }}>
-            {!UserStorage.getIsFreelancerLocalStorage() ?
+              {!UserStorage.getIsFreelancerLocalStorage() ?
                 chatData.freelancerId.name :
                 chatData.userId.name}
             </h2>

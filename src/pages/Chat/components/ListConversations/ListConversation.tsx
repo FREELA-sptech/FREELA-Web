@@ -1,6 +1,7 @@
 import { Avatar, Grid } from "@mui/material";
 import "./style.scss";
 import Conversation from "../Conversation/Conversation";
+import { UserStorage } from "../../../../store/userStorage";
 
 export type Props = {
   chatData: any;
@@ -11,6 +12,8 @@ export default function ListConversation({
   chatData,
   handleGetMessagesData,
 }: Props) {
+  const photo = UserStorage.getPhotoUserLocalStorage()
+
   return (
     <Grid
       container
@@ -36,7 +39,7 @@ export default function ListConversation({
             border: "4px solid white",
           }}
           alt={"namePhoto"}
-          src={`data:image/png;base64,`}
+          src={photo ? `data:image/png;base64, ${photo}` : "/assets/images/profile.png"}
         />
       </Grid>
       <Grid
