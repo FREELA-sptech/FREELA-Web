@@ -19,7 +19,7 @@ export default function Chat() {
   //const url = `ws://localhost:9090/chat?userId=${UserStorage.getIdUserLocalStorage()}`;
 
   const options = {
-    onOpen: () => {},
+    onOpen: () => { },
   };
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(url, options);
@@ -89,7 +89,11 @@ export default function Chat() {
               <Grid
                 container
                 className="chat-component d-flex flex-column align-items-center w-100"
-              ></Grid>
+              >
+                <Box width="100%" height="100%" display="flex" alignItems="center" justifyContent="center">
+                  <img style={{ height: `80%` }} src="/assets/images/chat fundo.jpg" />
+                </Box>
+              </Grid>
             )}
           </Grid>
         </Grid>

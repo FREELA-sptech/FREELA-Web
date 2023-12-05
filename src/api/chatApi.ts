@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useApi } from "./api";
 
 export function ChatApi() {
@@ -9,7 +10,11 @@ export function ChatApi() {
   }
 
   async function createChat(formData: any) {
-    const response = await api.post("/chats", formData);
+    const apiChat = axios.create({
+      baseURL: "https://freela-chat-service.duckdns.org"
+    });
+
+    const response = await apiChat.post("/chats", formData);
     return response;
   }
 

@@ -6,9 +6,12 @@ import { Avatar, AvatarGroup, Box } from "@mui/material";
 import { deepOrange } from '@mui/material/colors';
 import HtmlTooltip from "../../tools/MuiTooltipCustom";
 import { useNavigate } from "react-router-dom";
+import { ChatApi } from "../../../api/chatApi";
+import { UserStorage } from "../../../store/userStorage";
 
 
 function FreelancerProfileCard(props: any) {
+  const { createChat } = ChatApi();
   const navigate = useNavigate()
   const {
     id,
@@ -18,6 +21,26 @@ function FreelancerProfileCard(props: any) {
     subCategories,
     photo
   } = props.data
+
+  const handleCreateChat = () => {
+    const time = new Date()
+
+    const request = {
+      freelancerId: id,
+      userId: UserStorage.getIdUserLocalStorage(),
+      orderId: 1,
+      lastUpdate: time
+    }
+
+    createChat(request)
+      .then(() => {
+      })
+      .catch(() => {
+      })
+      .finally(() => {
+        navigate("/chat")
+      })
+  }
 
   return (
     <Card className="services-available-background b-radius position-relative overflow-hidden">
@@ -77,21 +100,21 @@ function FreelancerProfileCard(props: any) {
                     disablePortal: true,
                   }}
                 >
-                    <Avatar
-                      sx={{
-                        bgcolor: "#274C77",
-                        border: '4px solid white'
-                      }}
-                      alt={item.name}
-                      src={`data:image/png;base64,asdasd`}
-                    />
+                  <Avatar
+                    sx={{
+                      bgcolor: "#274C77",
+                      border: '4px solid white'
+                    }}
+                    alt={item.name}
+                    src={`data:image/png;base64,asdasd`}
+                  />
                 </HtmlTooltip>
               ))}
             </AvatarGroup>
           </Box>
         </Box>
       </Card.Body>
-      <ButtonBase onClick={() => navigate(`/perfil/${id}`)} className="b-radius-button z-index-2 w-100 button-hidden" buttonType={"primary-standart"} label={"Ver Portfólio"} ></ButtonBase>
+      <ButtonBase onClick={handleCreateChat} className="b-radius-button z-index-2 w-100 button-hidden" buttonType={"primary-standart"} label={"Faça um Pedido"} ></ButtonBase>
     </Card>
   );
 }
