@@ -1,5 +1,6 @@
 name: Push-to-EC2
 
+# Trigger deployment only on push to master branch
 on:
   push:
     branches:
@@ -19,10 +20,46 @@ jobs:
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            echo "Esta é outra etapa"
             nvm install 14
             nvm use 14
-            node -v
+            cd /home/ubuntu/FREELA-Web
+            git pull
+            yarn cache clean
+            yarn build
+            sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
+            sudo systemctl restart nginx
+  build-front-02:
+    name: Build Front-02
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conectando na EC2 front-02 e atualizando repositorio
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_02 }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            nvm install 14
+            nvm use 14
+            cd /home/ubuntu/FREELA-Web
+            git pull
+            yarn cache clean
+            yarn build
+            sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
+            sudo systemctl restart nginx
+                  - name: Conectando na EC2 front-02 e atualizando repositorio
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_02 }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            nvm install 14
+            nvm use 14
             cd /home/ubuntu/FREELA-Web
             git pull
             yarn cache clean
