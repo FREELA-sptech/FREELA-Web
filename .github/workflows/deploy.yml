@@ -1,6 +1,5 @@
 name: Push-to-EC2
 
-# Trigger deployment only on push to master branch
 on:
   push:
     branches:
@@ -29,11 +28,11 @@ jobs:
             yarn build
             sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
             sudo systemctl restart nginx
-  build-front-02:
+ build-front-02:
     name: Build Front-02
     runs-on: ubuntu-latest
     steps:
-      - name: Conectando na EC2 front-02 e atualizando repositorio
+      - name: Conectando na EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS_02 }}
@@ -44,10 +43,18 @@ jobs:
             source ~/.nvm/nvm.sh
             nvm install 14
             nvm use 14
-            node -v
-            cd /home/ubuntu/FREELA-Web
-            git pull
-            yarn cache clean
-            yarn build
-            sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
-            sudo systemctl restart nginx
+
+      - name: Verificando atualizações
+        run: |
+          cd /home/ubuntu/FREELA-Web
+          git pull
+
+      - name: Compilando o projeto
+        run: |
+          yarn cache clean
+          yarn build
+
+      - name: Publicando nova versão
+        run: |
+          sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
+          sudo systemctl restart nginx
