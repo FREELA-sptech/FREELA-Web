@@ -19,7 +19,11 @@ export function ChatApi() {
   }
 
   async function getMessagesById(id: number) {
-    const response = await api.get(`/chats/messages/${id}`);
+    const apiChat = axios.create({
+      baseURL: "https://freela-chat-service.duckdns.org"
+    });
+
+    const response = await apiChat.get(`/chats/messages/${id}`);
     return response;
   }
 
