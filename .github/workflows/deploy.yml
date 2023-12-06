@@ -1,6 +1,5 @@
 name: Push-to-EC2
 
-# Trigger deployment only on push to master branch
 on:
   push:
     branches:
@@ -11,7 +10,7 @@ jobs:
     name: Build Front-01
     runs-on: ubuntu-latest
     steps:
-      - name: Conectando na EC2 front-01 e atualizando repositorio
+      - name: Conectar na EC2 front-01 e atualizar repositório
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS }}
@@ -24,15 +23,40 @@ jobs:
             nvm use 14
             cd /home/ubuntu/FREELA-Web
             git pull
+
+      - name: Instalar Dependências e Construir
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
             yarn cache clean
             yarn build
+
+      - name: Copiar para /var/www/html/
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
             sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
+
+      - name: Reiniciar Nginx
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
             sudo systemctl restart nginx
+
   build-front-02:
     name: Build Front-02
     runs-on: ubuntu-latest
     steps:
-      - name: Conectando na EC2 front-02 e atualizando repositorio
+      - name: Conectar na EC2 front-02 e atualizar repositório
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS_02 }}
@@ -45,24 +69,31 @@ jobs:
             nvm use 14
             cd /home/ubuntu/FREELA-Web
             git pull
-            yarn cache clean
-            yarn build
-            sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
-            sudo systemctl restart nginx
-                  - name: Conectando na EC2 front-02 e atualizando repositorio
+
+      - name: Instalar Dependências e Construir
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS_02 }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            nvm install 14
-            nvm use 14
-            cd /home/ubuntu/FREELA-Web
-            git pull
             yarn cache clean
             yarn build
+
+      - name: Copiar para /var/www/html/
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_02 }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
             sudo cp -r /home/ubuntu/FREELA-Web/dist/* /var/www/html/
+
+      - name: Reiniciar Nginx
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_02 }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
             sudo systemctl restart nginx
