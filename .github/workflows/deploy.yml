@@ -31,6 +31,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cd /home/ubuntu/FREELA-Web
             yarn cache clean
             yarn build
 
@@ -69,6 +70,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cd /home/ubuntu/FREELA-Web
             yarn cache clean
             yarn build
 
